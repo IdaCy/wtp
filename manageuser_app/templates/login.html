@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/../static/css/login.css">
+    <title>Wildlife Transfer Parameter Database</title>
+</head>
+<body>
+    <section class="landing">
+        <div class="landing-content">
+            <h1>Wildlife Transfer Parameter Database</h1>
+            <div class="login-form">
+                <h2>Login</h2>
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Login</button>
+                </form>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <section class="info" id="info" >
+        <div class="info-content">
+            <p>The database was started to aid both:</p>
+            <ol>
+                <li>
+                    the International Atomic Energy Agency (IAEA) in the production of
+                    a handbook on wildlife transfer parameters (IAEA Technical Report Series 479); and
+                </li>
+                <li>
+                    the derivation of transfer parameter values for the International
+                    Commission on Radiological Protections (ICRP) list of Reference
+                    Animals and Plants (RAPs) (ICRP Publication 114).
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="supported-by">
+        <div class="supported-by-content">
+            <div class="head">
+                <h2>S<br>u<br>p<br>p<br>o<br>r<br>t<br>e<br>d</h2>
+                <h2>b<br>y</h2>
+            </div>
+            <ul>
+                <li>Environment Agency, England and Wales</li>
+                <li>Norwegian Radiation Protection Authority, Norway</li>
+                <li>Centre for Ecology and Hydrology, NERC, UK</li>
+                <li>University of Stirling, UK</li>
+                <li>The STAR Radioecology Network of Excellence</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="contributions">
+        <div class="contributions-content">
+            <h2>Contributions</h2>
+            <p>The data are being compiled in collaboration with the International
+                Union of Radioecologists (IUR). The database is being maintained to
+                provide a future and evolving source of up-to-date information to
+                those conducting assessments and developing/maintaining models. Your
+                assistance in populating the database with any suitable data on
+                concentration ratios that you may have would be welcomed.
+            </p>
+            <p>All contributors to the database will be acknowledged, as
+                appropriate, in any publications arising from the use of these data.
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="{% url 'privacy' %}">Privacy policy</a>
+            <span class="footer-bullet">&bull;</span>
+            <a href="{% url 'legal' %}">Legal Disclaimer</a>
+            <span class="footer-bullet">&bull;</span>
+            <a href="{% url 'login' %}#info">About</a>
+        </div>
+    </footer>
+</body>
+</html>

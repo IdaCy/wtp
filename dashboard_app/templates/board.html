@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard - Wildlife Transfer Parameter Database{% endblock %}
+
+{% block content %}
+    <h1>Dashboard of Tools</h1>
+    <div class="dashboard-options">
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">Add new data</a>
+        </div>
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">View Summary results</a>
+        </div>
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">View/Edit data</a>
+        </div>
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">Suggest improvements</a>
+        </div>
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">Download summary tables</a>
+        </div>
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">View/Update Database Tables</a>
+        </div>
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">Summary (Individual wildlife/habitat)</a>
+        </div>
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">Assign admin privileges to users</a>
+        </div>
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">View all data</a>
+        </div>
+        <div class="dashboard-option">
+            <a href="{% url 'data' %}">View Reports</a>
+        </div>
+    </div>
+    <link rel="stylesheet" href="{% static '/css/board.css' %}">
+{% endblock %}

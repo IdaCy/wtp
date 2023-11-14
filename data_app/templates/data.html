@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Data View Page{% endblock %}
+
+{% block content %}
+    <h1>Data from PostgreSQL</h1>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>CR ID</th>
+                <th>Ref ID</th>
+                <th>Habitat ID</th>
+                <th>Wildlife</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>{{ item.CR_ID }}</td>
+                    <td>{{ item.RefID }}</td>
+                    <td>{{ item.HabitatID }}</td>
+                    <td>{{ item.Wildlife }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <link rel="stylesheet" href="/static/css/data.css">
+    {% block extra_css %}{% endblock %}
+{% endblock %}

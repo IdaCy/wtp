@@ -6,7 +6,7 @@ from manageuser_app import views as manageuser_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashboard/', board_views.board_view, name='board'),
+    path('dashboard/', board_views.board_view, name='dashboard'),
     path('register/', manageuser_views.register_view, name='register'),
     path('login/', manageuser_views.login_view, name='login'),
     path('logout/', manageuser_views.logout_view, name='logout'),

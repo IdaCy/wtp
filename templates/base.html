@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Wildlife Transfer Parameter DB{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav class="top-menu">
+            <h1>Wildlife Transfer Parameter Database</h1>
+            <ul>
+                {% block board_link %}<li><a href="{% url 'dashboard' %}">Dashboard</a></li>{% endblock %}
+                {% block logout_link %}<li><a href="{% url 'logout' %}">Logout</a></li>{% endblock %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-links">
+            <a href="{% url 'privacy' %}">Privacy policy</a>
+            <span class="footer-bullet">&bull;</span>
+            <a href="{% url 'legal' %}">Legal Disclaimer</a>
+            <span class="footer-bullet">&bull;</span>
+            <a href="{% url 'login' %}#info">About</a>
+        </div>
+    </footer>
+</body>
+</html>

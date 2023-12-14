@@ -1,51 +1,31 @@
+from django.core.management.base import BaseCommand, CommandError
+from data_app.models import (Element, Habitat, WildlifeGroup, RAP, Lifestage, Media, PubType, PubTitle,
+                             SpeciesName, StudyType, Tissue, MaterialStatus, ActivityConcUnit, ParCRCalc,
+                             MaterialCRCalc, Radionuclide, Language, Reference, DataRC)
+import pandas as pd
 import os
-import csv
-from django.core.management.base import BaseCommand
-from data_app.models import (
-    Client, EditTable, Element, Habitat, Language, Lifestage, Location, Media, PubTitle, PubType,
-    SpeciesName, StudyType, Tissue, MaterialStatus, Wildlife, ActivityConcentrationUnit, ParCRCalc,
-    MaterialCRCalc, Radionuclide, RAP, Reference, DataCR
-)
 
 
 class Command(BaseCommand):
-    help = 'Import data from CSV files'
+    help = 'Imports data from Excel files into the database'
 
     def add_arguments(self, parser):
-        parser.add_argument('directory_path', type=str, help='Path to the directory containing CSV files')
+        parser.add_argument('file_path', type=str, help='Path to the directory containing Excel files')
 
-    def handle(self, *args, **kwargs):
-        directory_path = kwargs['directory_path']
-        csv_files = [f for f in os.listdir(directory_path) if f.endswith('.csv')]
+    def handle(self, *args, **options):
+        file_path = options['file_path']
 
-        for csv_file in csv_files:
-            csv_file_path = os.path.join(directory_path, csv_file)
-            self.import_data(csv_file_path)
+        if not os.path.isdir(file_path):
+            raise CommandError(f'"{file_path}" is not a valid directory')
 
-    def import_data(self, csv_file):
-        model_mapping = {
-            'Client': Client, 'EditTable': EditTable, 'Element': Element,
-            'Habitat': Habitat, 'Language': Language, 'Lifestage': Lifestage,
-            'Location': Location, 'Media': Media, 'PubTitle': PubTitle,
-            'PubType': PubType, 'SpeciesName': SpeciesName, 'StudyType': StudyType,
-            'Tissue': Tissue, 'MaterialStatus': MaterialStatus, 'Wildlife': Wildlife,
-            'ActivityConcentrationUnit': ActivityConcentrationUnit, 'ParCRCalc': ParCRCalc,
-            'MaterialCRCalc': MaterialCRCalc, 'Radionuclide': Radionuclide, 'RAP': RAP,
-            'Reference': Reference, 'DataCR': DataCR,
-        }
+        for model in [Element, Habitat, WildlifeGroup, ...]:
+            file_name = os.path.join(file_path, model.__name__ + '.xlsx')
+            if os.path.exists(file_name):
+                self.stdout.write(f'Importing data for {model.__name__}...')
+                data = pd.read_excel(file_name)
+                model.objects.bulk_create(model(**row) for index, row in data.iterrows())
+                self.stdout.write(self.style.SUCCESS(f'Successfully imported data for {model.__name__}'))
+            else:
+                self.stdout.write(self.style.WARNING(f'No file found for {model.__name__}, skipping'))
 
-        model_name = os.path.splitext(os.path.basename(csv_file))[0]
-        if model_name not in model_mapping:
-            self.stdout.write(self.style.ERROR(f"Model {model_name} not found. Skipping..."))
-            return
-
-        model = model_mapping[model_name]
-
-        with open(csv_file, 'r') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                obj, created = model.objects.get_or_create(**row)
-                if created:
-                    self.stdout.write(self.style.SUCCESS(f"Successfully imported {model_name} {obj}"))
-                else:
-                    self.stdout.write(self.style.SUCCESS(f"{model_name} {obj} already exists. Skipping..."))
+        self.stdout.write(self.style.SUCCESS('Data import complete'))

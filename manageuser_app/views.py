@@ -31,7 +31,7 @@ def login_view(request):
                 login(request, user)
                 print("Successful login for user:", username)  # Add this line for debugging
                 messages.success(request, f'Welcome back, {username}!')
-                return redirect('board')
+                return redirect('dashboard')
             else:
                 print("Invalid username or password")  # Add this line for debugging
                 messages.error(request, 'Invalid username or password.')

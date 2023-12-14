@@ -5,4 +5,4 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def board_view(request):
-    return render(request, 'board.html')
+    return render(request, 'dashboard.html')

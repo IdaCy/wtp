@@ -1,254 +1,241 @@
 from django.db import models
-
-
-class Client(models.Model):
-    ClientID = models.IntegerField(primary_key=True)
-    Salutation = models.CharField(max_length=50)
-    Firstname = models.CharField(max_length=200)
-    Lastname = models.CharField(max_length=200)
-    EmailAddress = models.CharField(max_length=200)
-    JobTitle = models.CharField(max_length=200)
-    CompanyName = models.CharField(max_length=200)
-    CompanyStreet1 = models.CharField(max_length=200)
-    CompanyStreet2 = models.CharField(max_length=200)
-    CompanyCity = models.CharField(max_length=200)
-    CompanyCountry = models.CharField(max_length=200)
-    CompanyPostcode = models.CharField(max_length=50)
-    CompanyTel = models.CharField(max_length=20)
-    Website = models.CharField(max_length=200)
-    CompanyFaxno = models.CharField(max_length=20)
-    Username = models.CharField(max_length=50)
-    Password1 = models.CharField(max_length=200)
-    AdminPriv = models.BooleanField(default=False)
-    MoreInfo = models.CharField(max_length=200)
-
-
-class EditTable(models.Model):
-    EditID = models.IntegerField(primary_key=True)
-    TableName = models.CharField(max_length=50)
+from django.contrib.auth.models import User
 
 
 class Element(models.Model):
-    ElementID = models.IntegerField(primary_key=True)
-    Element = models.CharField(max_length=50)
-    Approved = models.BooleanField(default=False)
+    element_id = models.IntegerField(primary_key=True)
+    element_symbol = models.CharField(max_length=10)
+    approved = models.BooleanField(default=False)
 
 
 class Habitat(models.Model):
-    HabitatID = models.IntegerField(primary_key=True)
-    Habitat = models.CharField(max_length=200)
-    Approved = models.BooleanField(default=False)
-    MainHabitatType = models.SmallIntegerField()
-    UserID = models.IntegerField()
+    habitat_id = models.IntegerField(primary_key=True)
+    habitat_specific_type = models.CharField(max_length=200)
+    habitat_main_type_id = models.SmallIntegerField()
+    approved = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-class Language(models.Model):
-    LanguageID = models.IntegerField(primary_key=True)
-    Language1 = models.CharField(max_length=50)
-    Approved = models.BooleanField(default=False)
-    UserID = models.IntegerField()
-
-
-class Lifestage(models.Model):
-    LifestageID = models.IntegerField(primary_key=True)
-    Lifestage = models.CharField(max_length=50)
-    Approved = models.BooleanField(default=False)
-    LinktoRAP = models.IntegerField()
-
-
-class Location(models.Model):
-    LocationID = models.IntegerField(primary_key=True)
-    Location = models.CharField(max_length=200)
-
-
-class Media(models.Model):
-    MediaID = models.IntegerField(primary_key=True)
-    MediaType = models.CharField(max_length=50)
-    Approved = models.BooleanField(default=False)
-    UserID = models.IntegerField()
-    HabitatID = models.IntegerField()
-
-
-class PubTitle(models.Model):
-    PubTitleID = models.IntegerField(primary_key=True)
-    PubTitle = models.CharField(max_length=200)
-    Approved = models.BooleanField(default=False)
-    UserID = models.IntegerField()
-    ArticleType = models.CharField(max_length=50)
-
-
-class PubType(models.Model):
-    PubTypeID = models.IntegerField(primary_key=True)
-    ArticleType = models.CharField(max_length=200)
-    Approved = models.BooleanField(default=False)
-    UserID = models.IntegerField()
-
-
-class SpeciesName(models.Model):
-    SpeciesID = models.IntegerField(primary_key=True)
-    NameLatin = models.CharField(max_length=200)
-    NameCommon = models.CharField(max_length=200)
-    Approved = models.BooleanField(default=False)
-    UserID = models.IntegerField()
-
-
-class StudyType(models.Model):
-    StudyTypeID = models.IntegerField(primary_key=True)
-    StudyType = models.CharField(max_length=50)
-
-
-class Tissue(models.Model):
-    TissueID = models.IntegerField(primary_key=True)
-    Approved = models.BooleanField(default=False)
-    UserID = models.IntegerField()
-    CorrectionFactor = models.CharField(max_length=30)
-
-
-class MaterialStatus(models.Model):
-    MaterialStatusID = models.IntegerField(primary_key=True)
-    MaterialStatus = models.CharField(max_length=50)
-    CorrectionRatio = models.DecimalField(max_digits=10, decimal_places=3)
-    MediaTypeID = models.ForeignKey(Media, on_delete=models.CASCADE)
-
-
-class Wildlife(models.Model):
-    WildlifeGroupNumber = models.IntegerField(primary_key=True)
-    WildlifeGroup = models.CharField(max_length=200)
-    Approved = models.BooleanField(default=False)
-    HabitatID = models.ForeignKey(Habitat, on_delete=models.CASCADE)
-    DataExtract = models.IntegerField()
-    UserID = models.IntegerField()
-    HabitatName = models.CharField(max_length=200)
+class WildlifeGroup(models.Model):
+    wildlife_group_id = models.IntegerField(primary_key=True)
+    wildlife_group_name = models.CharField(max_length=200)
+    approved = models.BooleanField(default=False)
+    habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
+    data_extract = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     de_tophab_topwild = models.IntegerField()
     de_tophab_indwild = models.IntegerField()
     de_indhab_topwild = models.IntegerField()
     de_indhab_indwild = models.IntegerField()
 
 
-class ActivityConcentrationUnit(models.Model):
-    ActivityConcUnitID = models.AutoField(primary_key=True)
-    ActConcUnits = models.CharField(max_length=50)
-    Approved = models.BooleanField(default=False)
-    CorrectionFactor = models.DecimalField(max_digits=10, decimal_places=3)
-    MediaTypeID = models.ForeignKey(Media, on_delete=models.CASCADE)
-    UnitNumber = models.SmallIntegerField()
+class RAP(models.Model):
+    rap_id = models.IntegerField(primary_key=True)
+    rap_name = models.CharField(max_length=200)
+    habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
+    wildlife_group = models.ForeignKey(WildlifeGroup, on_delete=models.CASCADE)
+    summary = models.CharField(max_length=200)
+
+
+class Lifestage(models.Model):
+    lifestage_id = models.IntegerField(primary_key=True)
+    lifestage_name = models.CharField(max_length=50)
+    approved = models.BooleanField(default=False)
+    rap = models.ForeignKey(RAP, on_delete=models.CASCADE)
+
+
+class Media(models.Model):
+    media_id = models.IntegerField(primary_key=True)
+    media_type = models.CharField(max_length=50)
+    approved = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
+
+
+class PubType(models.Model):
+    pub_type_id = models.IntegerField(primary_key=True)
+    pub_type_name = models.CharField(max_length=200)
+    approved = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class PubTitle(models.Model):
+    pub_title_id = models.IntegerField(primary_key=True)
+    pub_title_name = models.CharField(max_length=200)
+    approved = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE)
+
+
+class SpeciesName(models.Model):
+    species_id = models.IntegerField(primary_key=True)
+    name_latin = models.CharField(max_length=200)
+    name_common = models.CharField(max_length=200)
+    approved = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class StudyType(models.Model):
+    study_type_id = models.IntegerField(primary_key=True)
+    study_type_name = models.CharField(max_length=50)
+
+
+class Tissue(models.Model):
+    tissue_id = models.IntegerField(primary_key=True)
+    approved = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    correction_factor_tissue = models.DecimalField(max_digits=10, decimal_places=3)
+
+
+class MaterialStatus(models.Model):
+    material_status_id = models.IntegerField(primary_key=True)
+    material_status_name = models.CharField(max_length=50)
+    correction_ratio = models.DecimalField(max_digits=10, decimal_places=3)
+    media = models.ForeignKey(Media, on_delete=models.CASCADE)
+
+
+class ActivityConcUnit(models.Model):
+    act_conc_unit_id = models.AutoField(primary_key=True)
+    act_conc_unit_symbol = models.CharField(max_length=50)
+    approved = models.BooleanField(default=False)
+    correction_factor_act_conc = models.DecimalField(max_digits=10, decimal_places=3)
+    media = models.ForeignKey(Media, on_delete=models.CASCADE)
 
 
 class ParCRCalc(models.Model):
-    CF_ID = models.IntegerField(primary_key=True)
-    WildlifeGroup = models.ForeignKey(Wildlife, on_delete=models.CASCADE)
-    Tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE)
-    WetDryRatio = models.DecimalField(max_digits=3, decimal_places=2)
-    AshRatio = models.DecimalField(max_digits=3, decimal_places=2)
-    FRESHER_CHOICES = [
+    cr_id = models.IntegerField(primary_key=True)
+    wildlife_group = models.ForeignKey(WildlifeGroup, on_delete=models.CASCADE)
+    tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE)
+    dry_to_wet_ratio = models.DecimalField(max_digits=3, decimal_places=2)
+    ash_to_wet_ratio = models.DecimalField(max_digits=3, decimal_places=2)
+    fmt_choices = [
         ('F', 'Freshwater'),
         ('M', 'Marine'),
         ('T', 'Terrestrial'),
     ]
-    IsFreMarTer = models.CharField(max_length=1, choices=FRESHER_CHOICES)
+    is_fre_mar_ter = models.CharField(max_length=1, choices=fmt_choices)
 
 
 class MaterialCRCalc(models.Model):
-    CF_ID = models.IntegerField(primary_key=True)
-    Element = models.ForeignKey(Element, on_delete=models.CASCADE)
-    Organism = models.CharField(max_length=50)
-    Liver = models.CharField(max_length=50)
-    Bone = models.CharField(max_length=50)
-    Muscle = models.CharField(max_length=50)
-    FRESHER_CHOICES = [
+    cr_id = models.IntegerField(primary_key=True)
+    element = models.ForeignKey(Element, on_delete=models.CASCADE)
+    organism = models.IntegerField()
+    liver_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2)
+    bone_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2)
+    muscle_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2)
+    fmt_choices = [
         ('F', 'Freshwater'),
         ('M', 'Marine'),
         ('T', 'Terrestrial'),
     ]
-    IsFreMarTer = models.CharField(max_length=1, choices=FRESHER_CHOICES)
+    is_fre_mar_ter = models.CharField(max_length=1, choices=fmt_choices)
 
 
 class Radionuclide(models.Model):
-    RadionuclideNumber = models.IntegerField(primary_key=True)
-    Radionuclide = models.CharField(max_length=50)
-    Element = models.ForeignKey(Element, on_delete=models.CASCADE)
-    Approved = models.BooleanField(default=False)
-    UserID = models.IntegerField()
+    radionuclide_id = models.IntegerField(primary_key=True)
+    radionuclide_name = models.CharField(max_length=50)
+    element = models.ForeignKey(Element, on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-class RAP(models.Model):
-    RAP_ID = models.IntegerField(primary_key=True)
-    RAP = models.CharField(max_length=200)
-    HabitatID = models.ForeignKey(Habitat, on_delete=models.CASCADE)
-    Approved = models.BooleanField(default=False)
-    WildlifeID = models.ForeignKey(Wildlife, on_delete=models.CASCADE)
-    Summary = models.CharField(max_length=200)
+class Language(models.Model):
+    language_id = models.IntegerField(primary_key=True)
+    language = models.CharField(max_length=50)
+    approved = models.BooleanField(default=False)
+    user_id = models.IntegerField()
 
 
 class Reference(models.Model):
-    RefID = models.IntegerField(primary_key=True)
-    Author = models.CharField(max_length=500)
-    ArticleTitle = models.CharField(max_length=500)
-    PubTitle = models.ForeignKey(PubTitle, on_delete=models.CASCADE)
-    Year1 = models.SmallIntegerField()
-    Volume = models.SmallIntegerField()
-    Part = models.CharField(max_length=20)
-    Pages = models.CharField(max_length=20)
-    Language = models.ForeignKey(Language, on_delete=models.CASCADE)
-    PubType = models.ForeignKey(PubType, on_delete=models.CASCADE)
-    Translation1 = models.CharField(max_length=5)
-    Keyword1 = models.CharField(max_length=50)
-    Keyword2 = models.CharField(max_length=50)
-    Keyword3 = models.CharField(max_length=50)
-    Keyword4 = models.CharField(max_length=50)
-    Location = models.CharField(max_length=200)
-    Notes = models.CharField(max_length=500)
-    UserID = models.IntegerField()
-    DC_ID = models.IntegerField()
-    ApprovalStatus = models.CharField(max_length=20)
-    ReasonApprovalDelete = models.CharField(max_length=500)
+    ref_id = models.IntegerField(primary_key=True)
+    author = models.CharField(max_length=500)
+    article_title = models.CharField(max_length=500)
+    pub_title = models.ForeignKey(PubTitle, on_delete=models.CASCADE)
+    year = models.SmallIntegerField()
+    volume = models.SmallIntegerField()
+    part = models.CharField(max_length=20)
+    pages = models.CharField(max_length=20)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE)
+    pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE)
+    translation = models.CharField(max_length=5)
+    keyword_1 = models.CharField(max_length=50)
+    keyword_2 = models.CharField(max_length=50)
+    keyword_3 = models.CharField(max_length=50)
+    keyword_4 = models.CharField(max_length=50)
+    notes = models.CharField(max_length=500)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    dc_id = models.IntegerField()
+    approval_status = models.CharField(max_length=20)
+    reason_approval_delete = models.CharField(max_length=500)
 
 
 class DataCR(models.Model):
-    CR_ID = models.IntegerField(primary_key=True)
-    RefID = models.ForeignKey(Reference, on_delete=models.CASCADE)
-    HabitatID = models.ForeignKey(Habitat, on_delete=models.CASCADE)
-    Wildlife = models.CharField(max_length=200)
-    ICRPRAP = models.CharField(max_length=200)
-    Lifestage = models.CharField(max_length=200)
-    SpNameLatin = models.ForeignKey(SpeciesName, on_delete=models.CASCADE)
-    StudyType = models.ForeignKey(StudyType, on_delete=models.CASCADE)
-    MeasurementDate = models.DateField()
-    Tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE)
-    Media = models.ForeignKey(Media, on_delete=models.CASCADE)
-    CRN = models.SmallIntegerField()
-    CR = models.IntegerField()
-    CR_SD = models.IntegerField()
-    Notes = models.CharField(max_length=500)
-    Radionuclide = models.ForeignKey(Radionuclide, on_delete=models.CASCADE)
-    FromERICA = models.BooleanField(default=False)
-    Accepted = models.BooleanField(default=False)
-    Biohalflife = models.CharField(max_length=30)
-    BiotaConc = models.CharField(max_length=30)
-    BiotaConcUnits = models.CharField(max_length=30)
-    BiotaN = models.CharField(max_length=30)
-    BiotaSD = models.CharField(max_length=30)
-    BiotaWetDry = models.CharField(max_length=30)
-    DataExtract = models.IntegerField()
-    Location = models.CharField(max_length=30)
-    MediaConc = models.CharField(max_length=30)
-    MediaN = models.CharField(max_length=30)
-    MediaConcUnits = models.CharField(max_length=30)
-    MediaSD = models.CharField(max_length=30)
-    MediaWetDry = models.CharField(max_length=30)
-    OtherTissue = models.BooleanField(default=False)
-    QC = models.CharField(max_length=30)
-    RepOrganUnits = models.CharField(max_length=30)
-    ReproductiveOrgan = models.CharField(max_length=30)
-    RepWetDry = models.CharField(max_length=30)
-    StandBiotaConc = models.CharField(max_length=30)
-    StandBiotaSD = models.CharField(max_length=30)
-    StandMediaConc = models.CharField(max_length=30)
-    StandMediaSD = models.CharField(max_length=30)
-    SummaryApprove = models.BooleanField(default=False)
-    APPROVAL_CHOICES = [
+    cr_id = models.IntegerField(primary_key=True)
+    reference = models.ForeignKey(Reference, on_delete=models.CASCADE)
+    habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
+    wildlife_group = models.ForeignKey(WildlifeGroup, on_delete=models.CASCADE)
+    icrp_rap = models.ForeignKey(RAP, on_delete=models.CASCADE)
+    lifestage = models.ForeignKey(Lifestage, on_delete=models.CASCADE)
+    species_name = models.ForeignKey(SpeciesName, on_delete=models.CASCADE)
+    study_type = models.ForeignKey(StudyType, on_delete=models.CASCADE)
+    measurement_date = models.DateField()
+    tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE)
+    media = models.ForeignKey(Media, on_delete=models.CASCADE)
+    crn = models.SmallIntegerField()
+    cr = models.IntegerField()
+    cr_sd = models.IntegerField()
+    notes = models.CharField(max_length=500)
+    radionuclide = models.ForeignKey(Radionuclide, on_delete=models.CASCADE)
+    from_erica = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=False)
+    biohalflife = models.CharField(max_length=30)
+    biota_conc = models.DecimalField(max_digits=25, decimal_places=15)
+    biota_conc_unit_choices = [
+        ('µCi/kg', 'µCi/kg'),
+        ('Bq/kg', 'Bq/kg'),
+        ('Bg/kg fresh', 'Bg/kg fresh'),
+        ('Bg/kg FW', 'Bg/kg FW'),
+        ('Bq/l', 'Bq/l'),
+        ('mg/kg fresh', 'mg/kg fresh'),
+        ('bg/kg FW', 'bg/kg FW'),
+    ]
+    biota_conc_units = models.CharField(max_length=20, choices=biota_conc_unit_choices, default='Bq/kg', )
+    biota_n = models.IntegerField()
+    biota_sd = models.CharField(max_length=30)
+    biota_wet_dry = models.CharField(max_length=30)
+    data_extract = models.IntegerField()
+    media_conc = models.DecimalField(max_digits=10, decimal_places=3)
+    media_n = models.CharField(max_length=30)
+    media_conc_unit_choices = [
+        ('Bq/kg', 'Bq/kg'),
+        ('Bq/l', 'Bq/l'),
+        ('mBq/l', 'mBq/l'),
+    ]
+    media_conc_units = models.CharField(max_length=20, choices=media_conc_unit_choices, default='Bq/kg', )
+    media_sd = models.CharField(max_length=30)
+    media_wet_dry_choices = [
+        ('W', 'Wet'),
+        ('D', 'Dry'),
+    ]
+    media_wet_dry = models.CharField(max_length=1, choices=media_wet_dry_choices, default='W', )
+    other_tissue = models.BooleanField(default=False)
+    qc = models.CharField(max_length=30)
+    rep_organ_units = models.CharField(max_length=30)
+    reproductive_organ = models.CharField(max_length=30)
+    rep_wet_dry_choices = [
+        ('W', 'Wet'),
+        ('D', 'Dry'),
+    ]
+    rep_wet_dry = models.CharField(max_length=1, choices=rep_wet_dry_choices, default='W')
+    stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3)
+    stand_biota_sd = models.CharField(max_length=30)
+    stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3)
+    stand_media_sd = models.CharField(max_length=30)
+    summary_approve = models.BooleanField(default=False)
+    approval_choices = [
         ('PENDING', 'Pending'),
         ('APPROVED', 'Approved'),
         ('REJECTED', 'Rejected'),
     ]
-    ApprovalDataStatus = models.CharField(max_length=20, choices=APPROVAL_CHOICES, default='PENDING', )
+    approval_data_status = models.CharField(max_length=20, choices=approval_choices, default='PENDING')

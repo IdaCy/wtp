@@ -4,23 +4,23 @@
 {% block title %}Data View Page{% endblock %}
 
 {% block content %}
-    <h1>CR Data Overview</h1>
+    <h1>The References</h1>
     <table class="data-table">
         <thead>
             <tr>
-                <th>CR ID</th>
+                <th>Reference ID</th>
                 <th>From ERICA</th>
                 <th>Correction Ratio (CR)</th>
                 <th>Approval Status</th>
             </tr>
         </thead>
         <tbody>
-            {% for item in data %}
+            {% for item in reference %}
                 <tr>
-                    <td>{{ item.cr_id }}</td>
-                    <td>{{ item.from_erica }}</td>
-                    <td>{{ item.cr }}</td>
-                    <td>{{ item.approval_data_status }}</td>
+                    <td>{{ item.ref_id }}</td>
+                    <td>{{ item.author }}</td>
+                    <td>{{ item.volume }}</td>
+                    <td>{{ item.translation }}</td>
                 </tr>
             {% endfor %}
         </tbody>

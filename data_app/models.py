@@ -144,53 +144,53 @@ class Language(models.Model):
     language_id = models.IntegerField(primary_key=True)
     language = models.CharField(max_length=50)
     approved = models.BooleanField(default=False)
-    user_id = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 
 class Reference(models.Model):
     ref_id = models.IntegerField(primary_key=True)
     author = models.CharField(max_length=500)
-    article_title = models.CharField(max_length=500)
-    pub_title = models.ForeignKey(PubTitle, on_delete=models.CASCADE)
-    year = models.SmallIntegerField()
-    volume = models.SmallIntegerField()
-    part = models.CharField(max_length=20)
-    pages = models.CharField(max_length=20)
-    language = models.ForeignKey(Language, on_delete=models.CASCADE)
-    pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE)
-    translation = models.CharField(max_length=5)
-    keyword_1 = models.CharField(max_length=50)
-    keyword_2 = models.CharField(max_length=50)
-    keyword_3 = models.CharField(max_length=50)
-    keyword_4 = models.CharField(max_length=50)
-    notes = models.CharField(max_length=500)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    article_title = models.CharField(max_length=500, null=True)
+    pub_title = models.ForeignKey(PubTitle, on_delete=models.CASCADE, null=True)
+    year = models.CharField(max_length=30, default='', blank=True)
+    volume = models.CharField(max_length=50, default='', blank=True)
+    part = models.CharField(max_length=50, default='', blank=True)
+    pages = models.CharField(max_length=50, default='', blank=True)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE, null=True)
+    pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE, null=True)
+    translation = models.CharField(max_length=5, default='', blank=True)
+    keyword_1 = models.CharField(max_length=50, default='', blank=True)
+    keyword_2 = models.CharField(max_length=50, default='', blank=True)
+    keyword_3 = models.CharField(max_length=50, default='', blank=True)
+    keyword_4 = models.CharField(max_length=50, default='', blank=True)
+    notes = models.CharField(max_length=500, default='', blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     dc_id = models.IntegerField()
     approval_status = models.CharField(max_length=20)
-    reason_approval_delete = models.CharField(max_length=500)
+    reason_approval_delete = models.CharField(max_length=500, default='', blank=True)
 
 
 class DataCR(models.Model):
     cr_id = models.IntegerField(primary_key=True)
-    reference = models.ForeignKey(Reference, on_delete=models.CASCADE)
-    habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
-    wildlife_group = models.ForeignKey(WildlifeGroup, on_delete=models.CASCADE)
-    icrp_rap = models.ForeignKey(RAP, on_delete=models.CASCADE)
-    lifestage = models.ForeignKey(Lifestage, on_delete=models.CASCADE)
-    species_name = models.ForeignKey(SpeciesName, on_delete=models.CASCADE)
-    study_type = models.ForeignKey(StudyType, on_delete=models.CASCADE)
-    measurement_date = models.DateField()
-    tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE)
-    media = models.ForeignKey(Media, on_delete=models.CASCADE)
-    crn = models.SmallIntegerField()
-    cr = models.IntegerField()
-    cr_sd = models.IntegerField()
-    notes = models.CharField(max_length=500)
-    radionuclide = models.ForeignKey(Radionuclide, on_delete=models.CASCADE)
+    reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
+    habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE, null=True)
+    wildlife_group = models.ForeignKey(WildlifeGroup, on_delete=models.CASCADE, null=True)
+    icrp_rap = models.ForeignKey(RAP, on_delete=models.CASCADE, null=True)
+    lifestage = models.ForeignKey(Lifestage, on_delete=models.CASCADE, null=True)
+    species_name = models.ForeignKey(SpeciesName, on_delete=models.CASCADE, null=True)
+    study_type = models.ForeignKey(StudyType, on_delete=models.CASCADE, null=True)
+    measurement_date = models.CharField(max_length=50, null=True)
+    tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE, null=True)
+    media = models.ForeignKey(Media, on_delete=models.CASCADE, null=True)
+    crn = models.IntegerField(null=True) # or? models.SmallIntegerField(null=True)
+    cr = models.DecimalField(max_digits=25, decimal_places=10, null=True)
+    cr_sd = models.DecimalField(max_digits=25, decimal_places=10, null=True)
+    notes = models.CharField(max_length=500, null=True)
+    radionuclide = models.ForeignKey(Radionuclide, on_delete=models.CASCADE, null=True)
     from_erica = models.BooleanField(default=False)
     accepted = models.BooleanField(default=False)
-    biohalflife = models.CharField(max_length=30)
-    biota_conc = models.DecimalField(max_digits=25, decimal_places=15)
+    biohalflife = models.CharField(max_length=30, null=True)
+    biota_conc = models.CharField(max_length=30, null=True)
     biota_conc_unit_choices = [
         ('µCi/kg', 'µCi/kg'),
         ('Bq/kg', 'Bq/kg'),
@@ -198,40 +198,51 @@ class DataCR(models.Model):
         ('Bg/kg FW', 'Bg/kg FW'),
         ('Bq/l', 'Bq/l'),
         ('mg/kg fresh', 'mg/kg fresh'),
-        ('bg/kg FW', 'bg/kg FW'),
+        ('mg/kg', 'mg/kg'),
+        ('mg/kg FW', 'mg/kg FW'),
+        ('Bq/m3', 'Bq/m3'),
     ]
-    biota_conc_units = models.CharField(max_length=20, choices=biota_conc_unit_choices, default='Bq/kg', )
-    biota_n = models.IntegerField()
-    biota_sd = models.CharField(max_length=30)
-    biota_wet_dry = models.CharField(max_length=30)
-    data_extract = models.IntegerField()
-    media_conc = models.DecimalField(max_digits=10, decimal_places=3)
-    media_n = models.CharField(max_length=30)
+    biota_conc_units = models.CharField(max_length=20, choices=biota_conc_unit_choices, default='Bq/kg', null=True, blank=True )
+    biota_n = models.IntegerField(null=True)
+    biota_sd = models.CharField(max_length=30, null=True)
+    biota_wet_dry_choices = [
+        ('W', 'Wet'),
+        ('D', 'Dry'),
+        ('A', 'Air'),
+    ]
+    biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, default='W', null=True, blank=True )
+    data_extract = models.IntegerField(null=True)
+    media_conc = models.CharField(max_length=30, null=True)
+    media_n = models.CharField(max_length=30, null=True)
     media_conc_unit_choices = [
         ('Bq/kg', 'Bq/kg'),
         ('Bq/l', 'Bq/l'),
+        ('Bq/m3', 'Bq/m3'),
         ('mBq/l', 'mBq/l'),
+        ('mg/kg', 'mg/kg'),
     ]
-    media_conc_units = models.CharField(max_length=20, choices=media_conc_unit_choices, default='Bq/kg', )
-    media_sd = models.CharField(max_length=30)
+    media_conc_units = models.CharField(max_length=20, choices=media_conc_unit_choices, default='Bq/kg', null=True, blank=True )
+    media_sd = models.CharField(max_length=30, null=True)
     media_wet_dry_choices = [
         ('W', 'Wet'),
         ('D', 'Dry'),
+        ('A', 'Air'),
     ]
-    media_wet_dry = models.CharField(max_length=1, choices=media_wet_dry_choices, default='W', )
-    other_tissue = models.BooleanField(default=False)
-    qc = models.CharField(max_length=30)
-    rep_organ_units = models.CharField(max_length=30)
-    reproductive_organ = models.CharField(max_length=30)
+    media_wet_dry = models.CharField(max_length=5, choices=media_wet_dry_choices, default='W', null=True, blank=True )
+    other_tissue = models.CharField(max_length=30, null=True)
+    qc = models.BooleanField(default=False)
+    rep_organ_units = models.CharField(max_length=30, null=True)
+    reproductive_organ = models.CharField(max_length=30, null=True)
     rep_wet_dry_choices = [
         ('W', 'Wet'),
         ('D', 'Dry'),
+        ('A', 'Air'),
     ]
-    rep_wet_dry = models.CharField(max_length=1, choices=rep_wet_dry_choices, default='W')
-    stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3)
-    stand_biota_sd = models.CharField(max_length=30)
-    stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3)
-    stand_media_sd = models.CharField(max_length=30)
+    rep_wet_dry = models.CharField(max_length=5, choices=rep_wet_dry_choices, default='W', null=True, blank=True )
+    stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True)
+    stand_biota_sd = models.CharField(max_length=30, null=True)
+    stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True)
+    stand_media_sd = models.CharField(max_length=30, null=True)
     summary_approve = models.BooleanField(default=False)
     approval_choices = [
         ('PENDING', 'Pending'),

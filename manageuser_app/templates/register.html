@@ -18,11 +18,11 @@
 
     <main>
         <h1>Register</h1>
-        <form method="post" action="{% url 'register' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Register</button>
-        </form>
+<form method="post" action="{% url 'register' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}

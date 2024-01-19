@@ -14,4 +14,5 @@ urlpatterns = [
     path('legal/', manageuser_views.legal_view, name='legal'),
     path('data/', data_views.data_view, name='data'),
     path('reference/', data_views.ref_view, name='reference'),
+    path('add_datacr/', data_views.add_datacr, name='add_datacr'),
 ]

@@ -1,10 +1,11 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
-from data_app.models import DataCR
+from data_app.models import User, DataCR
 import pandas as pd
 import os
-import numpy as np  # Import numpy to check for NaN
+from math import isnan  # Import isnan from math
+from decimal import Decimal
 
 class Command(BaseCommand):
     help = 'Imports data from Excel files into the database'
@@ -75,10 +76,10 @@ class Command(BaseCommand):
                                     row_data[field_name] = None
                                 else:
                                     self.stdout.write(self.style.WARNING(
-                                        f"Skipping row {index} in {model.__name__}: "
-                                        f"NaN found in non-nullable numeric field {field_name}."
+                                        f"Setting row {index} in {model.__name__}: "
+                                        f"NaN found in non-nullable numeric field {field_name} to None."
                                     ))
-                                    continue
+                                    row_data[field_name] = None
 
                     instances.append(model(**row_data))
 

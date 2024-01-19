@@ -1,5 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    SALUTATION_CHOICES = [
+    ('Mr', 'Mr'),
+    ('Mrs', 'Mrs'),
+    ('Miss', 'Miss'),
+    ('Dr', 'Dr'),
+    ('Professor', 'Professor'),
+    ('Ms', 'Ms'),
+    ('Other', 'Other'),
+    ]
+
+    salutation = models.CharField(max_length=20, choices=SALUTATION_CHOICES, blank=True, null=True)
+    firstname = models.CharField(max_length=30, blank=True, null=True)
+    lastname = models.CharField(max_length=30, blank=True, null=True)
+    email = models.EmailField(unique=True)
+    jobtitle = models.CharField(max_length=200, blank=True, null=True)
+    company = models.CharField(max_length=200, blank=True, null=True)
+    admin_priv = models.SmallIntegerField(default=0, null=True)
 
 
 class Element(models.Model):
@@ -107,8 +126,8 @@ class ParCRCalc(models.Model):
     cr_id = models.IntegerField(primary_key=True)
     wildlife_group = models.ForeignKey(WildlifeGroup, on_delete=models.CASCADE)
     tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE)
-    dry_to_wet_ratio = models.DecimalField(max_digits=3, decimal_places=2)
-    ash_to_wet_ratio = models.DecimalField(max_digits=3, decimal_places=2)
+    dry_to_wet_ratio = models.DecimalField(max_digits=3, decimal_places=2, null=True)
+    ash_to_wet_ratio = models.DecimalField(max_digits=3, decimal_places=2, null=True)
     fmt_choices = [
         ('F', 'Freshwater'),
         ('M', 'Marine'),
@@ -121,9 +140,9 @@ class MaterialCRCalc(models.Model):
     cr_id = models.IntegerField(primary_key=True)
     element = models.ForeignKey(Element, on_delete=models.CASCADE)
     organism = models.IntegerField()
-    liver_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2)
-    bone_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2)
-    muscle_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2)
+    liver_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    bone_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    muscle_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     fmt_choices = [
         ('F', 'Freshwater'),
         ('M', 'Marine'),

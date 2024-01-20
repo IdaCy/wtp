@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import DataCR, PubType, PubTitle, Language
-from .models import Reference
+from .models import DataCR, PubType, PubTitle, Language, Reference
 from .forms import DataCRForm
 
 
@@ -36,4 +35,5 @@ def add_datacr(request):
         'pub_types': PubType.objects.all(),
         'pub_titles': PubTitle.objects.all(),
         'languages': Language.objects.all(),
+        'article_title': Reference.objects.all(),
     })

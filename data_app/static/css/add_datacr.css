@@ -1,0 +1,55 @@
+section {
+    background-color: #b0b6af;
+    padding: 30px 20px 30px 20px;
+    margin: 10px 0;
+}
+
+.reference {
+    /*display: flex;
+    flex-direction: column;*/
+    /* align-items: center; Centering the content horizontally? */
+}
+
+.flex-container {
+    display: flex;
+    width: 100%;
+}
+
+.left, .right {
+    width: 50%;
+    display: flex;
+    flex-direction: column; /* Updated to make the content stack vertically */
+}
+
+/* some margin between the labels and inputs/select */
+.left label,
+.right label,
+.left input,
+.right select,
+.right input {
+    margin-bottom: 10px;
+}
+
+div.entry, div.pub {
+    margin: 5px;
+}
+
+
+/* Publication Title Lable & Field */
+.pub {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pub label {
+    margin-right: 10px;
+    white-space: nowrap; /* Prevent label from wrapping to the next line */
+}
+
+.pub select {
+    flex: 1;
+    /*width: auto;  Let the select element determine its width based on content */
+    width: 100%;
+    margin-left: 5px; /* Adjust margin to separate label and select */
+}

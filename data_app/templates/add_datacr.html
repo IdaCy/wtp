@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/add_datacr.css' %}">
 {% endblock %}
 
+<!-- note: auto-format with Ctrl + Alt + L -->
 {% block content %}
     <h1>Add Record</h1>
 
@@ -16,158 +17,183 @@
 
 
         <!-- Reference Section -->
-        <h2>Reference</h2>
-        <label for="id_reference_id">Reference ID:</label>
-        <input type="text" id="id_reference_id" name="reference_id" readonly>
+        <section class="reference">
+            <!--<h2>Reference</h2>-->
+            <div class="entry">
+                <label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>
+            </div>
 
-        <label for="id_author">Author:</label>
-        <input type="text" id="id_author" name="author">
+            <div class="flex-container">
+                <div class="left">
+                    <div class="entry">
+                        <label for="id_author">Author:</label>
+                        <input type="text" id="id_author" name="author">
+                    </div>
+                    <div class="entry">
+                        <label for="id_publication_type">Publication Type:</label>
+                        {{ form.publication_type }}
+                    </div>
+                </div>
 
-        <label for="id_publication_type">Publication Type:</label>
-        {{ form.publication_type }}
+                <div class="right">
 
-        <label for="id_publication_title">Publication Title:</label>
-        {{ form.publication_title }}
+                    <div class="entry">
+                        <label for="id_article_title">Article Title:</label>
+                        {{ form.ref_article_title }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_year">Year:</label>
+                        <input type="text" id="id_year" name="year">
+                    </div>
+                </div>
+            </div>
 
-        <label for="id_volume">Volume:</label>
-        <input type="text" id="id_volume" name="volume">
+            <div class="pub">
+                <label for="id_publication_title">Publication Title:</label>
+                {{ form.publication_title }}
+            </div>
 
-        <label for="id_part">Part:</label>
-        <input type="text" id="id_part" name="part">
 
-        <label for="id_page_numbers">Page Numbers:</label>
-        <input type="text" id="id_page_numbers" name="page_numbers">
-
-        <label for="id_reference_language">Reference Language:</label>
-        <select id="id_reference_language" name="reference_language">
-            <!-- !! add option to enter a new reference language -->
-            <option value="">-- Enter New --</option>
-        </select>
-
-        <label for="id_translation_available">Translation into English Available:</label>
-        <input type="checkbox" id="id_translation_available" name="translation_available">
-
-        <label for="id_year">Year:</label>
-        <input type="text" id="id_year" name="year">
-
-        <label for="id_article_title">Article Title:</label>
-        <select id="id_article_title" name="article_title">
-            <!-- !! add option to enter a new article title -->
-            <option value="">-- Enter New --</option>
-        </select>
-
-        <label for="id_reference_language">Reference Language:</label>
-        {{ form.reference_language }}
+            <div class="flex-container">
+                <div class="left">
+                    <div class="entry">
+                        <label for="id_volume">Volume:</label>
+                        <input type="text" id="id_volume" name="volume">
+                    </div>
+                    <div class="entry">
+                        <label for="id_reference_language">Reference Language:</label>
+                            {{ form.reference_language }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_translation_available">Translation into English Available:</label>
+                        <input type="checkbox" id="id_translation_available" name="translation_available">
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="entry">
+                        <label for="id_part">Part:</label>
+                        <input type="text" id="id_part" name="part">
+                    </div>
+                    <div class="entry">
+                        <label for="id_page_numbers">Page Numbers:</label>
+                        <input type="text" id="id_page_numbers" name="page_numbers">
+                    </div>
+                </div>
+            </div>
+        </section>
 
 
         <!-- Species Section -->
-        <h2>Species</h2>
-        <label for="id_habitat">Habitat:</label>
-        <select id="id_habitat" name="habitat">
-            <option value="estuarine" selected>Estuarine (terrestrial)</option>
-            <!-- !! add other habitat options -->
-        </select>
+        <section class="species">
+            <!--<h2>Species</h2>-->
+            <label for="id_habitat">Habitat:</label>
+            <select id="id_habitat" name="habitat">
+                <option value="estuarine" selected>Estuarine (terrestrial)</option>
+                <!-- !! add other habitat options -->
+            </select>
 
-        <label for="id_icrp_rap">ICRP RAP:</label>
-        <select id="id_icrp_rap" name="icrp_rap">
-            <option value="frog" selected>Frog</option>
-        </select>
+            <label for="id_icrp_rap">ICRP RAP:</label>
+            <select id="id_icrp_rap" name="icrp_rap">
+                <option value="frog" selected>Frog</option>
+            </select>
 
-        <label for="id_lifestage">Lifestage:</label>
-        <select id="id_lifestage" name="lifestage">
-            <option value="none" selected>None</option>
-        </select>
+            <label for="id_lifestage">Lifestage:</label>
+            <select id="id_lifestage" name="lifestage">
+                <option value="none" selected>None</option>
+            </select>
 
-        <label for="id_wildlife_group">Wildlife Group:</label>
-        <select id="id_wildlife_group" name="wildlife_group">
-            <option value="amphibian" selected>Amphibian</option>
-        </select>
+            <label for="id_wildlife_group">Wildlife Group:</label>
+            <select id="id_wildlife_group" name="wildlife_group">
+                <option value="amphibian" selected>Amphibian</option>
+            </select>
 
-        <label for="id_studytype">Studytype:</label>
-        <select id="id_studytype" name="studytype">
-        </select>
+            <label for="id_studytype">Studytype:</label>
+            <select id="id_studytype" name="studytype">
+            </select>
 
-        <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
+            <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
 
-        <label for="id_species_common">Species Common:</label>
-        <select id="id_species_common" name="species_common">
-            <option value="" selected>-- Add New --</option>
-        </select>
+            <label for="id_species_common">Species Common:</label>
+            <select id="id_species_common" name="species_common">
+                <option value="" selected>-- Add New --</option>
+            </select>
 
-        <label for="id_species_latin">Species Latin:</label>
-        <select id="id_species_latin" name="species_latin">
-            <option value="" selected>-- Add New --</option>
-        </select>
+            <label for="id_species_latin">Species Latin:</label>
+            <select id="id_species_latin" name="species_latin">
+                <option value="" selected>-- Add New --</option>
+            </select>
 
-        <label for="id_sampling_date">Sampling Date:</label>
-        <input type="date" id="id_sampling_date" name="sampling_date">
+            <label for="id_sampling_date">Sampling Date:</label>
+            <input type="date" id="id_sampling_date" name="sampling_date">
 
-        <label for="id_dynamic_info">Dynamic Info:</label>
-        <input type="text" id="id_dynamic_info" name="dynamic_info">
+            <label for="id_dynamic_info">Dynamic Info:</label>
+            <input type="text" id="id_dynamic_info" name="dynamic_info">
 
-        <label for="id_element_nuclide">Element/Nuclide:</label>
-        <select id="id_element_nuclide" name="element_nuclide">
-        </select>
-
+            <label for="id_element_nuclide">Element/Nuclide:</label>
+            <select id="id_element_nuclide" name="element_nuclide">
+            </select>
+        </section>
 
         <!-- Sample Section -->
-        <h2>Sample</h2>
-        <label for="id_media_type">Media Type:</label>
-        <select id="id_media_type" name="media_type">
-            <option value="soil" selected>Soil</option>
-            <option value="air">Air</option>
-        </select>
+        <section class="species">
+            <!--<h2>Sample</h2>-->
+            <label for="id_media_type">Media Type:</label>
+            <select id="id_media_type" name="media_type">
+                <option value="soil" selected>Soil</option>
+                <option value="air">Air</option>
+            </select>
 
-        <label for="id_media_wet_dry">Media Wet/Dry:</label>
-        <select id="id_media_wet_dry" name="media_wet_dry">
-        </select>
+            <label for="id_media_wet_dry">Media Wet/Dry:</label>
+            <select id="id_media_wet_dry" name="media_wet_dry">
+            </select>
 
-        <label for="id_n_for_media">N for Media:</label>
-        <input type="text" id="id_n_for_media" name="n_for_media">
+            <label for="id_n_for_media">N for Media:</label>
+            <input type="text" id="id_n_for_media" name="n_for_media">
 
-        <label for="id_sd_for_media">SD for Media:</label>
-        <input type="text" id="id_sd_for_media" name="sd_for_media">
+            <label for="id_sd_for_media">SD for Media:</label>
+            <input type="text" id="id_sd_for_media" name="sd_for_media">
 
-        <label for="id_media_conc">Media Conc:</label>
-        <input type="text" id="id_media_conc" name="media_conc">
+            <label for="id_media_conc">Media Conc:</label>
+            <input type="text" id="id_media_conc" name="media_conc">
 
-        <label for="id_media_units">Media Units:</label>
-        <select id="id_media_units" name="media_units">
-            <!-- Add media units options -->
-        </select>
+            <label for="id_media_units">Media Units:</label>
+            <select id="id_media_units" name="media_units">
+                <!-- Add media units options -->
+            </select>
 
-        <label for="id_tissue_type">Tissue Type:</label>
-        <select id="id_tissue_type" name="tissue_type">
-            <!-- Add tissue type options -->
-        </select>
+            <label for="id_tissue_type">Tissue Type:</label>
+            <select id="id_tissue_type" name="tissue_type">
+                <!-- Add tissue type options -->
+            </select>
 
-        <label for="id_status_of_biota">Status of Biota:</label>
-        <select id="id_status_of_biota" name="status_of_biota">
-            <!-- Add status of biota options -->
-        </select>
+            <label for="id_status_of_biota">Status of Biota:</label>
+            <select id="id_status_of_biota" name="status_of_biota">
+                <!-- Add status of biota options -->
+            </select>
 
-        <label for="id_n_for_biota">N for Biota:</label>
-        <input type="text" id="id_n_for_biota" name="n_for_biota">
+            <label for="id_n_for_biota">N for Biota:</label>
+            <input type="text" id="id_n_for_biota" name="n_for_biota">
 
-        <label for="id_sd_for_biota">SD for Biota:</label>
-        <input type="text" id="id_sd_for_biota" name="sd_for_biota">
+            <label for="id_sd_for_biota">SD for Biota:</label>
+            <input type="text" id="id_sd_for_biota" name="sd_for_biota">
 
-        <label for="id_biota_conc">Biota Conc:</label>
-        <input type="text" id="id_biota_conc" name="biota_conc">
+            <label for="id_biota_conc">Biota Conc:</label>
+            <input type="text" id="id_biota_conc" name="biota_conc">
 
-        <label for="id_biota_units">Biota Units:</label>
-        <select id="id_biota_units" name="biota_units">
-            <!-- Add biota units options -->
-        </select>
+            <label for="id_biota_units">Biota Units:</label>
+            <select id="id_biota_units" name="biota_units">
+                <!-- Add biota units options -->
+            </select>
 
-        <label for="id_concentration_ratio">Concentration Ratio:</label>
-        <input type="text" id="id_concentration_ratio" name="concentration_ratio" readonly>
+            <label for="id_concentration_ratio">Concentration Ratio:</label>
+            <input type="text" id="id_concentration_ratio" name="concentration_ratio" readonly>
 
-        <label for="id_n_of_cr">N of CR:</label>
-        <input type="text" id="id_n_of_cr" name="n_of_cr">
+            <label for="id_n_of_cr">N of CR:</label>
+            <input type="text" id="id_n_of_cr" name="n_of_cr">
 
-        <label for="id_sd_of_cr">SD of CR:</label>
-        <input type="text" id="id_sd_of_cr" name="sd_of_cr">
+            <label for="id_sd_of_cr">SD of CR:</label>
+            <input type="text" id="id_sd_of_cr" name="sd_of_cr">
+        </section>
 
         <!-- Placeholder for Calculations -->
         <div>
@@ -179,5 +205,19 @@
 
         <button type="submit" name="action" value="add_all">Add All</button>
         <button type="submit" name="action" value="add_mid">Add Mid</button>
+
     </form>
+
+
+    <script>
+        // JavaScript to set the value of reference_id when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            // Generate a unique reference_id based on the date and time
+            var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '');
+            /*var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(2);*/
+            document.getElementById('reference_id_placeholder').textContent = reference_id;
+        });
+    </script>
+
+    <link rel="stylesheet" href="/static/css/add_datacr.css">
 {% endblock %}

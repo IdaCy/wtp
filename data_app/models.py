@@ -194,6 +194,8 @@ class Reference(models.Model):
     approval_status = models.CharField(max_length=20)
     reason_approval_delete = models.CharField(max_length=500, default='', blank=True)
 
+    def __str__(self):
+        return self.article_title
 
 class DataCR(models.Model):
     cr_id = models.IntegerField(primary_key=True)

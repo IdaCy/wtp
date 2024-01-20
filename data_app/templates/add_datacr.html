@@ -24,14 +24,10 @@
         <input type="text" id="id_author" name="author">
 
         <label for="id_publication_type">Publication Type:</label>
-        <select id="id_publication_type" name="publication_type">
-            <option value="abstract">Abstract</option>
-            <option value="journal">Journal</option>
-        </select>
+        {{ form.publication_type }}
 
         <label for="id_publication_title">Publication Title:</label>
-        <select id="id_publication_title" name="publication_title">
-        </select>
+        {{ form.publication_title }}
 
         <label for="id_volume">Volume:</label>
         <input type="text" id="id_volume" name="volume">
@@ -59,6 +55,9 @@
             <!-- !! add option to enter a new article title -->
             <option value="">-- Enter New --</option>
         </select>
+
+        <label for="id_reference_language">Reference Language:</label>
+        {{ form.reference_language }}
 
 
         <!-- Species Section -->

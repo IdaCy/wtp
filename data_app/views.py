@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import DataCR
+from .models import DataCR, PubType, PubTitle, Language
 from .models import Reference
 from .forms import DataCRForm
 
@@ -31,4 +31,9 @@ def add_datacr(request):
         # Render the form for GET requests
         form = DataCRForm()
 
-    return render(request, 'add_datacr.html', {'form': form})
+    return render(request, 'add_datacr.html', {
+        'form': form,
+        'pub_types': PubType.objects.all(),
+        'pub_titles': PubTitle.objects.all(),
+        'languages': Language.objects.all(),
+    })

@@ -78,6 +78,8 @@ class PubType(models.Model):
     approved = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.pub_type_name
 
 class PubTitle(models.Model):
     pub_title_id = models.IntegerField(primary_key=True)
@@ -86,6 +88,8 @@ class PubTitle(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.pub_title_name
 
 class SpeciesName(models.Model):
     species_id = models.IntegerField(primary_key=True)
@@ -165,6 +169,8 @@ class Language(models.Model):
     approved = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
+    def __str__(self):
+        return self.language
 
 class Reference(models.Model):
     ref_id = models.IntegerField(primary_key=True)

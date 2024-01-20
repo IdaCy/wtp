@@ -248,14 +248,6 @@
         </section>
 
 
-        <!-- Placeholder for Calculations
-        <div>
-            <p>Placeholder for Calculations:</p>
-            <label for="id_calculation_result">Calculation Result:</label>
-            <input type="text" id="id_calculation_result" name="calculation_result" readonly>
-        </div> -->
-
-
         <button type="submit" name="action" value="add_all">Add All</button>
         <button type="submit" name="action" value="add_mid">Add Mid</button>
 
@@ -269,6 +261,42 @@
             var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '');
             /*var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(2);*/
             document.getElementById('reference_id_placeholder').textContent = reference_id;
+
+            // Get references to the Media Type and Media Units dropdowns
+            var mediaTypeDropdown = document.getElementById('id_media_type');
+            var mediaUnitsDropdown = document.getElementById('id_media_units');
+
+            // Function to update Media Units based on the selected Media Type
+            function updateMediaUnits() {
+                // Clear previous options
+                mediaUnitsDropdown.innerHTML = '';
+
+                // Get the selected value of Media Type
+                var selectedMediaType = mediaTypeDropdown.value;
+
+                // Add options based on the selected Media Type
+                if (selectedMediaType === 'air') {
+                    addOption('Bq/m3', 'Bq/m3');
+                } else if (selectedMediaType === 'soil') {
+                    addOption('Bq/kg', 'Bq/kg');
+                    addOption('Bq/g', 'Bq/g');
+                    addOption('mg/g', 'mg/g');
+                }
+            }
+
+            // Helper function to add options to the dropdown
+            function addOption(text, value) {
+                var option = document.createElement('option');
+                option.text = text;
+                option.value = value;
+                mediaUnitsDropdown.add(option);
+            }
+
+            // Attach the updateMediaUnits function to the change event of Media Type dropdown
+            mediaTypeDropdown.addEventListener('change', updateMediaUnits);
+
+            // Initialize Media Units on page load
+            updateMediaUnits();
         });
     </script>
 

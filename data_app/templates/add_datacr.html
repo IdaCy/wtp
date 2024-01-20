@@ -23,6 +23,15 @@
                 <label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>
             </div>
 
+            <div class="pub">
+                <label for="id_article_title">Article Title:</label>
+                {{ form.ref_article_title }}
+            </div>
+            <div class="pub">
+                <label for="id_publication_title">Publication Title:</label>
+                {{ form.publication_title }}
+            </div>
+
             <div class="flex-container">
                 <div class="left">
                     <div class="entry">
@@ -30,53 +39,35 @@
                         <input type="text" id="id_author" name="author">
                     </div>
                     <div class="entry">
-                        <label for="id_publication_type">Publication Type:</label>
-                        {{ form.publication_type }}
+                        <label for="id_volume">Volume:</label>
+                        <input type="text" id="id_volume" name="volume">
+                    </div>
+                    <div class="entry">
+                        <label for="id_page_numbers">Page Numbers:</label>
+                        <input type="text" id="id_page_numbers" name="page_numbers">
+                    </div>
+                    <div class="entry">
+                        <label for="id_reference_language">Reference Language:</label>
+                        {{ form.reference_language }}
                     </div>
                 </div>
 
                 <div class="right">
-
                     <div class="entry">
-                        <label for="id_article_title">Article Title:</label>
-                        {{ form.ref_article_title }}
+                        <label for="id_publication_type">Publication Type:</label>
+                        {{ form.publication_type }}
                     </div>
                     <div class="entry">
                         <label for="id_year">Year:</label>
                         <input type="text" id="id_year" name="year">
                     </div>
-                </div>
-            </div>
-
-            <div class="pub">
-                <label for="id_publication_title">Publication Title:</label>
-                {{ form.publication_title }}
-            </div>
-
-
-            <div class="flex-container">
-                <div class="left">
-                    <div class="entry">
-                        <label for="id_volume">Volume:</label>
-                        <input type="text" id="id_volume" name="volume">
-                    </div>
-                    <div class="entry">
-                        <label for="id_reference_language">Reference Language:</label>
-                            {{ form.reference_language }}
-                    </div>
-                    <div class="entry">
-                        <label for="id_translation_available">Translation into English Available:</label>
-                        <input type="checkbox" id="id_translation_available" name="translation_available">
-                    </div>
-                </div>
-                <div class="right">
                     <div class="entry">
                         <label for="id_part">Part:</label>
                         <input type="text" id="id_part" name="part">
                     </div>
-                    <div class="entry">
-                        <label for="id_page_numbers">Page Numbers:</label>
-                        <input type="text" id="id_page_numbers" name="page_numbers">
+                    <div class="translation">
+                        <label for="id_translation_available">Translation into English Available:</label>
+                        <input type="checkbox" id="id_translation_available" name="translation_available">
                     </div>
                 </div>
             </div>
@@ -86,52 +77,75 @@
         <!-- Species Section -->
         <section class="species">
             <!--<h2>Species</h2>-->
-            <label for="id_habitat">Habitat:</label>
-            <select id="id_habitat" name="habitat">
-                <option value="estuarine" selected>Estuarine (terrestrial)</option>
-                <!-- !! add other habitat options -->
-            </select>
 
-            <label for="id_icrp_rap">ICRP RAP:</label>
-            <select id="id_icrp_rap" name="icrp_rap">
-                <option value="frog" selected>Frog</option>
-            </select>
 
-            <label for="id_lifestage">Lifestage:</label>
-            <select id="id_lifestage" name="lifestage">
-                <option value="none" selected>None</option>
-            </select>
-
-            <label for="id_wildlife_group">Wildlife Group:</label>
-            <select id="id_wildlife_group" name="wildlife_group">
-                <option value="amphibian" selected>Amphibian</option>
-            </select>
-
-            <label for="id_studytype">Studytype:</label>
-            <select id="id_studytype" name="studytype">
-            </select>
-
-            <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
-
-            <label for="id_species_common">Species Common:</label>
-            <select id="id_species_common" name="species_common">
-                <option value="" selected>-- Add New --</option>
-            </select>
-
-            <label for="id_species_latin">Species Latin:</label>
-            <select id="id_species_latin" name="species_latin">
-                <option value="" selected>-- Add New --</option>
-            </select>
-
-            <label for="id_sampling_date">Sampling Date:</label>
-            <input type="date" id="id_sampling_date" name="sampling_date">
-
-            <label for="id_dynamic_info">Dynamic Info:</label>
-            <input type="text" id="id_dynamic_info" name="dynamic_info">
-
-            <label for="id_element_nuclide">Element/Nuclide:</label>
-            <select id="id_element_nuclide" name="element_nuclide">
-            </select>
+            <div class="flex-container">
+                <div class="left-rim">
+                    <div class="entry">
+                        <label for="id_habitat">Habitat:</label>
+                        <select id="id_habitat" name="habitat">
+                            <option value="estuarine" selected>Estuarine (terrestrial)</option>
+                        </select>
+                    </div>
+                    <div class="entry">
+                        <label for="id_icrp_rap">ICRP RAP:</label>
+                        <select id="id_icrp_rap" name="icrp_rap">
+                            <option value="frog" selected>Frog</option>
+                        </select>
+                    </div>
+                    <div class="entry">
+                        <label for="id_lifestage">Lifestage:</label>
+                        <select id="id_lifestage" name="lifestage">
+                            <option value="none" selected>None</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="left-mid">
+                    <div class="entry">
+                        <label for="id_wildlife_group">Wildlife Group:</label>
+                        <select id="id_wildlife_group" name="wildlife_group">
+                            <option value="amphibian" selected>Amphibian</option>
+                        </select>
+                    </div>
+                    <div class="entry">
+                        <label for="id_studytype">Studytype:</label>
+                        <select id="id_studytype" name="studytype">
+                        </select>
+                    </div>
+                    <div class="entry">
+                        <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
+                    </div>
+                </div>
+                <div class="right-mid">
+                    <div class="entry">
+                        <label for="id_species_common">Species Common:</label>
+                        <select id="id_species_common" name="species_common">
+                            <option value="" selected>-- Add New --</option>
+                        </select>
+                    </div>
+                    <div class="entry">
+                        <label for="id_sampling_date">Sampling Date:</label>
+                        <input type="date" id="id_sampling_date" name="sampling_date">
+                    </div>
+                    <div class="entry">
+                        <label for="id_dynamic_info">Dynamic Info:</label>
+                        <input type="text" id="id_dynamic_info" name="dynamic_info">
+                    </div>
+                </div>
+                <div class="right-rim">
+                    <div class="entry">
+                        <label for="id_species_latin">Species Latin:</label>
+                        <select id="id_species_latin" name="species_latin">
+                            <option value="" selected>-- Add New --</option>
+                        </select>
+                    </div>
+                    <div class="entry">
+                        <label for="id_element_nuclide">Element/Nuclide:</label>
+                        <select id="id_element_nuclide" name="element_nuclide">
+                        </select>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Sample Section -->

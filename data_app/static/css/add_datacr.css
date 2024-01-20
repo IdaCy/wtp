@@ -1,6 +1,6 @@
 section {
     background-color: #b0b6af;
-    padding: 30px 20px 30px 20px;
+    padding: 10px 20px 10px 20px;
     margin: 10px 0;
 }
 
@@ -33,11 +33,11 @@ section {
 }
 
 div.entry, div.pub {
-    margin: 10px;
+    margin: 5px;
+    width: 100%;
 }
 div.translation {
-    margin: 0;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 
@@ -77,3 +77,7 @@ div.pub {
     margin-bottom: 10px;
 }
 
+div.entry select.limited {
+    width: 100%;
+    max-width: 120px;
+}

@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import DataCR, PubType, PubTitle, Language, Reference
+from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName
+from .models import RAP, Lifestage, StudyType
 from .forms import DataCRForm
 
 
@@ -36,4 +37,11 @@ def add_datacr(request):
         'pub_titles': PubTitle.objects.all(),
         'languages': Language.objects.all(),
         'article_title': Reference.objects.all(),
+        'habitat_specific_type': Habitat.objects.all(),
+        'rap_name': RAP.objects.all(),
+        'lifestage_name': Habitat.objects.all(),
+        'study_type_name': Habitat.objects.all(),
+        'name_common': SpeciesName.objects.all(),
+        'name_latin': SpeciesName.objects.all(),
+        'radionuclide_name': SpeciesName.objects.all(),
     })

@@ -20,12 +20,16 @@ class User(AbstractUser):
     company = models.CharField(max_length=200, blank=True, null=True)
     admin_priv = models.SmallIntegerField(default=0, null=True)
 
+    def __str__(self):
+        return self.firstname + ' ' + self.lastname
 
 class Element(models.Model):
     element_id = models.IntegerField(primary_key=True)
     element_symbol = models.CharField(max_length=10)
     approved = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.element_symbol
 
 class Habitat(models.Model):
     habitat_id = models.IntegerField(primary_key=True)
@@ -34,6 +38,8 @@ class Habitat(models.Model):
     approved = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.habitat_specific_type
 
 class WildlifeGroup(models.Model):
     wildlife_group_id = models.IntegerField(primary_key=True)
@@ -47,6 +53,8 @@ class WildlifeGroup(models.Model):
     de_indhab_topwild = models.IntegerField()
     de_indhab_indwild = models.IntegerField()
 
+    def __str__(self):
+        return self.wildlife_group_name
 
 class RAP(models.Model):
     rap_id = models.IntegerField(primary_key=True)
@@ -56,6 +64,8 @@ class RAP(models.Model):
     wildlife_group = models.ForeignKey(WildlifeGroup, on_delete=models.CASCADE)
     summary = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.rap_name
 
 class Lifestage(models.Model):
     lifestage_id = models.IntegerField(primary_key=True)
@@ -63,6 +73,8 @@ class Lifestage(models.Model):
     approved = models.BooleanField(default=False)
     rap = models.ForeignKey(RAP, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.lifestage_name
 
 class Media(models.Model):
     media_id = models.IntegerField(primary_key=True)
@@ -71,6 +83,8 @@ class Media(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.media_type
 
 class PubType(models.Model):
     pub_type_id = models.IntegerField(primary_key=True)
@@ -98,11 +112,21 @@ class SpeciesName(models.Model):
     approved = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.name_latin} ({self.name_common})"
+
+    def get_name_latin(self):
+        return str(self.name_latin)
+
+    def get_name_common(self):
+        return str(self.name_common)
 
 class StudyType(models.Model):
     study_type_id = models.IntegerField(primary_key=True)
     study_type_name = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.study_type_name
 
 class Tissue(models.Model):
     tissue_id = models.IntegerField(primary_key=True)
@@ -110,6 +134,8 @@ class Tissue(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     correction_factor_tissue = models.DecimalField(max_digits=10, decimal_places=3)
 
+    def __str__(self):
+        return self.correction_factor_tissue
 
 class MaterialStatus(models.Model):
     material_status_id = models.IntegerField(primary_key=True)
@@ -117,6 +143,8 @@ class MaterialStatus(models.Model):
     correction_ratio = models.DecimalField(max_digits=10, decimal_places=3)
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.material_status_name
 
 class ActivityConcUnit(models.Model):
     act_conc_unit_id = models.AutoField(primary_key=True)
@@ -125,6 +153,8 @@ class ActivityConcUnit(models.Model):
     correction_factor_act_conc = models.DecimalField(max_digits=10, decimal_places=3)
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.act_conc_unit_symbol
 
 class ParCRCalc(models.Model):
     cr_id = models.IntegerField(primary_key=True)
@@ -138,6 +168,15 @@ class ParCRCalc(models.Model):
         ('T', 'Terrestrial'),
     ]
     is_fre_mar_ter = models.CharField(max_length=1, choices=fmt_choices)
+
+    def __str__(self):
+        return f"{str(self.dry_to_wet_ratio)} ({str(self.ash_to_wet_ratio)})"
+
+    def get_dry_to_wet_ratio(self):
+        return self.dry_to_wet_ratio
+
+    def get_ash_to_wet_ratio(self):
+        return self.ash_to_wet_ratio
 
 
 class MaterialCRCalc(models.Model):
@@ -154,6 +193,18 @@ class MaterialCRCalc(models.Model):
     ]
     is_fre_mar_ter = models.CharField(max_length=1, choices=fmt_choices)
 
+    def __str__(self):
+        return f"{str(self.liver_to_body_ratio)} ({str(self.bone_to_body_ratio)}) ({str(self.muscle_to_body_ratio)})"
+
+    def get_liver_to_body_ratio(self):
+        return self.liver_to_body_ratio
+
+    def get_bone_to_body_ratio(self):
+        return self.bone_to_body_ratio
+
+    def get_muscle_to_body_ratio(self):
+        return self.muscle_to_body_ratio
+
 
 class Radionuclide(models.Model):
     radionuclide_id = models.IntegerField(primary_key=True)
@@ -162,6 +213,8 @@ class Radionuclide(models.Model):
     approved = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.radionuclide_name
 
 class Language(models.Model):
     language_id = models.IntegerField(primary_key=True)

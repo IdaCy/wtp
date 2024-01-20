@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'manageuser_app',
     'dashboard_app',
     'data_app',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

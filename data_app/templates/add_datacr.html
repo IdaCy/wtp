@@ -263,8 +263,30 @@
             document.getElementById('reference_id_placeholder').textContent = reference_id;
 
             // Get references to the Media Type and Media Units dropdowns
+            var habitatDropdown = document.getElementById('id_habitat_specific_type');
             var mediaTypeDropdown = document.getElementById('id_media_type');
             var mediaUnitsDropdown = document.getElementById('id_media_units');
+
+        // Function to update Media Type based on the selected Habitat
+        function updateMediaType() {
+            // Clear previous options
+            mediaTypeDropdown.innerHTML = '';
+            // Get the selected value of Habitat
+            var selectedHabitat = habitatDropdown.value.toLowerCase();
+
+            // Add options based on the selected Habitat
+            if (selectedHabitat.includes('terrestrial')) {
+                addOption('Air', 'air');
+                addOption('Soil', 'soil');
+            } else if (
+                selectedHabitat.includes('estuarine') ||
+                selectedHabitat.includes('freshwater') ||
+                selectedHabitat.includes('marine')
+            ) {
+                addOption('Sediment', 'sediment');
+                addOption('Water', 'water');
+            }
+        }
 
             // Function to update Media Units based on the selected Media Type
             function updateMediaUnits() {
@@ -278,9 +300,19 @@
                 if (selectedMediaType === 'air') {
                     addOption('Bq/m3', 'Bq/m3');
                 } else if (selectedMediaType === 'soil') {
-                    addOption('Bq/kg', 'Bq/kg');
+                    addOption('µCi/kg', 'µCi/kg');
                     addOption('Bq/g', 'Bq/g');
+                    addOption('Bq/m2', 'Bq/m2');
+                    addOption('mBq/g', 'mBq/g');
+                    addOption('mBq/kg', 'mBq/kg');
                     addOption('mg/g', 'mg/g');
+                    addOption('mg/kg', 'mg/kg');
+                    addOption('pCi/g', 'pCi/g');
+                    addOption('pCi/kg', 'pCi/kg');
+                    addOption('ppb', 'ppb');
+                    addOption('ppm', 'ppm');
+                    addOption('ug/g', 'ug/g');
+                    addOption('ug/kg', 'ug/kg');
                 }
             }
 

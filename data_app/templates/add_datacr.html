@@ -96,9 +96,7 @@
                 <div class="left-mid">
                     <div class="entry">
                         <label for="id_wildlife_group">Wildlife Group:</label>
-                        <select id="id_wildlife_group" name="wildlife_group">
-                            <option value="amphibian" selected>Amphibian</option>
-                        </select>
+                        {{ form.wildlife_group_name | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <label for="id_studytype">Studytype:</label>
@@ -197,6 +195,9 @@
                     <div class="entry">
                         <label for="id_status_of_biota">Status of Biota:</label>
                         <select id="id_status_of_biota" name="status_of_biota">
+                            <option value="Wet">Wet</option>
+                            <option value="Dry">Dry</option>
+                            <option value="Ash">Ash</option>
                         </select>
                     </div>
                     <div class="entry">
@@ -214,6 +215,15 @@
                     <div class="entry">
                         <label for="id_biota_units">Biota Units:</label>
                         <select id="id_biota_units" name="biota_units">
+                            <option value="Bq/l">Bq/l</option>
+                            <option value="Bq/m3">Bq/m3</option>
+                            <option value="mBq/l">mBq/l</option>
+                            <option value="mg/l">mg/l</option>
+                            <option value="p/Ci/l">p/Ci/l</option>
+                            <option value="ppb">ppb</option>
+                            <option value="ppm">ppm</option>
+                            <option value="uCi/l">uCi/l</option>
+                            <option value="ug/l">ug/l</option>
                         </select>
                     </div>
                 </div>
@@ -266,11 +276,13 @@
             var habitatDropdown = document.getElementById('id_habitat_specific_type');
             var mediaTypeDropdown = document.getElementById('id_media_type');
             var mediaUnitsDropdown = document.getElementById('id_media_units');
+            var mediaWetDryDropdown = document.getElementById('id_media_wet_dry');
 
             // Function to update Media Type based on the selected Habitat
             function updateMediaType() {
                 // Clear previous options
                 mediaTypeDropdown.innerHTML = '';
+
                 // Get the selected value of Habitat
                 var selectedHabitat = habitatDropdown.value.toLowerCase();
 
@@ -300,14 +312,17 @@
             function updateMediaUnits() {
                 // Clear previous options
                 mediaUnitsDropdown.innerHTML = '';
+                mediaWetDryDropdown.innerHTML = '';
 
                 // Get the selected value of Media Type
                 var selectedMediaType = mediaTypeDropdown.value;
 
-                // Add options based on the selected Media Type
+                // Add unit options based on the selected Media Type
                 if (selectedMediaType === 'air') {
                     addMediaUnitOption('Bq/m3', 'Bq/m3');
-                } else if (selectedMediaType === 'soil') {
+                } else if ((selectedMediaType === 'soil')
+                    || (selectedMediaType === "sediment")
+                    || (selectedMediaType === "water")) {
                     addMediaUnitOption('µCi/kg', 'µCi/kg');
                     addMediaUnitOption('Bq/g', 'Bq/g');
                     addMediaUnitOption('Bq/m2', 'Bq/m2');
@@ -322,9 +337,18 @@
                     addMediaUnitOption('ug/g', 'ug/g');
                     addMediaUnitOption('ug/kg', 'ug/kg');
                 }
+
+                // Add wt/dry options based on the selected Media Type
+                if (selectedMediaType === 'air') {
+                    addWetDryOption('Air');
+                } else if (selectedMediaType === "water") {
+                    addWetDryOption('Water');
+                } else if (selectedMediaType === 'soil') {
+                    addWetDryOption('Dry');
+                }
             }
 
-            // Helper function to add options to the dropdown
+            // Helper functions to add options to the dropdown
             function addMediaUnitOption(text, value) {
                 var option = document.createElement('option');
                 option.text = text;
@@ -332,12 +356,19 @@
                 mediaUnitsDropdown.add(option);
             }
 
+            function addWetDryOption(text, value) {
+                var option = document.createElement('option');
+                option.text = text;
+                option.value = value;
+                mediaWetDryDropdown.add(option);
+            }
+
+            // Attach the functions to the change event of dropdowns
             habitatDropdown.addEventListener('change', updateMediaType);
-            // Attach the updateMediaUnits function to the change event of Media Type dropdown
             mediaTypeDropdown.addEventListener('change', updateMediaUnits);
 
+            // Initialize functions on page load
             updateMediaType();
-            // Initialize Media Units on page load
             updateMediaUnits();
         });
     </script>

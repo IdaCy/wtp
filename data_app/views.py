@@ -44,4 +44,5 @@ def add_datacr(request):
         'name_common': SpeciesName.objects.all(),
         'name_latin': SpeciesName.objects.all(),
         'radionuclide_name': SpeciesName.objects.all(),
+        'wildlife_group_name': SpeciesName.objects.all(),
     })

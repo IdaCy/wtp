@@ -267,26 +267,34 @@
             var mediaTypeDropdown = document.getElementById('id_media_type');
             var mediaUnitsDropdown = document.getElementById('id_media_units');
 
-        // Function to update Media Type based on the selected Habitat
-        function updateMediaType() {
-            // Clear previous options
-            mediaTypeDropdown.innerHTML = '';
-            // Get the selected value of Habitat
-            var selectedHabitat = habitatDropdown.value.toLowerCase();
+            // Function to update Media Type based on the selected Habitat
+            function updateMediaType() {
+                // Clear previous options
+                mediaTypeDropdown.innerHTML = '';
+                // Get the selected value of Habitat
+                var selectedHabitat = habitatDropdown.value.toLowerCase();
 
-            // Add options based on the selected Habitat
-            if (selectedHabitat.includes('terrestrial')) {
-                addOption('Air', 'air');
-                addOption('Soil', 'soil');
-            } else if (
-                selectedHabitat.includes('estuarine') ||
-                selectedHabitat.includes('freshwater') ||
-                selectedHabitat.includes('marine')
-            ) {
-                addOption('Sediment', 'sediment');
-                addOption('Water', 'water');
+                // Add options based on the selected Habitat
+                if (selectedHabitat.includes('terrestrial')) {
+                    addMediaTypeDropdown('Air', 'air');
+                    addMediaTypeDropdown('Soil', 'soil');
+                } else if (
+                    selectedHabitat.includes('estuarine') ||
+                    selectedHabitat.includes('freshwater') ||
+                    selectedHabitat.includes('marine')
+                ) {
+                    addMediaTypeDropdown('Sediment', 'sediment');
+                    addMediaTypeDropdown('Water', 'water');
+                }
             }
-        }
+
+            // Helper function to add options to the dropdown
+            function addMediaTypeDropdown(text, value) {
+                var option = document.createElement('option');
+                option.text = text;
+                option.value = value;
+                mediaTypeDropdown.add(option);
+            }
 
             // Function to update Media Units based on the selected Media Type
             function updateMediaUnits() {
@@ -298,35 +306,37 @@
 
                 // Add options based on the selected Media Type
                 if (selectedMediaType === 'air') {
-                    addOption('Bq/m3', 'Bq/m3');
+                    addMediaUnitOption('Bq/m3', 'Bq/m3');
                 } else if (selectedMediaType === 'soil') {
-                    addOption('µCi/kg', 'µCi/kg');
-                    addOption('Bq/g', 'Bq/g');
-                    addOption('Bq/m2', 'Bq/m2');
-                    addOption('mBq/g', 'mBq/g');
-                    addOption('mBq/kg', 'mBq/kg');
-                    addOption('mg/g', 'mg/g');
-                    addOption('mg/kg', 'mg/kg');
-                    addOption('pCi/g', 'pCi/g');
-                    addOption('pCi/kg', 'pCi/kg');
-                    addOption('ppb', 'ppb');
-                    addOption('ppm', 'ppm');
-                    addOption('ug/g', 'ug/g');
-                    addOption('ug/kg', 'ug/kg');
+                    addMediaUnitOption('µCi/kg', 'µCi/kg');
+                    addMediaUnitOption('Bq/g', 'Bq/g');
+                    addMediaUnitOption('Bq/m2', 'Bq/m2');
+                    addMediaUnitOption('mBq/g', 'mBq/g');
+                    addMediaUnitOption('mBq/kg', 'mBq/kg');
+                    addMediaUnitOption('mg/g', 'mg/g');
+                    addMediaUnitOption('mg/kg', 'mg/kg');
+                    addMediaUnitOption('pCi/g', 'pCi/g');
+                    addMediaUnitOption('pCi/kg', 'pCi/kg');
+                    addMediaUnitOption('ppb', 'ppb');
+                    addMediaUnitOption('ppm', 'ppm');
+                    addMediaUnitOption('ug/g', 'ug/g');
+                    addMediaUnitOption('ug/kg', 'ug/kg');
                 }
             }
 
             // Helper function to add options to the dropdown
-            function addOption(text, value) {
+            function addMediaUnitOption(text, value) {
                 var option = document.createElement('option');
                 option.text = text;
                 option.value = value;
                 mediaUnitsDropdown.add(option);
             }
 
+            habitatDropdown.addEventListener('change', updateMediaType);
             // Attach the updateMediaUnits function to the change event of Media Type dropdown
             mediaTypeDropdown.addEventListener('change', updateMediaUnits);
 
+            updateMediaType();
             // Initialize Media Units on page load
             updateMediaUnits();
         });

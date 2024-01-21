@@ -22,6 +22,6 @@ urlpatterns = [
     path('view_all_data/<int:ref_id>/', data_views.view_all_data, name='view_all_data'),
     path('prev_ref_record/<int:ref_id>/', data_views.prev_ref_record, name='prev_ref_record'),
     path('next_ref_record/<int:ref_id>/', data_views.next_ref_record, name='next_ref_record'),
-    path('prev_datacr_record/<int:ref_id>/<int:datacr_id>/', data_views.prev_datacr_record, name='prev_datacr_record'),
-    path('next_datacr_record/<int:ref_id>/<int:datacr_id>/', data_views.next_datacr_record, name='next_datacr_record'),
+    path('prev_datacr_record/<int:ref_id>/<int:cr_id>/', data_views.prev_datacr_record, name='prev_datacr_record'),
+    path('next_datacr_record/<int:ref_id>/<int:cr_id>/', data_views.next_datacr_record, name='next_datacr_record'),
 ]

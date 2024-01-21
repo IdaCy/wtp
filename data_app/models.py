@@ -1,15 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class User(AbstractUser):
     SALUTATION_CHOICES = [
-    ('Mr', 'Mr'),
-    ('Mrs', 'Mrs'),
-    ('Miss', 'Miss'),
-    ('Dr', 'Dr'),
-    ('Professor', 'Professor'),
-    ('Ms', 'Ms'),
-    ('Other', 'Other'),
+        ('Mr', 'Mr'),
+        ('Mrs', 'Mrs'),
+        ('Miss', 'Miss'),
+        ('Dr', 'Dr'),
+        ('Professor', 'Professor'),
+        ('Ms', 'Ms'),
+        ('Other', 'Other'),
     ]
 
     salutation = models.CharField(max_length=20, choices=SALUTATION_CHOICES, blank=True, null=True)
@@ -23,6 +24,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.firstname + ' ' + self.lastname
 
+
 class Element(models.Model):
     element_id = models.IntegerField(primary_key=True)
     element_symbol = models.CharField(max_length=10)
@@ -30,6 +32,7 @@ class Element(models.Model):
 
     def __str__(self):
         return self.element_symbol
+
 
 class Habitat(models.Model):
     habitat_id = models.IntegerField(primary_key=True)
@@ -40,6 +43,7 @@ class Habitat(models.Model):
 
     def __str__(self):
         return self.habitat_specific_type
+
 
 class WildlifeGroup(models.Model):
     wildlife_group_id = models.IntegerField(primary_key=True)
@@ -56,6 +60,7 @@ class WildlifeGroup(models.Model):
     def __str__(self):
         return self.wildlife_group_name
 
+
 class RAP(models.Model):
     rap_id = models.IntegerField(primary_key=True)
     rap_name = models.CharField(max_length=200)
@@ -67,6 +72,7 @@ class RAP(models.Model):
     def __str__(self):
         return self.rap_name
 
+
 class Lifestage(models.Model):
     lifestage_id = models.IntegerField(primary_key=True)
     lifestage_name = models.CharField(max_length=50)
@@ -75,6 +81,7 @@ class Lifestage(models.Model):
 
     def __str__(self):
         return self.lifestage_name
+
 
 class Media(models.Model):
     media_id = models.IntegerField(primary_key=True)
@@ -92,6 +99,7 @@ class Media(models.Model):
     def get_name_common(self):
         return str(self.media_type)
 
+
 class PubType(models.Model):
     pub_type_id = models.IntegerField(primary_key=True)
     pub_type_name = models.CharField(max_length=200)
@@ -100,6 +108,7 @@ class PubType(models.Model):
 
     def __str__(self):
         return self.pub_type_name
+
 
 class PubTitle(models.Model):
     pub_title_id = models.IntegerField(primary_key=True)
@@ -110,6 +119,7 @@ class PubTitle(models.Model):
 
     def __str__(self):
         return self.pub_title_name
+
 
 class SpeciesName(models.Model):
     species_id = models.IntegerField(primary_key=True)
@@ -127,12 +137,14 @@ class SpeciesName(models.Model):
     def get_name_common(self):
         return str(self.name_common)
 
+
 class StudyType(models.Model):
     study_type_id = models.IntegerField(primary_key=True)
     study_type_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.study_type_name
+
 
 class Tissue(models.Model):
     tissue_id = models.IntegerField(primary_key=True)
@@ -144,6 +156,7 @@ class Tissue(models.Model):
     def __str__(self):
         return self.tissue_name
 
+
 class MaterialStatus(models.Model):
     material_status_id = models.IntegerField(primary_key=True)
     material_status_name = models.CharField(max_length=50)
@@ -152,6 +165,7 @@ class MaterialStatus(models.Model):
 
     def __str__(self):
         return self.material_status_name
+
 
 class ActivityConcUnit(models.Model):
     act_conc_unit_id = models.AutoField(primary_key=True)
@@ -162,6 +176,7 @@ class ActivityConcUnit(models.Model):
 
     def __str__(self):
         return self.correction_factor_act_conc
+
 
 class ParCRCalc(models.Model):
     cr_id = models.IntegerField(primary_key=True)
@@ -223,6 +238,7 @@ class Radionuclide(models.Model):
     def __str__(self):
         return self.radionuclide_name
 
+
 class Language(models.Model):
     language_id = models.IntegerField(primary_key=True)
     language = models.CharField(max_length=50)
@@ -231,6 +247,7 @@ class Language(models.Model):
 
     def __str__(self):
         return self.language
+
 
 class Reference(models.Model):
     ref_id = models.IntegerField(primary_key=True)
@@ -257,6 +274,7 @@ class Reference(models.Model):
     def __str__(self):
         return self.article_title
 
+
 class DataCR(models.Model):
     cr_id = models.IntegerField(primary_key=True)
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True)
@@ -269,7 +287,7 @@ class DataCR(models.Model):
     measurement_date = models.CharField(max_length=50, null=True)
     tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE, null=True)
     media = models.ForeignKey(Media, on_delete=models.CASCADE, null=True)
-    crn = models.IntegerField(null=True) # or? models.SmallIntegerField(null=True)
+    crn = models.IntegerField(null=True)  # or? models.SmallIntegerField(null=True)
     cr = models.DecimalField(max_digits=25, decimal_places=10, null=True)
     cr_sd = models.DecimalField(max_digits=25, decimal_places=10, null=True)
     notes = models.CharField(max_length=500, null=True)
@@ -288,8 +306,15 @@ class DataCR(models.Model):
         ('mg/kg', 'mg/kg'),
         ('mg/kg FW', 'mg/kg FW'),
         ('Bq/m3', 'Bq/m3'),
+        ('mBq/l', 'mBq/l'),
+        ('mg/l', 'mg/l'),
+        ('p/Ci/l', 'p/Ci/l'),
+        ('ppb', 'ppb'),
+        ('ppm', 'ppm'),
+        ('uCi/l', 'uCi/l'),
     ]
-    biota_conc_units = models.CharField(max_length=20, choices=biota_conc_unit_choices, default='Bq/kg', null=True, blank=True )
+    biota_conc_units = models.CharField(max_length=20, choices=biota_conc_unit_choices, default='Bq/kg', null=True,
+                                        blank=True)
     biota_n = models.IntegerField(null=True)
     biota_sd = models.CharField(max_length=30, null=True)
     biota_wet_dry_choices = [
@@ -297,25 +322,34 @@ class DataCR(models.Model):
         ('D', 'Dry'),
         ('A', 'Air'),
     ]
-    biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, default='W', null=True, blank=True )
+    biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, default='W', null=True, blank=True)
     data_extract = models.IntegerField(null=True)
     media_conc = models.CharField(max_length=30, null=True)
     media_n = models.CharField(max_length=30, null=True)
     media_conc_unit_choices = [
-        ('Bq/kg', 'Bq/kg'),
-        ('Bq/l', 'Bq/l'),
-        ('Bq/m3', 'Bq/m3'),
-        ('mBq/l', 'mBq/l'),
+        ('µCi/kg', 'µCi/kg'),
+        ('Bq/g', 'Bq/g'),
+        ('Bq/m2', 'Bq/m2'),
+        ('mBq/g', 'mBq/g'),
+        ('mBq/kg', 'mBq/kg'),
+        ('mg/g', 'mg/g'),
         ('mg/kg', 'mg/kg'),
+        ('pCi/g', 'pCi/g'),
+        ('pCi/kg', 'pCi/kg'),
+        ('ppb', 'ppb'),
+        ('ppm', 'ppm'),
+        ('ug/g', 'ug/g'),
+        ('ug/kg', 'ug/kg'),
     ]
-    media_conc_units = models.CharField(max_length=20, choices=media_conc_unit_choices, default='Bq/kg', null=True, blank=True )
+    media_conc_units = models.CharField(max_length=20, choices=media_conc_unit_choices, default='Bq/kg', null=True,
+                                        blank=True)
     media_sd = models.CharField(max_length=30, null=True)
     media_wet_dry_choices = [
         ('W', 'Wet'),
         ('D', 'Dry'),
         ('A', 'Air'),
     ]
-    media_wet_dry = models.CharField(max_length=5, choices=media_wet_dry_choices, default='W', null=True, blank=True )
+    media_wet_dry = models.CharField(max_length=5, choices=media_wet_dry_choices, default='W', null=True, blank=True)
     other_tissue = models.CharField(max_length=30, null=True)
     qc = models.BooleanField(default=False)
     rep_organ_units = models.CharField(max_length=30, null=True)
@@ -325,7 +359,7 @@ class DataCR(models.Model):
         ('D', 'Dry'),
         ('A', 'Air'),
     ]
-    rep_wet_dry = models.CharField(max_length=5, choices=rep_wet_dry_choices, default='W', null=True, blank=True )
+    rep_wet_dry = models.CharField(max_length=5, choices=rep_wet_dry_choices, default='W', null=True, blank=True)
     stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True)
     stand_biota_sd = models.CharField(max_length=30, null=True)
     stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True)

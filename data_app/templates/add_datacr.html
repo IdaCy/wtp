@@ -108,7 +108,7 @@
                 </div>
                 <div class="right-mid">
                     <div class="entry">
-                        <label for="id_name_common">Name Common:</label>
+                        <label for="id_name_common">Species Common:</label>
                         {{ form.name_common | add_class:"limited" }}
                     </div>
                     <div class="entry">
@@ -122,7 +122,7 @@
                 </div>
                 <div class="right-rim">
                     <div class="entry">
-                        <label for="id_name_latin">Name Latin:</label>
+                        <label for="id_name_latin">Species Latin:</label>
                         {{ form.name_latin | add_class:"limited" }}
                     </div>
                     <div class="entry">
@@ -182,9 +182,8 @@
             <div class="flex-container">
                 <div class="left-rim">
                     <div class="entry">
-                        <label for="id_tissue_type">Tissue Type:</label>
-                        <select id="id_tissue_type" name="tissue_type">
-                        </select>
+                        <label for="id_tissue_name">Tissue Type:</label>
+                        {{ form.tissue_name | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <label for="id_n_for_biota">N for Biota:</label>

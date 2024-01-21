@@ -136,12 +136,13 @@ class StudyType(models.Model):
 
 class Tissue(models.Model):
     tissue_id = models.IntegerField(primary_key=True)
+    tissue_name = models.CharField(max_length=50, default="Default")
     approved = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     correction_factor_tissue = models.DecimalField(max_digits=10, decimal_places=3)
 
     def __str__(self):
-        return self.correction_factor_tissue
+        return self.tissue_name
 
 class MaterialStatus(models.Model):
     material_status_id = models.IntegerField(primary_key=True)

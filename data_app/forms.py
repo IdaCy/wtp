@@ -1,6 +1,6 @@
 from django import forms
 from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName
-from .models import RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup
+from .models import RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup, Tissue
 
 class DataCRForm(forms.ModelForm):
     class Meta:
@@ -17,6 +17,7 @@ class DataCRForm(forms.ModelForm):
     study_type_name = forms.ModelChoiceField(queryset=StudyType.objects.all(), to_field_name='study_type_name')
     radionuclide_name = forms.ModelChoiceField(queryset=Radionuclide.objects.all(), to_field_name='radionuclide_name')
     wildlife_group_name = forms.ModelChoiceField(queryset=WildlifeGroup.objects.all(), to_field_name='wildlife_group_name')
+    tissue_name = forms.ModelChoiceField(queryset=Tissue.objects.all(), to_field_name='tissue_name')
     name_common = forms.CharField(widget=forms.Select(attrs={'class': 'limited'}))
     name_latin = forms.CharField(widget=forms.Select(attrs={'class': 'limited'}))
 

@@ -4,9 +4,11 @@ from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, Spe
 from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media
 from .forms import DataCRForm
 
-
 from django.http import JsonResponse
 from django.views import View
+
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 
 @login_required
@@ -82,3 +84,53 @@ class GetCorrectionFactorView(View):
         except Media.DoesNotExist:
             return JsonResponse({'error': 'Media not found'}, status=404)
 
+
+def view_all_data(request, ref_id=None):
+    if ref_id is None:
+        # If ref_id is not provided, you can redirect to a default reference or handle it as you prefer
+        # For example, redirect to the first reference if available
+        first_reference = Reference.objects.order_by('ref_id').first()
+        if first_reference:
+            return redirect('view_all_data', ref_id=first_reference.ref_id)
+        else:
+            return render(request, 'view_all_data.html', {'error_message': 'No references available.'})
+
+    try:
+        # Get the reference with the specified ref_id
+        reference = Reference.objects.get(ref_id=ref_id)
+    except Reference.DoesNotExist:
+        # Handle the case where the reference does not exist
+        reference = None
+
+    return render(request, 'view_all_data.html', {'reference': reference})
+
+
+def next_data_record(request, ref_id):
+    try:
+        # Get the next reference with a ref_id greater than the current one
+        next_reference = Reference.objects.filter(ref_id__gt=ref_id).order_by('ref_id').first()
+
+        if next_reference:
+            # Redirect to the view_all_data page for the next reference
+            return redirect('view_all_data', ref_id=next_reference.ref_id)
+        else:
+            # If no next reference, redirect to the view_all_data page for the current reference
+            return redirect('view_all_data', ref_id=ref_id)
+    except Reference.DoesNotExist:
+        # Handle the case where the reference does not exist
+        return redirect('view_all_data', ref_id=ref_id)
+
+def prev_data_record(request, ref_id):
+    try:
+        # Get the previous reference with a ref_id less than the current one
+        prev_reference = Reference.objects.filter(ref_id__lt=ref_id).order_by('-ref_id').first()
+
+        if prev_reference:
+            # Redirect to the view_all_data page for the previous reference
+            return redirect('view_all_data', ref_id=prev_reference.ref_id)
+        else:
+            # If no previous reference, redirect to the view_all_data page for the current reference
+            return redirect('view_all_data', ref_id=ref_id)
+    except Reference.DoesNotExist:
+        # Handle the case where the reference does not exist
+        return redirect('view_all_data', ref_id=ref_id)

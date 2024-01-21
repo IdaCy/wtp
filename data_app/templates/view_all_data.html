@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Single Data View{% endblock %}
+
+{% block content %}
+    <h1>Single Data View</h1>
+
+    {% if reference %}
+        <div class="data-record">
+            <h2>Reference Information</h2>
+            <table>
+                <tr>
+                    <th>Reference ID</th>
+                    <td>{{ reference.ref_id }}</td>
+                </tr>
+                <tr>
+                    <th>Author</th>
+                    <td>{{ reference.author }}</td>
+                </tr>
+                <tr>
+                    <th>Article Title</th>
+                    <td>{{ reference.article_title }}</td>
+                </tr>
+                <tr>
+                    <th>Year</th>
+                    <td>{{ reference.year }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="data-record">
+            <h2>Publication Information</h2>
+            <table>
+                <tr>
+                    <th>Publication Title</th>
+                    <td>{{ reference.pub_title.title }}</td>
+                </tr>
+                <tr>
+                    <th>Publication Type</th>
+                    <td>{{ reference.pub_type.type_name }}</td>
+                </tr>
+                <tr>
+                    <th>Volume</th>
+                    <td>{{ reference.volume }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="data-record">
+            <h2>Additional Information</h2>
+            <table>
+                <tr>
+                    <th>Pages</th>
+                    <td>{{ reference.pages }}</td>
+                </tr>
+                <tr>
+                    <th>Part</th>
+                    <td>{{ reference.part }}</td>
+                </tr>
+                <tr>
+                    <th>Reference Language</th>
+                    <td>{{ reference.language.language_name }}</td>
+                </tr>
+                <tr>
+                    <th>Translation Available</th>
+                    <td>{{ reference.translation }}</td>
+                </tr>
+            </table>
+        </div>
+
+    {% else %}
+        {% if error_message %}
+            <p>{{ error_message }}</p>
+        {% else %}
+            <p>No data found for the specified reference ID.</p>
+        {% endif %}
+    {% endif %}
+
+    <!-- Add navigation links for moving to the next and previous data records -->
+    <a href="{% url 'prev_data_record' reference.ref_id %}">Previous</a>
+    <a href="{% url 'next_data_record' reference.ref_id %}">Next</a>
+
+{% endblock %}

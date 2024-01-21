@@ -260,15 +260,7 @@
 
         <button type="submit" name="action" value="add_all">Add All</button>
         <button type="submit" name="action" value="add_mid">Add Mid</button>
-
-
-        <button type="button" onclick="updateConcentrationRatio()">Get Correction Factor</button>
     </form>
-
-    <!-- test the result -->
-    <div id="mediaResultDiv"></div>
-    <div id="biotaResultDiv"></div>
-    <div id="correctionFactorResult"></div>
 
     <script>
         // JavaScript to set the value of reference_id when the page loads
@@ -402,36 +394,26 @@
                             .then(response => response.json())
                             .then(biotaData => {
                                 // Display the result for media unit
-                                var mediaResultDiv = document.getElementById('mediaResultDiv');
                                 var mediaCorrectionFactor = mediaData.correction_factor || 1.0;
                                 var mediaConcentration = parseFloat(mediaConcField.value);
                                 var mediaResult = mediaCorrectionFactor * mediaConcentration;
-                                mediaResultDiv.innerHTML = `Media Correction Factor: ${mediaCorrectionFactor}, Result: ${mediaResult.toFixed(2)}`;
 
                                 // Display the result for biota unit
-                                var biotaResultDiv = document.getElementById('biotaResultDiv');
                                 var biotaCorrectionFactor = biotaData.correction_factor || 1.0;
                                 var biotaConcentration = parseFloat(biotaConcField.value);
                                 var biotaResult = biotaCorrectionFactor * biotaConcentration;
-                                biotaResultDiv.innerHTML = `Biota Correction Factor: ${biotaCorrectionFactor}, Result: ${biotaResult.toFixed(2)}`;
 
                                 // Calculate and display the Concentration Ratio
                                 var crField = document.getElementById('id_concentration_ratio');
                                 var concentrationRatio = biotaResult / mediaResult;
                                 crField.value = concentrationRatio.toFixed(2);
-                                var correctionFactorResultDiv = document.getElementById('correctionFactorResult');
-                                correctionFactorResultDiv.innerHTML = `Correction Factor Result: ${concentrationRatio.toFixed(2)}`;
                             })
                             .catch(biotaError => {
                                 console.error('Error fetching biota correction factor:', biotaError);
-                                var biotaResultDiv = document.getElementById('biotaResultDiv');
-                                biotaResultDiv.innerHTML = 'Error fetching biota correction factor';
                             });
                     })
                     .catch(mediaError => {
                         console.error('Error fetching media correction factor:', mediaError);
-                        var mediaResultDiv = document.getElementById('mediaResultDiv');
-                        mediaResultDiv.innerHTML = 'Error fetching media correction factor';
                     });
             }
 

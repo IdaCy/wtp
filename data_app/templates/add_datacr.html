@@ -266,6 +266,8 @@
     </form>
 
     <!-- test the result -->
+    <div id="mediaResultDiv"></div>
+    <div id="biotaResultDiv"></div>
     <div id="correctionFactorResult"></div>
 
     <script>
@@ -379,7 +381,7 @@
 
             /******************* CR CALCULATIONS ***************************/
 
-                // Get references to the relevant input fields and select dropdowns
+            // Get references to the relevant input fields and select dropdowns
             var mediaConcField = document.getElementById('id_media_conc');
             var biotaConcField = document.getElementById('id_biota_conc');
             // var mediaUnitsDropdown = document.getElementById('id_media_units'); // already above
@@ -388,83 +390,40 @@
 
             // Function to update Concentration Ratio based on Media and Biota Concentration
             function updateConcentrationRatio() {
-
-                //var unitSymbol = document.getElementById('unitSymbolInput').value;
-                //var mediaType = document.getElementById('mediaTypeInput').value;
-                var unitSymbol = document.getElementById('id_media_units').value;
+                var mediaUnitSymbol = document.getElementById('id_media_units').value;
+                var biotaUnitSymbol = document.getElementById('id_biota_units').value;
                 var mediaType = document.getElementById('id_media_type').value;
 
-                // Make an AJAX request to fetch the correction factor
-                fetch(`/get_correction_factor/?unit_symbol=${unitSymbol}&media_type=${mediaType}`)
+                fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media_type=${mediaType}`)
                     .then(response => response.json())
-                    .then(data => {
-                        // Display the result
-                        var resultDiv = document.getElementById('correctionFactorResult');
-                        resultDiv.innerHTML = `Correction Factor: ${data.correction_factor || 'Not found'}`;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching correction factor:', error);
-                        var resultDiv = document.getElementById('correctionFactorResult');
-                        resultDiv.innerHTML = 'Error fetching correction factor';
-                    });
-
-
-                /*console.log("entered updateConcentrationRatio()");
-                // Get values from Media and Biota Concentration fields
-                var mediaConcentration = parseFloat(mediaConcField.value);
-                var biotaConcentration = parseFloat(biotaConcField.value);
-
-                // Get selected Media Units
-                var selectedMediaUnits = mediaUnitsDropdown.value;
-                var selectedBiotaUnits = biotaUnitsDropdown.value
-
-                // Get current selection Media Type
-                //mediaTypeDropdown = document.getElementById('id_media_type');
-                //var selectedMediaType = mediaTypeDropdown.value;
-                var mediaType = document.getElementById('id_media_type').value;
-
-                console.log("Media Concentration:", mediaConcentration);
-                console.log("Biota Concentration:", biotaConcentration);
-
-                // Check if both values are valid numbers
-                if (!isNaN(mediaConcentration) && !isNaN(biotaConcentration)) {
-                    // Adjust Media Concentration based on correction factor if needed
-                    if (selectedMediaUnits !== 'Bg/kg') {
-                        // Make an AJAX request to fetch the correction factor
-//fetch(`/get_correction_factor/?unit_symbol=${encodeURIComponent(selectedMediaUnits)}&media_type=${encodeURIComponent(selectedMediaType)}`)
-                        fetch(`/get_correction_factor/?unit_symbol=${selectedMediaUnits}&media_type=${mediaType}`)
+                    .then(mediaData => {
+                        // Make AJAX request for biota unit correction factor
+                        fetch(`/get_correction_factor/?unit_symbol=${biotaUnitSymbol}&media_type=${mediaType}`)
                             .then(response => response.json())
-                            .then(data => {
-                                console.log("Correction Factor:", data.correction_factor);
+                            .then(biotaData => {
+                                // Display the result for media unit
+                                var mediaResultDiv = document.getElementById('mediaResultDiv');
+                                mediaResultDiv.innerHTML = `Media Correction Factor: ${mediaData.correction_factor || 'Not found'}`;
 
-                                // Update Media and Biota Concentrations based on correction factor
-                                var correctionFactor = data.correction_factor || 1.0;
-                                mediaConcentration *= correctionFactor;
-                                biotaConcentration *= correctionFactor;
+                                // Display the result for biota unit
+                                var biotaResultDiv = document.getElementById('biotaResultDiv');
+                                biotaResultDiv.innerHTML = `Biota Correction Factor: ${biotaData.correction_factor || 'Not found'}`;
 
-                                // Calculate Concentration Ratio
-                                var concentrationRatio = mediaConcentration * biotaConcentration;
-
-                                // Update the Concentration Ratio field
-                                crField.value = concentrationRatio.toFixed(2);
-                                console.log("Concentration Ratio:", concentrationRatio);
+                                // Use the correction factors to update concentrations or perform other calculations
+                                // For example, you can access mediaData.correction_factor and biotaData.correction_factor
+                                // to apply correction factors to your concentrations.
                             })
-                            .catch(error => {
-                                console.error('Error fetching correction factor:', error);
-                                crField.value = ''; // Clear the field in case of an error
+                            .catch(biotaError => {
+                                console.error('Error fetching biota correction factor:', biotaError);
+                                var biotaResultDiv = document.getElementById('biotaResultDiv');
+                                biotaResultDiv.innerHTML = 'Error fetching biota correction factor';
                             });
-                    } else {
-                        // Calculate Concentration Ratio without correction factor
-                        var concentrationRatio = mediaConcentration * biotaConcentration;
-
-                        // Update the Concentration Ratio field
-                        crField.value = concentrationRatio.toFixed(2);
-                        console.log("Concentration Ratio:", concentrationRatio);
-                    }
-                } else {
-                    // If any of the values is not a valid number, clear the Concentration Ratio field
-                    crField.value = '';
-                }*/
+                    })
+                    .catch(mediaError => {
+                        console.error('Error fetching media correction factor:', mediaError);
+                        var mediaResultDiv = document.getElementById('mediaResultDiv');
+                        mediaResultDiv.innerHTML = 'Error fetching media correction factor';
+                    });
             }
 
             // Helper function to get correction factor from ActivityConcUnit table

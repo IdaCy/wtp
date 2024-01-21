@@ -83,15 +83,18 @@
             <!-- Navigation links for moving to the next and previous data records -->
             <div class="center-links">
                 {% if reference.datacr_set.all %}
-                    {% for datacr in reference.datacr_set.all %}
-                        <a href="{% url 'prev_datacr_record' reference.ref_id datacr.cr_id %}">Previous CR Data</a>
-                        <a href="{% url 'next_datacr_record' reference.ref_id datacr.cr_id %}">Next CR Data</a>
-                    {% endfor %}
+                    {% with first_datacr=reference.datacr_set.first %}
+                        <a href="{% url 'prev_datacr_record' reference.ref_id first_datacr.cr_id %}">Previous CR
+                            Data</a>
+                    {% endwith %}
+
+                    {% with last_datacr=reference.datacr_set.last %}
+                        <a href="{% url 'next_datacr_record' reference.ref_id last_datacr.cr_id %}">Next CR Data</a>
+                    {% endwith %}
                 {% else %}
                     <p>No related DataCR records found for the specified reference ID.</p>
                 {% endif %}
             </div>
-
         {% else %}
             <p>No related DataCR records found for the specified reference ID.</p>
         {% endif %}

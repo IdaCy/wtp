@@ -42,10 +42,9 @@ th {
     padding: 10px;
     margin: 10px;
     text-decoration: none;
-    /*background-color: #007bff;*/
+    background-color: #007bff;
     color: #fff;
     border-radius: 5px;
-    background-color: red;
 }
 
 .center-links a:hover {

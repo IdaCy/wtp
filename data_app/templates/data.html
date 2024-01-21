@@ -4,27 +4,65 @@
 {% block title %}Data View Page{% endblock %}
 
 {% block content %}
-    <h1>CR Data Overview</h1>
-    <table class="data-table">
-        <thead>
+
+    <h1>Data View</h1>
+
+<!-- Display the ActivityConcUnit data -->
+<table border="1">
+    <thead>
+        <tr>
+            <th>Unit Symbol</th>
+            <th>Media Type</th>
+            <th>Correction Factor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in data %}
             <tr>
-                <th>CR ID</th>
-                <th>From ERICA</th>
-                <th>Correction Ratio (CR)</th>
-                <th>Approval Status</th>
+                <td>{{ entry.act_conc_unit_symbol }}</td>
+                <td>{{ entry.media.media_type }}</td>
+                <td>{{ entry.correction_factor_act_conc }}</td>
             </tr>
-        </thead>
-        <tbody>
-            {% for item in data %}
-                <tr>
-                    <td>{{ item.cr_id }}</td>
-                    <td>{{ item.from_erica }}</td>
-                    <td>{{ item.cr }}</td>
-                    <td>{{ item.approval_data_status }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Form to input unit symbol and media type for correction factor -->
+<form id="correctionFactorForm">
+    <label for="unitSymbolInput">Unit Symbol:</label>
+    <input type="text" id="unitSymbolInput" name="unit_symbol" required>
+
+    <label for="mediaTypeInput">Media Type:</label>
+    <input type="text" id="mediaTypeInput" name="media_type" required>
+
+    <button type="button" onclick="getCorrectionFactor()">Get Correction Factor</button>
+</form>
+
+<!-- Display the result -->
+<div id="correctionFactorResult"></div>
+
+<script>
+    function getCorrectionFactor() {
+        var unitSymbol = document.getElementById('unitSymbolInput').value;
+        var mediaType = document.getElementById('mediaTypeInput').value;
+
+        // Make an AJAX request to fetch the correction factor
+        fetch(`/get_correction_factor/?unit_symbol=${unitSymbol}&media_type=${mediaType}`)
+            .then(response => response.json())
+            .then(data => {
+                // Display the result
+                var resultDiv = document.getElementById('correctionFactorResult');
+                resultDiv.innerHTML = `Correction Factor: ${data.correction_factor || 'Not found'}`;
+            })
+            .catch(error => {
+                console.error('Error fetching correction factor:', error);
+                var resultDiv = document.getElementById('correctionFactorResult');
+                resultDiv.innerHTML = 'Error fetching correction factor';
+            });
+    }
+</script>
+
+
     <link rel="stylesheet" href="/static/css/data.css">
     {% block extra_css %}{% endblock %}
 {% endblock %}

@@ -84,7 +84,13 @@ class Media(models.Model):
     habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.media_type
+        return f"{self.media_id} ({self.media_type})"
+
+    def get_media_id(self):
+        return str(self.name_latin)
+
+    def get_name_common(self):
+        return str(self.media_type)
 
 class PubType(models.Model):
     pub_type_id = models.IntegerField(primary_key=True)
@@ -154,7 +160,7 @@ class ActivityConcUnit(models.Model):
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.act_conc_unit_symbol
+        return self.correction_factor_act_conc
 
 class ParCRCalc(models.Model):
     cr_id = models.IntegerField(primary_key=True)

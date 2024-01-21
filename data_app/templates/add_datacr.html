@@ -164,7 +164,7 @@
                 </div>
                 <div class="right-mid">
                     <div class="entry">
-                        <label for="id_media_conc">Media Conc:</label>
+                        <label for="id_media_conc">Media Concentration:</label>
                         <input type="text" id="id_media_conc" name="media_conc">
                     </div>
                 </div>
@@ -207,7 +207,7 @@
                 </div>
                 <div class="right-mid">
                     <div class="entry">
-                        <label for="id_biota_conc">Biota Conc:</label>
+                        <label for="id_biota_conc">Biota Concentration:</label>
                         <input type="text" id="id_biota_conc" name="biota_conc">
                     </div>
                 </div>
@@ -261,12 +261,17 @@
         <button type="submit" name="action" value="add_all">Add All</button>
         <button type="submit" name="action" value="add_mid">Add Mid</button>
 
+
+        <button type="button" onclick="updateConcentrationRatio()">Get Correction Factor</button>
     </form>
 
+    <!-- test the result -->
+    <div id="correctionFactorResult"></div>
 
     <script>
         // JavaScript to set the value of reference_id when the page loads
         document.addEventListener('DOMContentLoaded', function () {
+            console.log("DOM content loaded");
             // Generate a unique reference_id based on the date and time
             var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '');
             /*var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(2);*/
@@ -288,15 +293,15 @@
 
                 // Add options based on the selected Habitat
                 if (selectedHabitat.includes('terrestrial')) {
-                    addMediaTypeDropdown('Air', 'air');
-                    addMediaTypeDropdown('Soil', 'soil');
+                    addMediaTypeDropdown('Air', 'Air');
+                    addMediaTypeDropdown('Soil', 'Soil');
                 } else if (
                     selectedHabitat.includes('estuarine') ||
                     selectedHabitat.includes('freshwater') ||
                     selectedHabitat.includes('marine')
                 ) {
-                    addMediaTypeDropdown('Sediment', 'sediment');
-                    addMediaTypeDropdown('Water', 'water');
+                    addMediaTypeDropdown('Sediment', 'Sediment');
+                    addMediaTypeDropdown('Water', 'Water');
                 }
             }
 
@@ -315,7 +320,7 @@
                 mediaWetDryDropdown.innerHTML = '';
 
                 // Get the selected value of Media Type
-                var selectedMediaType = mediaTypeDropdown.value;
+                var selectedMediaType = mediaTypeDropdown.value.toLowerCase();
 
                 // Add unit options based on the selected Media Type
                 if (selectedMediaType === 'air') {
@@ -370,6 +375,116 @@
             // Initialize functions on page load
             updateMediaType();
             updateMediaUnits();
+
+
+            /******************* CR CALCULATIONS ***************************/
+
+                // Get references to the relevant input fields and select dropdowns
+            var mediaConcField = document.getElementById('id_media_conc');
+            var biotaConcField = document.getElementById('id_biota_conc');
+            // var mediaUnitsDropdown = document.getElementById('id_media_units'); // already above
+            var biotaUnitsDropdown = document.getElementById('id_biota_units');
+            var crField = document.getElementById('id_concentration_ratio');
+
+            // Function to update Concentration Ratio based on Media and Biota Concentration
+            function updateConcentrationRatio() {
+
+                //var unitSymbol = document.getElementById('unitSymbolInput').value;
+                //var mediaType = document.getElementById('mediaTypeInput').value;
+                var unitSymbol = document.getElementById('id_media_units').value;
+                var mediaType = document.getElementById('id_media_type').value;
+
+                // Make an AJAX request to fetch the correction factor
+                fetch(`/get_correction_factor/?unit_symbol=${unitSymbol}&media_type=${mediaType}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Display the result
+                        var resultDiv = document.getElementById('correctionFactorResult');
+                        resultDiv.innerHTML = `Correction Factor: ${data.correction_factor || 'Not found'}`;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching correction factor:', error);
+                        var resultDiv = document.getElementById('correctionFactorResult');
+                        resultDiv.innerHTML = 'Error fetching correction factor';
+                    });
+
+
+                /*console.log("entered updateConcentrationRatio()");
+                // Get values from Media and Biota Concentration fields
+                var mediaConcentration = parseFloat(mediaConcField.value);
+                var biotaConcentration = parseFloat(biotaConcField.value);
+
+                // Get selected Media Units
+                var selectedMediaUnits = mediaUnitsDropdown.value;
+                var selectedBiotaUnits = biotaUnitsDropdown.value
+
+                // Get current selection Media Type
+                //mediaTypeDropdown = document.getElementById('id_media_type');
+                //var selectedMediaType = mediaTypeDropdown.value;
+                var mediaType = document.getElementById('id_media_type').value;
+
+                console.log("Media Concentration:", mediaConcentration);
+                console.log("Biota Concentration:", biotaConcentration);
+
+                // Check if both values are valid numbers
+                if (!isNaN(mediaConcentration) && !isNaN(biotaConcentration)) {
+                    // Adjust Media Concentration based on correction factor if needed
+                    if (selectedMediaUnits !== 'Bg/kg') {
+                        // Make an AJAX request to fetch the correction factor
+//fetch(`/get_correction_factor/?unit_symbol=${encodeURIComponent(selectedMediaUnits)}&media_type=${encodeURIComponent(selectedMediaType)}`)
+                        fetch(`/get_correction_factor/?unit_symbol=${selectedMediaUnits}&media_type=${mediaType}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log("Correction Factor:", data.correction_factor);
+
+                                // Update Media and Biota Concentrations based on correction factor
+                                var correctionFactor = data.correction_factor || 1.0;
+                                mediaConcentration *= correctionFactor;
+                                biotaConcentration *= correctionFactor;
+
+                                // Calculate Concentration Ratio
+                                var concentrationRatio = mediaConcentration * biotaConcentration;
+
+                                // Update the Concentration Ratio field
+                                crField.value = concentrationRatio.toFixed(2);
+                                console.log("Concentration Ratio:", concentrationRatio);
+                            })
+                            .catch(error => {
+                                console.error('Error fetching correction factor:', error);
+                                crField.value = ''; // Clear the field in case of an error
+                            });
+                    } else {
+                        // Calculate Concentration Ratio without correction factor
+                        var concentrationRatio = mediaConcentration * biotaConcentration;
+
+                        // Update the Concentration Ratio field
+                        crField.value = concentrationRatio.toFixed(2);
+                        console.log("Concentration Ratio:", concentrationRatio);
+                    }
+                } else {
+                    // If any of the values is not a valid number, clear the Concentration Ratio field
+                    crField.value = '';
+                }*/
+            }
+
+            // Helper function to get correction factor from ActivityConcUnit table
+            function getCorrectionFactor(unit) {
+                // !! replace: here logic to fetch the correction factor from the ActivityConcUnit table
+                // might need to make an AJAX request or fetch it from server-side logic
+                // trying first a simple mapping....
+                var correctionFactors = {
+                    'Bq/g': 1.5,
+                    'Bq/m2': 2.0,
+                    'Bq/m3': 2.5
+                };
+
+                return correctionFactors[unit] || 1.0; // Default to 1.0 if not found
+            }
+
+            // Attach the updateConcentrationRatio function to the input event of Media and Biota Concentration fields
+            mediaConcField.addEventListener('input', updateConcentrationRatio);
+            biotaConcField.addEventListener('input', updateConcentrationRatio);
+            mediaUnitsDropdown.addEventListener('change', updateConcentrationRatio);
         });
     </script>
 

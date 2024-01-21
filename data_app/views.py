@@ -1,13 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName
-from .models import RAP, Lifestage, StudyType
+from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media
 from .forms import DataCRForm
+
+
+from django.http import JsonResponse
+from django.views import View
 
 
 @login_required
 def data_view(request):
-    dataobj = DataCR.objects.all()
+    dataobj = ActivityConcUnit.objects.all()
     return render(request, 'data.html', {'data': dataobj})
 
 
@@ -42,7 +46,39 @@ def add_datacr(request):
         'lifestage_name': Habitat.objects.all(),
         'study_type_name': Habitat.objects.all(),
         'name_common': SpeciesName.objects.all(),
-        'name_latin': SpeciesName.objects.all(),
-        'radionuclide_name': SpeciesName.objects.all(),
-        'wildlife_group_name': SpeciesName.objects.all(),
+        #'name_latin': SpeciesName.objects.all(),
+        #'radionuclide_name': SpeciesName.objects.all(),
+        #'wildlife_group_name': SpeciesName.objects.all(),
     })
+
+
+class GetCorrectionFactorView(View):
+    def get(self, request, *args, **kwargs):
+        unit_symbol = request.GET.get('unit_symbol', '')
+        media_type_string = request.GET.get('media_type', '')
+
+        print("Unit Symbol:", unit_symbol)
+        print("Media Type:", media_type_string)
+
+        try:
+            # Get the first Media object based on the selected media type name
+            media_obj = Media.objects.filter(media_type=media_type_string).first()
+
+            if media_obj:
+                # Get the correction factor based on both unit symbol and media type
+                correction_factor_entry = ActivityConcUnit.objects.filter(
+                    act_conc_unit_symbol=unit_symbol,
+                    media=media_obj
+                ).first()
+
+                if correction_factor_entry:
+                    correction_factor = correction_factor_entry.correction_factor_act_conc
+                    return JsonResponse({'correction_factor': correction_factor})
+                else:
+                    return JsonResponse({'error': 'Unit not found for the given media type'}, status=404)
+            else:
+                return JsonResponse({'error': 'Media not found'}, status=404)
+
+        except Media.DoesNotExist:
+            return JsonResponse({'error': 'Media not found'}, status=404)
+

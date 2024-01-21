@@ -3,70 +3,98 @@
 {% block title %}Single Data View{% endblock %}
 
 {% block content %}
-    <h1>Single Data View</h1>
+    <h1>References</h1>
 
     {% if reference %}
         <div class="data-record">
-            <h2>Reference Information</h2>
             <table>
                 <tr>
                     <th>Reference ID</th>
-                    <td>{{ reference.ref_id }}</td>
-                </tr>
-                <tr>
-                    <th>Author</th>
-                    <td>{{ reference.author }}</td>
-                </tr>
-                <tr>
-                    <th>Article Title</th>
-                    <td>{{ reference.article_title }}</td>
-                </tr>
-                <tr>
                     <th>Year</th>
+                    <th>Volume</th>
+                    <th>Publication Type</th>
+                </tr>
+                <tr>
+                    <td>{{ reference.ref_id }}</td>
                     <td>{{ reference.year }}</td>
+                    <td>{{ reference.volume }}</td>
+                    <td>{{ reference.pub_type.type_name }}</td>
                 </tr>
             </table>
-        </div>
 
-        <div class="data-record">
-            <h2>Publication Information</h2>
             <table>
                 <tr>
+                    <th>Author</th>
+                    <th>Article Title</th>
                     <th>Publication Title</th>
+                </tr>
+                <tr>
+                    <td>{{ reference.author }}</td>
+                    <td>{{ reference.article_title }}</td>
                     <td>{{ reference.pub_title.title }}</td>
                 </tr>
                 <tr>
-                    <th>Publication Type</th>
-                    <td>{{ reference.pub_type.type_name }}</td>
-                </tr>
-                <tr>
-                    <th>Volume</th>
-                    <td>{{ reference.volume }}</td>
                 </tr>
             </table>
-        </div>
 
-        <div class="data-record">
-            <h2>Additional Information</h2>
             <table>
                 <tr>
                     <th>Pages</th>
-                    <td>{{ reference.pages }}</td>
-                </tr>
-                <tr>
                     <th>Part</th>
-                    <td>{{ reference.part }}</td>
-                </tr>
-                <tr>
                     <th>Reference Language</th>
-                    <td>{{ reference.language.language_name }}</td>
+                    <th>Translation Available</th>
                 </tr>
                 <tr>
-                    <th>Translation Available</th>
+                    <td>{{ reference.pages }}</td>
+                    <td>{{ reference.part }}</td>
+                    <td>{{ reference.language.language }}</td>
                     <td>{{ reference.translation }}</td>
                 </tr>
             </table>
         </div>
+
+        <!-- navigation links for moving to the next and previous reference records -->
+        <div class="center-links">
+            <a href="{% url 'prev_ref_record' reference.ref_id %}">Previous</a>
+            <a href="{% url 'next_ref_record' reference.ref_id %}">Next</a>
+        </div>
+
+
+        <!-- DataCR RECORDS OF ABOVE REFERENCE -->
+
+        <h1>Data Record</h1>
+        {% if reference.datacr_set.all %}
+            {% for datacr in reference.datacr_set.all %}
+                <!-- DataCR record table -->
+                <div class="data-record">
+                    <table>
+                        <tr>
+                            <th>Habitat</th>
+                            <th>Wildlife Group</th>
+                        </tr>
+                        <tr>
+                            <td>{{ datacr.habitat.habitat_specific_type }}</td>
+                            <td>{{ datacr.wildlife_group.wildlife_group_name }}</td>
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
+
+            <!-- Navigation links for moving to the next and previous data records -->
+            <div class="center-links">
+                {% if reference.datacr_set.all %}
+                    {% for datacr in reference.datacr_set.all %}
+                        <a href="{% url 'prev_datacr_record' reference.ref_id datacr.cr_id %}">Previous CR Data</a>
+                        <a href="{% url 'next_datacr_record' reference.ref_id datacr.cr_id %}">Next CR Data</a>
+                    {% endfor %}
+                {% else %}
+                    <p>No related DataCR records found for the specified reference ID.</p>
+                {% endif %}
+            </div>
+
+        {% else %}
+            <p>No related DataCR records found for the specified reference ID.</p>
+        {% endif %}
 
     {% else %}
         {% if error_message %}
@@ -76,8 +104,5 @@
         {% endif %}
     {% endif %}
 
-    <!-- Add navigation links for moving to the next and previous data records -->
-    <a href="{% url 'prev_data_record' reference.ref_id %}">Previous</a>
-    <a href="{% url 'next_data_record' reference.ref_id %}">Next</a>
-
+    <link rel="stylesheet" href="/static/css/view_all_data.css">
 {% endblock %}

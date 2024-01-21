@@ -20,6 +20,8 @@ urlpatterns = [
     path('add_datacr/', data_views.add_datacr, name='add_datacr'),
     path('view_all_data/', data_views.view_all_data, name='view_all_data'),
     path('view_all_data/<int:ref_id>/', data_views.view_all_data, name='view_all_data'),
-    path('prev_data_record/<int:ref_id>/', data_views.prev_data_record, name='prev_data_record'),
-    path('next_data_record/<int:ref_id>/', data_views.next_data_record, name='next_data_record'),
+    path('prev_ref_record/<int:ref_id>/', data_views.prev_ref_record, name='prev_ref_record'),
+    path('next_ref_record/<int:ref_id>/', data_views.next_ref_record, name='next_ref_record'),
+    path('prev_datacr_record/<int:ref_id>/<int:datacr_id>/', data_views.prev_datacr_record, name='prev_datacr_record'),
+    path('next_datacr_record/<int:ref_id>/<int:datacr_id>/', data_views.next_datacr_record, name='next_datacr_record'),
 ]

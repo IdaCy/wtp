@@ -435,20 +435,6 @@
                     });
             }
 
-            // Helper function to get correction factor from ActivityConcUnit table
-            function getCorrectionFactor(unit) {
-                // !! replace: here logic to fetch the correction factor from the ActivityConcUnit table
-                // might need to make an AJAX request or fetch it from server-side logic
-                // trying first a simple mapping....
-                var correctionFactors = {
-                    'Bq/g': 1.5,
-                    'Bq/m2': 2.0,
-                    'Bq/m3': 2.5
-                };
-
-                return correctionFactors[unit] || 1.0; // Default to 1.0 if not found
-            }
-
             // Attach the updateConcentrationRatio function to the input event of Media and Biota Concentration fields
             mediaConcField.addEventListener('input', updateConcentrationRatio);
             mediaConcField.addEventListener('input', updateConcentrationRatio);

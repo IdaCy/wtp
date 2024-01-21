@@ -381,10 +381,10 @@
 
             /******************* CR CALCULATIONS ***************************/
 
-            // Get references to the relevant input fields and select dropdowns
+                // Get references to the relevant input fields and select dropdowns
             var mediaConcField = document.getElementById('id_media_conc');
             var biotaConcField = document.getElementById('id_biota_conc');
-            // var mediaUnitsDropdown = document.getElementById('id_media_units'); // already above
+            mediaUnitsDropdown = document.getElementById('id_media_units'); // already above
             var biotaUnitsDropdown = document.getElementById('id_biota_units');
             var crField = document.getElementById('id_concentration_ratio');
 
@@ -403,15 +403,24 @@
                             .then(biotaData => {
                                 // Display the result for media unit
                                 var mediaResultDiv = document.getElementById('mediaResultDiv');
-                                mediaResultDiv.innerHTML = `Media Correction Factor: ${mediaData.correction_factor || 'Not found'}`;
+                                var mediaCorrectionFactor = mediaData.correction_factor || 1.0;
+                                var mediaConcentration = parseFloat(mediaConcField.value);
+                                var mediaResult = mediaCorrectionFactor * mediaConcentration;
+                                mediaResultDiv.innerHTML = `Media Correction Factor: ${mediaCorrectionFactor}, Result: ${mediaResult.toFixed(2)}`;
 
                                 // Display the result for biota unit
                                 var biotaResultDiv = document.getElementById('biotaResultDiv');
-                                biotaResultDiv.innerHTML = `Biota Correction Factor: ${biotaData.correction_factor || 'Not found'}`;
+                                var biotaCorrectionFactor = biotaData.correction_factor || 1.0;
+                                var biotaConcentration = parseFloat(biotaConcField.value);
+                                var biotaResult = biotaCorrectionFactor * biotaConcentration;
+                                biotaResultDiv.innerHTML = `Biota Correction Factor: ${biotaCorrectionFactor}, Result: ${biotaResult.toFixed(2)}`;
 
-                                // Use the correction factors to update concentrations or perform other calculations
-                                // For example, you can access mediaData.correction_factor and biotaData.correction_factor
-                                // to apply correction factors to your concentrations.
+                                // Calculate and display the Concentration Ratio
+                                var crField = document.getElementById('id_concentration_ratio');
+                                var concentrationRatio = biotaResult / mediaResult;
+                                crField.value = concentrationRatio.toFixed(2);
+                                var correctionFactorResultDiv = document.getElementById('correctionFactorResult');
+                                correctionFactorResultDiv.innerHTML = `Correction Factor Result: ${concentrationRatio.toFixed(2)}`;
                             })
                             .catch(biotaError => {
                                 console.error('Error fetching biota correction factor:', biotaError);
@@ -442,7 +451,9 @@
 
             // Attach the updateConcentrationRatio function to the input event of Media and Biota Concentration fields
             mediaConcField.addEventListener('input', updateConcentrationRatio);
-            biotaConcField.addEventListener('input', updateConcentrationRatio);
+            mediaConcField.addEventListener('input', updateConcentrationRatio);
+            mediaUnitsDropdown.addEventListener('input', updateConcentrationRatio);
+            biotaUnitsDropdown.addEventListener('input', updateConcentrationRatio);
             mediaUnitsDropdown.addEventListener('change', updateConcentrationRatio);
         });
     </script>

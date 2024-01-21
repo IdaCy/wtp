@@ -25,33 +25,33 @@ def ref_view(request):
 
 @login_required
 def add_datacr(request):
-    # Handle form submission
     if request.method == 'POST':
         form = DataCRForm(request.POST)
+
         if form.is_valid():
-            # Save the form data to the database
-            form.save()
-            # Redirect to the data view or any other desired page
-            return redirect('data_view')
+            # Save the Reference object
+            reference = Reference(
+                author=form.cleaned_data['author'],
+                article_title=form.cleaned_data['ref_article_title'],
+                # Add other fields as needed
+            )
+            reference.save()
+
+            # Save the DataCR object with the reference foreign key
+            datacr = DataCRForm(
+                reference=reference,
+                habitat=form.cleaned_data['habitat_specific_type'],
+                wildlife_group=form.cleaned_data['wildlife_group_name'],
+                # Add other fields as needed
+            )
+            datacr.save()
+
+            return redirect('success_page')  # Redirect to a success page or any other desired URL
     else:
-        # Render the form for GET requests
         form = DataCRForm()
 
-    return render(request, 'add_datacr.html', {
-        'form': form,
-        'pub_types': PubType.objects.all(),
-        'pub_titles': PubTitle.objects.all(),
-        'languages': Language.objects.all(),
-        'article_title': Reference.objects.all(),
-        'habitat_specific_type': Habitat.objects.all(),
-        'rap_name': RAP.objects.all(),
-        'lifestage_name': Habitat.objects.all(),
-        'study_type_name': Habitat.objects.all(),
-        'name_common': SpeciesName.objects.all(),
-        #'name_latin': SpeciesName.objects.all(),
-        #'radionuclide_name': SpeciesName.objects.all(),
-        #'wildlife_group_name': SpeciesName.objects.all(),
-    })
+    return render(request, 'add_datacr.html', {'form': form})
+
 
 
 class GetCorrectionFactorView(View):

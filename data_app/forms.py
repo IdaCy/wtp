@@ -3,6 +3,9 @@ from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, Spe
 from .models import RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup, Tissue
 
 class DataCRForm(forms.ModelForm):
+    reference_id = forms.CharField(max_length=20)
+    author = forms.CharField(max_length=500)
+
     class Meta:
         model = DataCR
         fields = '__all__'

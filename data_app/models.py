@@ -96,7 +96,7 @@ class Media(models.Model):
     def get_media_id(self):
         return str(self.name_latin)
 
-    def get_name_common(self):
+    def get_media_type(self):
         return str(self.media_type)
 
 
@@ -349,7 +349,7 @@ class DataCR(models.Model):
         ('D', 'Dry'),
         ('A', 'Air'),
     ]
-    media_wet_dry = models.CharField(max_length=5, choices=media_wet_dry_choices, default='W', null=True, blank=True)
+    media_wet_dry = models.CharField(max_length=10, choices=media_wet_dry_choices, default='W', null=True, blank=True)
     other_tissue = models.CharField(max_length=30, null=True)
     qc = models.BooleanField(default=False)
     rep_organ_units = models.CharField(max_length=30, null=True)

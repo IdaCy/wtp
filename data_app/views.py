@@ -27,62 +27,67 @@ def ref_view(request):
 def add_datacr(request):
     if request.method == 'POST':
         form = DataCRForm(request.POST)
-
         if form.is_valid():
             # Save the Reference object
-            reference = Reference(
-                ref_id=form.cleaned_data['reference_id'],
-                author=form.cleaned_data['author'],
-                article_title=form.cleaned_data['ref_article_title'],
-                pub_title=form.cleaned_data['publication_title'],
-                year=form.cleaned_data['year'],
-                volume=form.cleaned_data['volume'],
-                part=form.cleaned_data['part'],
-                pages=form.cleaned_data['page_numbers'],
-                language=form.cleaned_data['reference_language'],
-                pub_type=form.cleaned_data['publication_title'],
-                translation=form.cleaned_data['translation_available'],
-                notes=form.cleaned_data['notes'],
-                user=request.user,
-                dc_id=form.cleaned_data['reference_id'],
-                approval_status='PENDING',
-            )
+            reference = form.save(commit=False)
+            reference.user = request.user
+            reference.approval_status = 'PENDING'
             reference.save()
 
-            # Save the DataCR object with the reference foreign key
-            datacr = DataCR(
-                reference=reference,
-                habitat_id=get_habitat_id(form.cleaned_data['habitat_specific_type']),
-                wildlife_group_id=get_wildlife_group_id(form.cleaned_data['wildlife_group_name']),
-                icrp_rap=get_rap_id(form.cleaned_data['icrp_rap'], habitat_id),
-                lifestage=get_lifestage_id(form.cleaned_data['lifestage_name']),
-                species_name=get_name_common_id(form.cleaned_data['common_names']),
-                study_type=get_study_type_id(form.cleaned_data['study_type_name']),
-                measurement_date=form.cleaned_data['measurement_date'],
-                tissue=get_study_tissue_id(form.cleaned_data['tissue_name']),
-                media=get_study_media_id(form.cleaned_data['media_type']),
-                crn=form.cleaned_data['n_of_cr'],
-                cr=form.cleaned_data['concentration_ratio'],
-                cr_sd=form.cleaned_data['sd_of_cr'],
-                radionuclide=get_radionuclide_id(form.cleaned_data['radionuclide_name']),
-                biota_conc=form.cleaned_data['biota_conc'],
-                biota_conc_units=form.cleaned_data['biota_conc_units'],
-                biota_n=form.cleaned_data['biota_n'],
-                biota_sd=form.cleaned_data['biota_sd'],
-                biota_wet_dry=form.cleaned_data['biota_wet_dry'],
-                media_conc=form.cleaned_data['media_conc'],
-                media_n=form.cleaned_data['media_n'],
-                media_conc_units=form.cleaned_data['media_conc_units'],
-                media_sd=form.cleaned_data['media_sd'],
-                media_wet_dry=form.cleaned_data['media_wet_dry'],
-                approval_data_status='PENDING',
-            )
+            # Create and save the DataCR object with the reference foreign key
+            datacr = DataCR.form.save(commit=False)
+            # Assigning fields from the form to the DataCR instance
+            datacr.reference = reference
+            datacr.habitat = get_habitat_id(form.cleaned_data['habitat_specific_type'])
+            datacr.wildlife_group = get_wildlife_group_id(form.cleaned_data['wildlife_group_name'])
+            datacr.icrp_rap = get_rap_id(form.cleaned_data['icrp_rap'], datacr.habitat.habitat_id if datacr.habitat else None)
+            datacr.lifestage = get_lifestage_id(form.cleaned_data['lifestage_name'])
+            datacr.species_name = get_name_common_id(form.cleaned_data['name_common'])
+            datacr.study_type = get_studytype_id(form.cleaned_data['study_type_name'])
+            datacr.measurement_date = form.cleaned_data['measurement_date']
+            datacr.tissue = get_tissue_id(form.cleaned_data['tissue_name'])
+            datacr.media = get_media_id(form.cleaned_data['media_type'])
+            datacr.crn = form.cleaned_data['n_of_cr']
+            datacr.cr = form.cleaned_data['concentration_ratio']
+            datacr.cr_sd = form.cleaned_data['sd_of_cr']
+            datacr.radionuclide = get_radionuclide_id(form.cleaned_data['radionuclide_name'])
+            datacr.biota_conc = form.cleaned_data['biota_conc']
+            datacr.biota_conc_units = form.cleaned_data['biota_conc_units']
+            datacr.biota_n = form.cleaned_data['biota_n']
+            datacr.biota_sd = form.cleaned_data['biota_sd']
+            datacr.biota_wet_dry = form.cleaned_data['biota_wet_dry']
+            datacr.media_conc = form.cleaned_data['media_conc']
+            datacr.media_n = form.cleaned_data['media_n']
+            datacr.media_conc_units = form.cleaned_data['media_conc_units']
+            datacr.media_sd = form.cleaned_data['media_sd']
+            datacr.media_wet_dry = form.cleaned_data['media_wet_dry']
+            datacr.approval_data_status = 'PENDING'
+
+            # Fields not covered by the form
+            datacr.notes = "Default notes"
+            datacr.from_erica = False
+            datacr.accepted = False
+            datacr.biohalflife = "Default biota half life"
+            datacr.data_extract = 0
+            datacr.other_tissue = "Default other tissue"
+            datacr.qc = False
+            datacr.rep_organ_units = "Default rep organ units"
+            datacr.reproductive_organ = "Default reproductive organ"
+            datacr.rep_wet_dry = "W"
+            datacr.stand_biota_conc = 1.0
+            datacr.stand_biota_sd = "Default stand biota sd"
+            datacr.stand_media_conc = 1.0
+            datacr.stand_media_sd = "Default stand media sd"
+            datacr.summary_approve = False
+            datacr.approval_data_status = 'PENDING'
+
             datacr.save()
 
-            return redirect('success_page')  # Redirect to a success page or any other desired URL
-
+            return redirect('success_page')
         else:
+            # Handling form errors
             print(form.errors)
+            return render(request, 'add_datacr.html', {'form': form})
     else:
         form = DataCRForm()
 

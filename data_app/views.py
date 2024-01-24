@@ -50,11 +50,11 @@ def add_datacr(request):
             datacr.reference = reference
 
             # Fetching the actual model instances
-            wildlife_group_id = datacr_form.cleaned_data.get('wildlife_group').id if datacr_form.cleaned_data.get(
+            wildlife_group_id = datacr_form.cleaned_data.get('wildlife_group').wildlife_group_id if datacr_form.cleaned_data.get(
                 'wildlife_group') else None
-            icrp_rap_id = datacr_form.cleaned_data.get('icrp_rap').id if datacr_form.cleaned_data.get(
+            icrp_rap_id = datacr_form.cleaned_data.get('icrp_rap').rap_id if datacr_form.cleaned_data.get(
                 'icrp_rap') else None
-            lifestage_id = datacr_form.cleaned_data.get('lifestage').id if datacr_form.cleaned_data.get(
+            lifestage_id = datacr_form.cleaned_data.get('lifestage').lifestage_id if datacr_form.cleaned_data.get(
                 'lifestage') else None
 
             if wildlife_group_id:
@@ -68,7 +68,7 @@ def add_datacr(request):
 
             datacr.save()
 
-            return redirect('success_page')
+            return redirect('dashboard')
         else:
             # Handling form errors
             print(reference_form.errors, datacr_form.errors)

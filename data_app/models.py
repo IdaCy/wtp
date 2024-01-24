@@ -317,12 +317,12 @@ class DataCR(models.Model):
     biota_n = models.IntegerField(null=True, blank=True, default=0)
     biota_sd = models.CharField(max_length=30, null=True, blank=True, default='Default Biota SD')
     biota_wet_dry_choices = [
-        ('W', 'Wet'),
-        ('D', 'Dry'),
-        ('A', 'Air'),
-        ('S', 'Soil'),
+        ('Water', 'Water'),
+        ('Dry', 'Dry'),
+        ('Air', 'Air'),
+        ('Soil', 'Soil'),
     ]
-    biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, default='W', null=True, blank=True)
+    biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, default='Dry', null=True, blank=True)
     data_extract = models.IntegerField(null=True, blank=True, default=0)
     media_conc = models.CharField(max_length=30, null=True, blank=True, default='Default Media Conc')
     media_n = models.CharField(max_length=30, null=True, blank=True, default='Default Media N')
@@ -344,22 +344,23 @@ class DataCR(models.Model):
     media_conc_units = models.CharField(max_length=20, choices=media_conc_unit_choices, default='Bq/kg', null=True, blank=True)
     media_sd = models.CharField(max_length=30, null=True, blank=True, default='Default Media SD')
     media_wet_dry_choices = [
-        ('W', 'Wet'),
-        ('D', 'Dry'),
-        ('A', 'Air'),
+        ('Water', 'Water'),
+        ('Dry', 'Dry'),
+        ('Air', 'Air'),
+        ('Soil', 'Soil'),
     ]
-    media_wet_dry = models.CharField(max_length=10, choices=media_wet_dry_choices, default='W', null=True, blank=True)
+    media_wet_dry = models.CharField(max_length=10, choices=media_wet_dry_choices, default='Dry', null=True, blank=True)
     other_tissue = models.CharField(max_length=30, null=True, blank=True, default='Default Other Tissue')
     qc = models.BooleanField(default=False)
     rep_organ_units = models.CharField(max_length=30, null=True, blank=True, default='Default Rep Organ Units')
     reproductive_organ = models.CharField(max_length=30, null=True, blank=True, default='Default Reproductive Organ')
     rep_wet_dry_choices = [
-        ('W', 'Wet'),
-        ('D', 'Dry'),
-        ('A', 'Air'),
-        ('S', 'Soil'),
+        ('Water', 'Water'),
+        ('Dry', 'Dry'),
+        ('Air', 'Air'),
+        ('Soil', 'Soil'),
     ]
-    rep_wet_dry = models.CharField(max_length=5, choices=rep_wet_dry_choices, default='W', null=True, blank=True)
+    rep_wet_dry = models.CharField(max_length=5, choices=rep_wet_dry_choices, default='Dry', null=True, blank=True)
     stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default=1.0)
     stand_biota_sd = models.CharField(max_length=30, null=True, blank=True, default='Default Stand Biota SD')
     stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default=1.0)

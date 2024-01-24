@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName
 from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup
-from .forms import DataCRForm
+from .forms import DataCRForm, ReferenceForm
 
 from django.http import JsonResponse
 from django.views import View
@@ -26,72 +26,46 @@ def ref_view(request):
 @login_required
 def add_datacr(request):
     if request.method == 'POST':
-        form = DataCRForm(request.POST)
-        if form.is_valid():
-            # Save the Reference object
-            reference = form.save(commit=False)
+        print("POST Data:", request.POST)
+        reference_form = ReferenceForm(request.POST)
+        datacr_form = DataCRForm(request.POST)
+
+        if reference_form.is_valid() and datacr_form.is_valid():
+            # Save Reference instance
+            reference = reference_form.save(commit=False)
             reference.user = request.user
-            reference.approval_status = 'PENDING'
             reference.save()
 
-            # Create and save the DataCR object with the reference foreign key
-            datacr = DataCR.form.save(commit=False)
-            # Assigning fields from the form to the DataCR instance
+            # Save DataCR instance
+            datacr = datacr_form.save(commit=False)
             datacr.reference = reference
-            datacr.habitat = get_habitat_id(form.cleaned_data['habitat_specific_type'])
-            datacr.wildlife_group = get_wildlife_group_id(form.cleaned_data['wildlife_group_name'])
-            datacr.icrp_rap = get_rap_id(form.cleaned_data['icrp_rap'], datacr.habitat.habitat_id if datacr.habitat else None)
-            datacr.lifestage = get_lifestage_id(form.cleaned_data['lifestage_name'])
-            datacr.species_name = get_name_common_id(form.cleaned_data['name_common'])
-            datacr.study_type = get_studytype_id(form.cleaned_data['study_type_name'])
-            datacr.measurement_date = form.cleaned_data['measurement_date']
-            datacr.tissue = get_tissue_id(form.cleaned_data['tissue_name'])
-            datacr.media = get_media_id(form.cleaned_data['media_type'])
-            datacr.crn = form.cleaned_data['n_of_cr']
-            datacr.cr = form.cleaned_data['concentration_ratio']
-            datacr.cr_sd = form.cleaned_data['sd_of_cr']
-            datacr.radionuclide = get_radionuclide_id(form.cleaned_data['radionuclide_name'])
-            datacr.biota_conc = form.cleaned_data['biota_conc']
-            datacr.biota_conc_units = form.cleaned_data['biota_conc_units']
-            datacr.biota_n = form.cleaned_data['biota_n']
-            datacr.biota_sd = form.cleaned_data['biota_sd']
-            datacr.biota_wet_dry = form.cleaned_data['biota_wet_dry']
-            datacr.media_conc = form.cleaned_data['media_conc']
-            datacr.media_n = form.cleaned_data['media_n']
-            datacr.media_conc_units = form.cleaned_data['media_conc_units']
-            datacr.media_sd = form.cleaned_data['media_sd']
-            datacr.media_wet_dry = form.cleaned_data['media_wet_dry']
-            datacr.approval_data_status = 'PENDING'
 
-            # Fields not covered by the form
-            datacr.notes = "Default notes"
-            datacr.from_erica = False
-            datacr.accepted = False
-            datacr.biohalflife = "Default biota half life"
-            datacr.data_extract = 0
-            datacr.other_tissue = "Default other tissue"
-            datacr.qc = False
-            datacr.rep_organ_units = "Default rep organ units"
-            datacr.reproductive_organ = "Default reproductive organ"
-            datacr.rep_wet_dry = "W"
-            datacr.stand_biota_conc = 1.0
-            datacr.stand_biota_sd = "Default stand biota sd"
-            datacr.stand_media_conc = 1.0
-            datacr.stand_media_sd = "Default stand media sd"
-            datacr.summary_approve = False
-            datacr.approval_data_status = 'PENDING'
+            # Fetching the actual model instances
+            wildlife_group_id = datacr_form.cleaned_data.get('wildlife_group').id if datacr_form.cleaned_data.get('wildlife_group') else None
+            icrp_rap_id = datacr_form.cleaned_data.get('icrp_rap').id if datacr_form.cleaned_data.get('icrp_rap') else None
+            lifestage_id = datacr_form.cleaned_data.get('lifestage').id if datacr_form.cleaned_data.get('lifestage') else None
+
+            if wildlife_group_id:
+                datacr.wildlife_group = WildlifeGroup.objects.get(pk=wildlife_group_id)
+
+            if icrp_rap_id:
+                datacr.icrp_rap = RAP.objects.get(pk=icrp_rap_id)
+
+            if lifestage_id:
+                datacr.lifestage = Lifestage.objects.get(pk=lifestage_id)
 
             datacr.save()
 
             return redirect('success_page')
         else:
             # Handling form errors
-            print(form.errors)
-            return render(request, 'add_datacr.html', {'form': form})
+            print(reference_form.errors, datacr_form.errors)
+            return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
     else:
-        form = DataCRForm()
+        reference_form = ReferenceForm()
+        datacr_form = DataCRForm()
 
-    return render(request, 'add_datacr.html', {'form': form})
+    return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
 
 
 class GetCorrectionFactorView(View):

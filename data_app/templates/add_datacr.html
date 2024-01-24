@@ -23,16 +23,16 @@
             <div class="entry">
                 <!--<label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>-->
                 <label for="id_reference_id">Reference ID: <input type="text" id="reference_id_placeholder"
-                       name="reference_id" readonly></label>
+                                                                  name="reference_id" readonly></label>
             </div>
 
             <div class="pub">
                 <label for="id_article_title">Article Title:</label>
-                {{ form.ref_article_title }}
+                {{ reference_form.article_title }}
             </div>
             <div class="pub">
                 <label for="id_publication_title">Publication Title:</label>
-                {{ form.publication_title }}
+                {{ reference_form.pub_title }}
             </div>
 
             <div class="flex-container">
@@ -51,14 +51,14 @@
                     </div>
                     <div class="entry">
                         <label for="id_reference_language">Reference Language:</label>
-                        {{ form.reference_language }}
+                        {{ reference_form.language }}
                     </div>
                 </div>
 
                 <div class="right">
                     <div class="entry">
                         <label for="id_publication_type">Publication Type:</label>
-                        {{ form.publication_type }}
+                        {{ reference_form.pub_type }}
                     </div>
                     <div class="entry">
                         <label for="id_year">Year:</label>
@@ -84,25 +84,25 @@
                 <div class="left-rim">
                     <div class="entry">
                         <label for="habitat_specific_type">Habitat:</label>
-                        {{ form.habitat_specific_type | add_class:"limited" }}
+                        {{ datacr_form.habitat | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <label for="id_icrp_rap">ICRP RAP:</label>
-                        {{ form.icrp_rap | add_class:"limited" }}
+                        {{ datacr_form.icrp_rap | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <label for="id_lifestage">Lifestage:</label>
-                        {{ form.lifestage_name | add_class:"limited" }}
+                        {{ datacr_form.lifestage | add_class:"limited" }}
                     </div>
                 </div>
                 <div class="left-mid">
                     <div class="entry">
                         <label for="id_wildlife_group">Wildlife Group:</label>
-                        {{ form.wildlife_group_name | add_class:"limited" }}
+                        {{ datacr_form.wildlife_group | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <label for="id_studytype">Studytype:</label>
-                        {{ form.study_type_name | add_class:"limited" }}
+                        {{ datacr_form.study_type | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
@@ -111,7 +111,7 @@
                 <div class="right-mid">
                     <div class="entry">
                         <label for="id_name_common">Species Common:</label>
-                        {{ form.name_common | add_class:"limited" }}
+                        {{ datacr_form.name_common | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <label for="id_sampling_date">Sampling Date:</label>
@@ -125,11 +125,11 @@
                 <div class="right-rim">
                     <div class="entry">
                         <label for="id_name_latin">Species Latin:</label>
-                        {{ form.name_latin | add_class:"limited" }}
+                        {{ datacr_form.name_latin | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <label for="id_element_nuclide">Element/Nuclide:</label>
-                        {{ form.radionuclide_name | add_class:"limited" }}
+                        {{ datacr_form.radionuclide | add_class:"limited" }}
                     </div>
                 </div>
             </div>
@@ -185,7 +185,7 @@
                 <div class="left-rim">
                     <div class="entry">
                         <label for="id_tissue_name">Tissue Type:</label>
-                        {{ form.tissue_name | add_class:"limited" }}
+                        {{ datacr_form.tissue | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <label for="id_n_for_biota">N for Biota:</label>
@@ -274,35 +274,47 @@
             console.log("Reference ID set:", reference_id);
 
             // Get references to the Media Type and Media Units dropdowns
-            var habitatDropdown = document.getElementById('id_habitat_specific_type');
+            var habitatDropdown = document.getElementById('id_habitat');
             var mediaTypeDropdown = document.getElementById('id_media_type');
             var mediaUnitsDropdown = document.getElementById('id_media_units');
             var mediaWetDryDropdown = document.getElementById('id_media_wet_dry');
 
             // Function to update Media Type based on the selected Habitat
             function updateMediaType() {
+                console.log("updateMediaType() started");
                 // Clear previous options
                 mediaTypeDropdown.innerHTML = '';
 
                 // Get the selected value of Habitat
                 var selectedHabitat = habitatDropdown.value.toLowerCase();
+                var selectedHabitatIndex = habitatDropdown.selectedIndex;
+                var selectedHabitatText = habitatDropdown.options[selectedHabitatIndex].text.toLowerCase();
+                console.log("Selected Habitat: ", selectedHabitatText);
+
+                console.log("Selected Habitat no: ", selectedHabitat);
 
                 // Add options based on the selected Habitat
-                if (selectedHabitat.includes('terrestrial')) {
+                if (selectedHabitatText.includes('terrestrial')) {
+                    console.log("Habitat: terrestrial");
                     addMediaTypeDropdown('Air', 'Air');
                     addMediaTypeDropdown('Soil', 'Soil');
                 } else if (
-                    selectedHabitat.includes('estuarine') ||
-                    selectedHabitat.includes('freshwater') ||
-                    selectedHabitat.includes('marine')
+                    selectedHabitatText.includes('estuarine') ||
+                    selectedHabitatText.includes('freshwater') ||
+                    selectedHabitatText.includes('marine')
                 ) {
+                    console.log("Habitat: aquatic");
                     addMediaTypeDropdown('Sediment', 'Sediment');
                     addMediaTypeDropdown('Water', 'Water');
+                } else {
+                    console.log("No matching habitat found");
                 }
+                console.log("end of updateMediaType()");
             }
 
             // Helper function to add options to the dropdown
             function addMediaTypeDropdown(text, value) {
+                console.log("addMediaTypeDropdown() started");
                 var option = document.createElement('option');
                 option.text = text;
                 option.value = value;

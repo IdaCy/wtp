@@ -31,19 +31,31 @@ def add_datacr(request):
         datacr_form = DataCRForm(request.POST)
 
         if reference_form.is_valid() and datacr_form.is_valid():
-            # Save Reference instance
-            reference = reference_form.save(commit=False)
-            reference.user = request.user
-            reference.save()
+            ref_id = reference_form.cleaned_data['ref_id']
+
+            # Check if a Reference with this ref_id already exists
+            reference, created = Reference.objects.get_or_create(
+                ref_id=ref_id,
+                defaults=reference_form.cleaned_data
+            )
+
+            # If the reference was not created (already exists), update its fields
+            if not created:
+                for field, value in reference_form.cleaned_data.items():
+                    setattr(reference, field, value)
+                reference.save()
 
             # Save DataCR instance
             datacr = datacr_form.save(commit=False)
             datacr.reference = reference
 
             # Fetching the actual model instances
-            wildlife_group_id = datacr_form.cleaned_data.get('wildlife_group').id if datacr_form.cleaned_data.get('wildlife_group') else None
-            icrp_rap_id = datacr_form.cleaned_data.get('icrp_rap').id if datacr_form.cleaned_data.get('icrp_rap') else None
-            lifestage_id = datacr_form.cleaned_data.get('lifestage').id if datacr_form.cleaned_data.get('lifestage') else None
+            wildlife_group_id = datacr_form.cleaned_data.get('wildlife_group').id if datacr_form.cleaned_data.get(
+                'wildlife_group') else None
+            icrp_rap_id = datacr_form.cleaned_data.get('icrp_rap').id if datacr_form.cleaned_data.get(
+                'icrp_rap') else None
+            lifestage_id = datacr_form.cleaned_data.get('lifestage').id if datacr_form.cleaned_data.get(
+                'lifestage') else None
 
             if wildlife_group_id:
                 datacr.wildlife_group = WildlifeGroup.objects.get(pk=wildlife_group_id)

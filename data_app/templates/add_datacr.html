@@ -22,8 +22,8 @@
             <!--<h2>Reference</h2>-->
             <div class="entry">
                 <!--<label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>-->
-                <label for="id_reference_id">Reference ID: <input type="text" id="reference_id_placeholder"
-                                                                  name="reference_id" readonly></label>
+                <label for="id_ref_id">Reference ID: <input type="text" id="ref_id"
+                                                                  name="ref_id" readonly></label>
             </div>
 
             <div class="pub">
@@ -268,9 +268,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             console.log("DOM content loaded");
             // Generate a unique reference_id based on the date and time
-            var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '');
-            /*var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(2);*/
-            document.getElementById('reference_id_placeholder').value = reference_id;
+            /*var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '');*/
+            var reference_id = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(3, -5);
+            document.getElementById('ref_id').value = reference_id;
             console.log("Reference ID set:", reference_id);
 
             // Get references to the Media Type and Media Units dropdowns

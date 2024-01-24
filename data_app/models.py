@@ -267,7 +267,7 @@ class Reference(models.Model):
     keyword_4 = models.CharField(max_length=50, default='', blank=True)
     notes = models.CharField(max_length=500, default='', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    dc_id = models.IntegerField()
+    dc_id = models.IntegerField(null=True, blank=True, default=0)
     approval_status = models.CharField(max_length=20)
     reason_approval_delete = models.CharField(max_length=500, default='', blank=True)
 
@@ -321,6 +321,7 @@ class DataCR(models.Model):
         ('Dry', 'Dry'),
         ('Air', 'Air'),
         ('Soil', 'Soil'),
+        ('undefined', 'undefined'),
     ]
     biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, default='Dry', null=True, blank=True)
     data_extract = models.IntegerField(null=True, blank=True, default=0)
@@ -329,6 +330,7 @@ class DataCR(models.Model):
     media_conc_unit_choices = [
         ('µCi/kg', 'µCi/kg'),
         ('Bq/g', 'Bq/g'),
+        ('Bq/kg', 'Bq/kg'),
         ('Bq/m2', 'Bq/m2'),
         ('mBq/g', 'mBq/g'),
         ('mBq/kg', 'mBq/kg'),
@@ -348,6 +350,7 @@ class DataCR(models.Model):
         ('Dry', 'Dry'),
         ('Air', 'Air'),
         ('Soil', 'Soil'),
+        ('undefined', 'undefined'),
     ]
     media_wet_dry = models.CharField(max_length=10, choices=media_wet_dry_choices, default='Dry', null=True, blank=True)
     other_tissue = models.CharField(max_length=30, null=True, blank=True, default='Default Other Tissue')
@@ -359,8 +362,9 @@ class DataCR(models.Model):
         ('Dry', 'Dry'),
         ('Air', 'Air'),
         ('Soil', 'Soil'),
+        ('undefined', 'undefined'),
     ]
-    rep_wet_dry = models.CharField(max_length=5, choices=rep_wet_dry_choices, default='Dry', null=True, blank=True)
+    rep_wet_dry = models.CharField(max_length=10, choices=rep_wet_dry_choices, default='Dry', null=True, blank=True)
     stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default=1.0)
     stand_biota_sd = models.CharField(max_length=30, null=True, blank=True, default='Default Stand Biota SD')
     stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default=1.0)

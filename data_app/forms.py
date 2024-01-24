@@ -3,14 +3,17 @@ from django.forms import ModelChoiceField
 from .models import DataCR, Reference, PubType, PubTitle, Language, Habitat, SpeciesName, RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup, Tissue
 
 class ReferenceForm(forms.ModelForm):
+    ref_id = forms.IntegerField(required=True)
+
     article_title = forms.ModelChoiceField(
         queryset=Reference.objects.all().order_by('article_title'),
         required=False,
         label='Article Title'
     )
+
     class Meta:
         model = Reference
-        fields = ['author', 'article_title', 'pub_title', 'year', 'volume', 'part', 'pages', 'language', 'pub_type', 'translation', 'notes']
+        fields = ['ref_id', 'author', 'article_title', 'pub_title', 'year', 'volume', 'part', 'pages', 'language', 'pub_type', 'translation', 'notes']
 
         # Set distinct article title
         distinct_article_title = Reference.objects.order_by('article_title').values_list('article_title', flat=True).distinct()

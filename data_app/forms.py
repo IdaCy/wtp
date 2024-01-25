@@ -19,23 +19,10 @@ class ReferenceForm(forms.ModelForm):
         distinct_article_title = Reference.objects.order_by('article_title').values_list('article_title', flat=True).distinct()
 
 
-class CommonNameChoiceField(ModelChoiceField):
-    def label_from_instance(self, obj):
-        return obj.name_common
-
-class LatinNameChoiceField(ModelChoiceField):
-    def label_from_instance(self, obj):
-        return obj.name_latin
-
 class DataCRForm(forms.ModelForm):
-    name_common = CommonNameChoiceField(
+    species_name = forms.ModelChoiceField(
         queryset=SpeciesName.objects.all(),
-        label='Species Common Name',
-        required=False
-    )
-    name_latin = LatinNameChoiceField(
-        queryset=SpeciesName.objects.all(),
-        label='Species Latin Name',
+        label='Species',
         required=False
     )
 

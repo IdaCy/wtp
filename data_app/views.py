@@ -66,9 +66,24 @@ def add_datacr(request):
             if lifestage_id:
                 datacr.lifestage = Lifestage.objects.get(pk=lifestage_id)
 
+            # Check if a DataCR with this cr_id already exists
+            #cr_id = None  # Initialize cr_id to None
+            #datacr, created = DataCR.objects.get_or_create(
+                #cr_id=cr_id,
+                #defaults=datacr_form.cleaned_data
+            #)
+
+            #while True:
+                #try:
+                    #datacr.save()
+                    #break  # Break the loop if saved successfully
+                #except IntegrityError:
+                    # If IntegrityError occurs, generate a new cr_id and try again
+                    #datacr.cr_id = None
+
             datacr.save()
 
-            return redirect('dashboard')
+            return redirect('dashboard/')
         else:
             # Handling form errors
             print(reference_form.errors, datacr_form.errors)

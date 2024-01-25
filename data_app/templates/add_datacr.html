@@ -111,7 +111,7 @@
                 <div class="right-mid">
                     <div class="entry">
                         <label for="id_name_common">Species Common:</label>
-                        {{ datacr_form.name_common | add_class:"limited" }}
+                        {{ datacr_form.species_name | add_class:"limited" }}
                     </div>
                     <div class="entry">
                         <label for="id_sampling_date">Sampling Date:</label>
@@ -123,10 +123,10 @@
                     </div>
                 </div>
                 <div class="right-rim">
-                    <div class="entry">
+                    <!--<div class="entry">
                         <label for="id_name_latin">Species Latin:</label>
-                        {{ datacr_form.name_latin | add_class:"limited" }}
-                    </div>
+                        {{ datacr_form.species_name | add_class:"limited" }}
+                    </div>-->
                     <div class="entry">
                         <label for="id_element_nuclide">Element/Nuclide:</label>
                         {{ datacr_form.radionuclide | add_class:"limited" }}

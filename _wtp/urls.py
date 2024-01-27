@@ -16,6 +16,7 @@ urlpatterns = [
     path('privacy/', manageuser_views.privacy_view, name='privacy'),
     path('legal/', manageuser_views.legal_view, name='legal'),
     path('data/', data_views.data_view, name='data'),
+    path('view_summary_results/', data_views.view_summary_results, name='view_summary_results'),
     path('reference/', data_views.ref_view, name='reference'),
     path('add_datacr/', data_views.add_datacr, name='add_datacr'),
     path('view_all_data/', data_views.view_all_data, name='view_all_data'),

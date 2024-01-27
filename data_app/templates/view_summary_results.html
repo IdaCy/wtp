@@ -1,0 +1,64 @@
+{% extends 'base.html' %} {# !! comment like this #}
+
+{% block content %}
+<h1>Summary of Records</h1>
+
+<form id="datacr_form">
+    <label for="habitat">Select Habitat:</label>
+    <select id="habitat" name="habitat" onchange="updateOptions()">
+        <option value="Estuarine (terrestrial)">Estuarine (terrestrial)</option>
+        <option value="Estuarine (water)">Estuarine (water)</option>
+        <option value="Freshwater">Freshwater</option>
+        <option value="Marine">Marine</option>
+        <option value="Terrestrial">Terrestrial</option>
+    </select>
+
+    <label for="choice">Select Option:</label>
+    <input type="radio" id="wildlife_group" name="choice" value="Wildlife group" checked onchange="updateOptions()">
+    <label for="wildlife_group">Wildlife group</label>
+    <input type="radio" id="icrp_rap" name="choice" value="ICRP RAP" onchange="updateOptions()">
+    <label for="icrp_rap">ICRP RAP</label>
+
+    <div id="additional_options" style="display: none;">
+        <label for="additional_dropdown">Additional Selection:</label>
+        <select id="additional_dropdown" name="additional_dropdown"></select>
+
+        <label for="media_type">Media Type:</label>
+        <input type="radio" id="air" name="media_type" value="Air" checked>
+        <label for="air">Air</label>
+        <input type="radio" id="soil" name="media_type" value="Soil">
+        <label for="soil">Soil</label>
+    </div>
+</form>
+
+<div id="datacr_table" style="display: none;">
+    <!-- DataCR table will be populated here -->
+</div>
+
+<script>
+    function updateOptions() {
+        var habitat = document.getElementById('habitat').value;
+        var choice = document.querySelector('input[name="choice"]:checked').value;
+        var additionalOptions = document.getElementById('additional_options');
+        var additionalDropdown = document.getElementById('additional_dropdown');
+        additionalDropdown.innerHTML = '';
+
+        if (habitat === 'Terrestrial') {
+            additionalDropdown.add(new Option('Amphibian', 'Amphibian'));
+            additionalDropdown.add(new Option('Bird', 'Bird'));
+        } else if (choice === 'ICRP RAP') {
+            additionalDropdown.add(new Option('Bee', 'Bee'));
+            additionalDropdown.add(new Option('Earthworm', 'Earthworm'));
+        }
+
+        additionalOptions.style.display = 'block';
+        updateDataCRTable();
+    }
+
+    function updateDataCRTable() {
+        // This function should make an AJAX call to fetch and display the DataCR table
+        // based on the selected options. Since AJAX and database interaction
+        // are not possible in this environment, this function is left empty.
+    }
+</script>
+{% endblock %}

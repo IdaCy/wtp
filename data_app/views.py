@@ -18,6 +18,12 @@ def data_view(request):
 
 
 @login_required
+def view_summary_results(request):
+    dataobj = ActivityConcUnit.objects.all()
+    return render(request, 'view_summary_results.html', {'data': dataobj})
+
+
+@login_required
 def ref_view(request):
     refobj = Reference.objects.all()
     return render(request, 'reference.html', {'reference': refobj})
@@ -83,7 +89,7 @@ def add_datacr(request):
 
             datacr.save()
 
-            return redirect('dashboard/')
+            return redirect('dashboard')
         else:
             # Handling form errors
             print(reference_form.errors, datacr_form.errors)

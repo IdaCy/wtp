@@ -1,8 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName
-from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup
+from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element
 from .forms import DataCRForm, ReferenceForm
+
+from django.http import JsonResponse
+from django.db.models import Sum, F
 
 from django.http import JsonResponse
 from django.views import View
@@ -19,8 +22,36 @@ def data_view(request):
 
 @login_required
 def view_summary_results(request):
-    dataobj = ActivityConcUnit.objects.all()
-    return render(request, 'view_summary_results.html', {'data': dataobj})
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        # Extract query parameters from AJAX request
+        habitat = request.GET.get('habitat')
+        choice = request.GET.get('choice')
+        additional_choice = request.GET.get('additionalChoice')
+        media_type = request.GET.get('mediaType')
+
+        # Perform database query and aggregation
+        query_result = DataCR.objects.filter(
+            habitat__habitat_specific_type=habitat,
+            # ...
+            media__media_type=media_type
+        ).values(
+            'element__element_symbol'
+        ).annotate(
+            arithmetic_mean=Sum('cr'),
+            arithmetic_std_dev=Sum('cr'),
+            geometric_std_dev=Sum('cr'),
+            n=Sum('crn'),
+            ref_id=Sum(F('reference__ref_id'))
+        )
+
+        # Convert to list of dicts
+        data_list = list(query_result)
+
+        # Return as JSON
+        return JsonResponse(data_list, safe=False)
+
+    # For non-AJAX requests, just render the template with no data
+    return render(request, 'view_summary_results.html', {'data': []})
 
 
 @login_required

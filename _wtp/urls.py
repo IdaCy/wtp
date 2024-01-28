@@ -4,6 +4,7 @@ from dashboard_app import views as dashboard_views
 # from data_app.views import GetCorrectionFactorView
 from data_app import views as data_views
 from manageuser_app import views as manageuser_views
+from legal_app import views as legal_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +26,7 @@ urlpatterns = [
     path('next_ref_record/<int:ref_id>/', data_views.next_ref_record, name='next_ref_record'),
     path('prev_datacr_record/<int:ref_id>/<int:cr_id>/', data_views.prev_datacr_record, name='prev_datacr_record'),
     path('next_datacr_record/<int:ref_id>/<int:cr_id>/', data_views.next_datacr_record, name='next_datacr_record'),
+    path('privacy-policy/', legal_views.privacy_policy, name='privacy_policy'),
+    path('legal-disclaimer/', legal_views.legal_disclaimer, name='legal_disclaimer'),
+    path('contact/', legal_views.contact, name='contact'),
 ]

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'dashboard_app',
     'data_app',
     'widget_tweaks',
+    'legal_app',
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,11 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 
 AUTH_USER_MODEL = 'data_app.User'
+
+# contact
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yourmailserver.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@yourdomain.com'
+EMAIL_HOST_PASSWORD = 'your-email-password'

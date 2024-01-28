@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Contact Us</h1>
+<p>Email: x@x.ac.uk<br>Phone: +44yyy</p>
+
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+<form method="post" action="{% url 'contact' %}">
+    {% csrf_token %}
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" required></textarea><br><br>
+
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

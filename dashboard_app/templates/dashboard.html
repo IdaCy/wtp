@@ -19,13 +19,13 @@
             <a href="{% url 'contact' %}">Suggest improvements</a>
         </div>
         <div class="dashboard-option">
-            <a href="{% url 'data' %}">Download summary tables</a>
+            <a href="{% url 'download_summaries' %}">Download summary tables</a>
         </div>
         <div class="dashboard-option">
             <a href="{% url 'data' %}">View/Update Database Tables</a>
         </div>
         <div class="dashboard-option">
-            <a href="{% url 'data' %}">Summary (Individual wildlife/habitat)</a>
+            <a href="{% url 'view_summary_results' %}">Summary (Individual wildlife/habitat)</a>
         </div>
         <div class="dashboard-option">
             <a href="{% url 'data' %}">Assign admin privileges to users</a>
@@ -34,7 +34,7 @@
             <a href="{% url 'view_all_data' %}">View all data</a>
         </div>
         <div class="dashboard-option">
-            <a href="{% url 'reference' %}">View Reports</a>
+            <a href="{% url 'view_reports' %}">View Reports</a>
         </div>
     </div>
     <link rel="stylesheet" href="{% static '/css/dashboard.css' %}">

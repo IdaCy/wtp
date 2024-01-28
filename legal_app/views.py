@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -9,6 +10,7 @@ def privacy_policy(request):
 def legal_disclaimer(request):
     return render(request, 'legal_disclaimer.html')
 
+@login_required
 def contact(request):
     if request.method == 'POST':
         user = request.user
@@ -18,7 +20,7 @@ def contact(request):
         # Prepare the email
         subject = 'New Contact Form Submission'
         message = f"From: {user.username} ({sender_email})\n\nMessage:\n{message_content}"
-        recipient_list = ['contact@yourdomain.com']  # Replace with your desired email address
+        recipient_list = ['contact@domain.com']
 
         # Send the email
         send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)

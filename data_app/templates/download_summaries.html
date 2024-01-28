@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="download-summary-container">
+    <h1>Download Summary Tables</h1>
+
+    <p>
+        In 2011, we extracted and summarised the data from the wildlife transfer database, and
+        the results were used in the preparation of the final reports for the IAEA handbook on
+        radionuclide transfer parameters for generic wildlife groups and also for the ICRP
+        Reference Animals and Plants. Both of these reports are now available (links on the
+        database front page). In 2014/2015, we updated the database and produced new summary
+        Excel spreadsheets. Below, we provide links to Excel files containing the extracted
+        data for (i) wildlife category as used by IAEA EMRAS WG5 and (ii) ICRP RAP. We provide
+        the outputs from the database from Feb 2011 and April 2015.
+    </p>
+
+    <p>
+        Any problems, please <a href="{% url 'contact' %}">contact</a> the website administrator.
+    </p>
+
+    <div class="download-links">
+        <h2>Download Links</h2>
+        <ul>
+            <li><a href="link-to-IAEA-summary-2015">Download IAEA summary tables (April 2015)</a></li>
+            <li><a href="link-to-ICRP-RAP-summary-2015">Download ICRP RAP summary tables (April 2015)</a></li>
+            <li><a href="link-to-IAEA-summary-2011">Download IAEA summary tables (Feb 2011)</a></li>
+            <li><a href="link-to-ICRP-RAP-summary-2011">Download ICRP RAP summary tables (Feb 2011)</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -19,6 +19,14 @@ def data_view(request):
     dataobj = ActivityConcUnit.objects.all()
     return render(request, 'data.html', {'data': dataobj})
 
+@login_required
+def download_summaries(request):
+    return render(request, 'download_summaries.html')
+
+@login_required
+def view_reports(request):
+    return render(request, 'view_reports.html')
+
 
 @login_required
 def view_summary_results(request):

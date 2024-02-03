@@ -25,7 +25,6 @@ class Command(BaseCommand):
             instances = []
             for index, row in data.iterrows():
                 row_data = row.to_dict()
-                # You might want to customize this based on your Excel columns
                 salutation = row_data.get('salutation')
                 firstname = row_data.get('firstname')
                 lastname = row_data.get('lastname')
@@ -36,9 +35,9 @@ class Command(BaseCommand):
 
                 # Use the create_user method to create a user instance
                 user = User.objects.create_user(
-                    username=email,  # Assuming email is used as the username
+                    username=email,
                     email=email,
-                    password=None,  # You might want to set a default password or leave it as None
+                    password=None,
                 )
 
                 # Set additional fields

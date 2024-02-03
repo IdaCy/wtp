@@ -23,10 +23,6 @@ def data_view(request):
 def download_summaries(request):
     return render(request, 'download_summaries.html')
 
-@login_required
-def view_reports(request):
-    return render(request, 'view_reports.html')
-
 
 @login_required
 def view_summary_results(request):
@@ -173,8 +169,8 @@ class GetCorrectionFactorView(View):
 
 def view_all_data(request, ref_id=None):
     if ref_id is None:
-        # If ref_id is not provided, you can redirect to a default reference or handle it as you prefer
-        # For example, redirect to the first reference if available
+        # If ref_id is not provided - redirecting to a default reference?
+        # trying to redirect to the first reference if available
         first_reference = Reference.objects.order_by('ref_id').first()
         if first_reference:
             return redirect('view_all_data', ref_id=first_reference.ref_id)

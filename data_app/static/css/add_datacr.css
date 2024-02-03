@@ -24,7 +24,7 @@ section {
 .left, .right {
     width: 50%;
     display: flex;
-    flex-direction: column; /* Updated to make the content stack vertically */
+    flex-direction: column; /* make the content stack vertically */
 }
 
 /* some margin between the labels and inputs/select */

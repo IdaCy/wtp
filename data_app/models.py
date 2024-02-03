@@ -22,7 +22,9 @@ class User(AbstractUser):
     admin_priv = models.SmallIntegerField(default=0, null=True)
 
     def __str__(self):
-        return self.firstname + ' ' + self.lastname
+        # Handle the case where firstname or lastname might be None
+        full_name = f"{self.firstname or ''} {self.lastname or ''}".strip()
+        return full_name if full_name else self.username
 
 
 class Element(models.Model):

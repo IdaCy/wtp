@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'data_app',
     'widget_tweaks',
     'legal_app',
+    'report_app',
 ]
 
 MIDDLEWARE = [
@@ -146,8 +147,9 @@ AUTH_USER_MODEL = 'data_app.User'
 
 # contact
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.yourmailserver.com'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@yourdomain.com'
-EMAIL_HOST_PASSWORD = 'your-email-password'
+EMAIL_HOST_USER = 'wildlifetransferdb@gmail.com'
+EMAIL_HOST_PASSWORD = 'tnsfqxgfccchyoij'
+EMAIL_RECIPIENT = 'wildlifetransferdb@gmail.com'

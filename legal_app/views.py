@@ -14,13 +14,13 @@ def legal_disclaimer(request):
 def contact(request):
     if request.method == 'POST':
         user = request.user
-        sender_email = request.POST.get('email')
+        #sender_email = request.POST.get('email')
         message_content = request.POST.get('message')
 
         # Prepare the email
         subject = 'New Contact Form Submission'
-        message = f"From: {user.username} ({sender_email})\n\nMessage:\n{message_content}"
-        recipient_list = ['contact@domain.com']
+        message = f"From: {user.username} ({user.email})\n\nMessage:\n{message_content}"
+        recipient_list = [settings.EMAIL_RECIPIENT]
 
         # Send the email
         send_mail(subject, message, settings.EMAIL_HOST_USER, recipient_list)
@@ -28,4 +28,4 @@ def contact(request):
         messages.success(request, f"Thank you, {user.username}, for your message!")
         return redirect('contact')
 
-    return render(request, 'contact.html')
+    return render(request, 'contact.html', {'email_address': settings.EMAIL_HOST_USER})

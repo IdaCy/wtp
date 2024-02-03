@@ -270,7 +270,12 @@ class Reference(models.Model):
     notes = models.CharField(max_length=500, default='', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     dc_id = models.IntegerField(null=True, blank=True, default=0)
-    approval_status = models.CharField(max_length=20)
+    approval_choices = [
+        ('PENDING', 'Pending'),
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
+    ]
+    approval_status = models.CharField(max_length=20, choices=approval_choices, default='PENDING', null=True, blank=True)
     reason_approval_delete = models.CharField(max_length=500, default='', blank=True)
 
     def __str__(self):

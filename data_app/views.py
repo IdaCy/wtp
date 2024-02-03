@@ -77,7 +77,7 @@ def add_datacr(request):
             # Check if a Reference with this ref_id already exists
             reference, created = Reference.objects.get_or_create(
                 ref_id=ref_id,
-                defaults=reference_form.cleaned_data
+                defaults={**reference_form.cleaned_data, 'user': request.user}
             )
 
             # If the reference was not created (already exists), update its fields
@@ -106,21 +106,6 @@ def add_datacr(request):
 
             if lifestage_id:
                 datacr.lifestage = Lifestage.objects.get(pk=lifestage_id)
-
-            # Check if a DataCR with this cr_id already exists
-            #cr_id = None  # Initialize cr_id to None
-            #datacr, created = DataCR.objects.get_or_create(
-                #cr_id=cr_id,
-                #defaults=datacr_form.cleaned_data
-            #)
-
-            #while True:
-                #try:
-                    #datacr.save()
-                    #break  # Break the loop if saved successfully
-                #except IntegrityError:
-                    # If IntegrityError occurs, generate a new cr_id and try again
-                    #datacr.cr_id = None
 
             datacr.save()
 

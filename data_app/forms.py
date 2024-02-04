@@ -59,7 +59,6 @@ class DataCRForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['habitat'].queryset = Habitat.objects.all()
-        #self.fields['icrp_rap'].queryset = RAP.objects.all()
         self.fields['study_type'].queryset = StudyType.objects.all()
         self.fields['radionuclide'].queryset = Radionuclide.objects.all()
         self.fields['tissue'].queryset = Tissue.objects.all()
@@ -69,16 +68,3 @@ class DataCRForm(forms.ModelForm):
         self.fields['wildlife_group'].choices = [(wg.wildlife_group_id, wg.wildlife_group_name) for wg in WildlifeGroup.objects.all().order_by('wildlife_group_name').distinct('wildlife_group_name')]
         self.fields['icrp_rap'].choices = [(rap.rap_id, rap.rap_name) for rap in RAP.objects.all().order_by('rap_name').distinct('rap_name')]
         self.fields['lifestage'].choices = [(ls.lifestage_id, ls.lifestage_name) for ls in Lifestage.objects.all().order_by('lifestage_name').distinct('lifestage_name')]
-        #self.fields['media'].choices = [(md.media_id, md.media_type) for md in Media.objects.all().order_by('media_id').distinct('media_id')]
-
-        # Set distinct lifestages
-        #distinct_lifestages = Lifestage.objects.order_by('lifestage_name').values_list('lifestage_name', flat=True).distinct()
-        #self.fields['lifestage'].choices = [(name, name) for name in distinct_lifestages]
-
-        # Set distinct wildlife group
-        #distinct_wildlife_group = WildlifeGroup.objects.order_by('wildlife_group_name').values_list('wildlife_group_name', flat=True).distinct()
-        #self.fields['wildlife_group'].choices = [(name, name) for name in distinct_wildlife_group]
-
-        # Set distinct rap
-        #distinct_rap = RAP.objects.order_by('rap_name').values_list('rap_name', flat=True).distinct()
-        #self.fields['icrp_rap'].choices = [(name, name) for name in distinct_rap]

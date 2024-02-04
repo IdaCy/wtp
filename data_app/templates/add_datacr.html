@@ -304,8 +304,8 @@
                         // Clear previous options
                         mediaTypeDropdown.innerHTML = '';
 
-                        // Add new options
-                        data.forEach(function (media) {
+                        // Filter out 'Biota' from the options, add else
+                        data.filter(media => media.media_type.toLowerCase() !== 'biota').forEach(function (media) {
                             var option = new Option(media.media_type, media.id);
                             mediaTypeDropdown.add(option);
                         });

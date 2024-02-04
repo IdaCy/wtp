@@ -12,6 +12,7 @@ from django.views import View
 
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib import messages
 
 
 @login_required
@@ -80,6 +81,8 @@ def add_datacr(request):
                 defaults={**reference_form.cleaned_data, 'user': request.user}
             )
 
+            messages.success(request, "Successfully saved. Thank you for your submission!")
+
             # If the reference was not created (already exists), update its fields
             if not created:
                 for field, value in reference_form.cleaned_data.items():
@@ -109,16 +112,28 @@ def add_datacr(request):
 
             datacr.save()
 
-            return redirect('dashboard')
+            #return redirect('dashboard')
         else:
             # Handling form errors
             print(reference_form.errors, datacr_form.errors)
+            messages.error(request, "There was a problem with your submission. Please try again or contact us.")
             return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
     else:
         reference_form = ReferenceForm()
         datacr_form = DataCRForm()
 
     return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
+
+
+@login_required
+def get_media_for_habitat(request):
+    habitat_id = request.GET.get('habitat_id')
+    media_options = Media.objects.filter(habitat_id=habitat_id).values('id', 'media_type')
+
+    # Convert QuerySet to list of dicts
+    media_options_list = list(media_options)
+
+    return JsonResponse(media_options_list, safe=False)
 
 
 class GetCorrectionFactorView(View):

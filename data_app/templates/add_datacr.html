@@ -23,7 +23,7 @@
             <div class="entry">
                 <!--<label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>-->
                 <label for="id_ref_id">Reference ID: <input type="text" id="ref_id"
-                                                                  name="ref_id" readonly></label>
+                                                            name="ref_id" readonly></label>
             </div>
 
             <div class="pub">
@@ -293,33 +293,35 @@
 
                 console.log("Selected Habitat no: ", selectedHabitat);
 
-                // Add options based on the selected Habitat
-                if (selectedHabitatText.includes('terrestrial')) {
-                    console.log("Habitat: terrestrial");
-                    addMediaTypeDropdown('Air', 'Air');
-                    addMediaTypeDropdown('Soil', 'Soil');
-                } else if (
-                    selectedHabitatText.includes('estuarine') ||
-                    selectedHabitatText.includes('freshwater') ||
-                    selectedHabitatText.includes('marine')
-                ) {
-                    console.log("Habitat: aquatic");
-                    addMediaTypeDropdown('Sediment', 'Sediment');
-                    addMediaTypeDropdown('Water', 'Water');
-                } else {
-                    console.log("No matching habitat found");
-                }
-                console.log("end of updateMediaType()");
+
+                console.log("changes follow")
+                //var selectedHabitatId = habitatDropdown.value;
+                //console.log("Selected Habitat ID: ", selectedHabitatId);
+
+                fetch(`/get-media-for-habitat/?habitat_id=${selectedHabitat}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear previous options
+                        mediaTypeDropdown.innerHTML = '';
+
+                        // Add new options
+                        data.forEach(function (media) {
+                            var option = new Option(media.media_type, media.id);
+                            mediaTypeDropdown.add(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching media types:', error));
+
             }
 
             // Helper function to add options to the dropdown
-            function addMediaTypeDropdown(text, value) {
+            /*function addMediaTypeDropdown(text, value) {
                 console.log("addMediaTypeDropdown() started");
                 var option = document.createElement('option');
                 option.text = text;
                 option.value = value;
                 mediaTypeDropdown.add(option);
-            }
+            }*/
 
             // Function to update Media Units based on the selected Media Type
             function updateMediaUnits() {

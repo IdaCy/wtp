@@ -128,7 +128,7 @@ def add_datacr(request):
 @login_required
 def get_media_for_habitat(request):
     habitat_id = request.GET.get('habitat_id')
-    media_options = Media.objects.filter(habitat_id=habitat_id).values('id', 'media_type')
+    media_options = Media.objects.filter(habitat_id=habitat_id).values('media_id', 'media_type')
 
     # Convert QuerySet to list of dicts
     media_options_list = list(media_options)

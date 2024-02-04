@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelChoiceField
-from .models import DataCR, Reference, PubType, PubTitle, Language, Habitat, SpeciesName, RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup, Tissue
+from .models import DataCR, Reference, PubType, PubTitle, Language, Habitat, SpeciesName
+from .models import RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup, Tissue, Media
 
 class ReferenceForm(forms.ModelForm):
     ref_id = forms.IntegerField(required=True)
@@ -44,6 +45,12 @@ class DataCRForm(forms.ModelForm):
         label='ICRP RAP',
         empty_label="Select ICRP RAP"
     )
+    media = forms.ModelChoiceField(
+        queryset=Media.objects.all(),
+        required=False,
+        label='Media',
+        empty_label="Select Media"
+    )
 
     class Meta:
         model = DataCR
@@ -56,11 +63,13 @@ class DataCRForm(forms.ModelForm):
         self.fields['study_type'].queryset = StudyType.objects.all()
         self.fields['radionuclide'].queryset = Radionuclide.objects.all()
         self.fields['tissue'].queryset = Tissue.objects.all()
+        self.fields['media'].queryset = Media.objects.all()
 
         # Modify the choices for wildlife_group, icrp_rap, and lifestage
         self.fields['wildlife_group'].choices = [(wg.wildlife_group_id, wg.wildlife_group_name) for wg in WildlifeGroup.objects.all().order_by('wildlife_group_name').distinct('wildlife_group_name')]
         self.fields['icrp_rap'].choices = [(rap.rap_id, rap.rap_name) for rap in RAP.objects.all().order_by('rap_name').distinct('rap_name')]
         self.fields['lifestage'].choices = [(ls.lifestage_id, ls.lifestage_name) for ls in Lifestage.objects.all().order_by('lifestage_name').distinct('lifestage_name')]
+        #self.fields['media'].choices = [(md.media_id, md.media_type) for md in Media.objects.all().order_by('media_id').distinct('media_id')]
 
         # Set distinct lifestages
         #distinct_lifestages = Lifestage.objects.order_by('lifestage_name').values_list('lifestage_name', flat=True).distinct()

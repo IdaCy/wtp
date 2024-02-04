@@ -100,6 +100,8 @@ def add_datacr(request):
                 'icrp_rap') else None
             lifestage_id = datacr_form.cleaned_data.get('lifestage').lifestage_id if datacr_form.cleaned_data.get(
                 'lifestage') else None
+            media_id = datacr_form.cleaned_data.get('media').media_id if datacr_form.cleaned_data.get(
+                'media') else None
 
             if wildlife_group_id:
                 datacr.wildlife_group = WildlifeGroup.objects.get(pk=wildlife_group_id)
@@ -110,9 +112,12 @@ def add_datacr(request):
             if lifestage_id:
                 datacr.lifestage = Lifestage.objects.get(pk=lifestage_id)
 
-            media_id = request.POST.get('media')
             if media_id:
                 datacr.media = Media.objects.get(pk=media_id)
+
+            #media_id = request.POST.get('media')
+            #if media_id:
+            #    datacr.media = Media.objects.get(pk=media_id)
 
             datacr.save()
 

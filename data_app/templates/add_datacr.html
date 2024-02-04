@@ -151,10 +151,11 @@
                 <div class="left-rim">
                     <div class="entry">
                         <label for="id_media">Media Type:</label>
-                        <select id="id_media" name="media">
+                        {{ datacr_form.media | add_class:"limited" }}
+                        <!--<select id="id_media" name="media">
                             <option value="soil" selected>Soil</option>
                             <option value="air">Air</option>
-                        </select>
+                        </select>-->
                     </div>
                     <div class="entry">
                         <label for="id_n_for_media">N for Media:</label>
@@ -302,7 +303,7 @@
                 console.log("Selected Habitat no: ", selectedHabitat);
 
 
-                console.log("changes follow")
+                console.log("changes follow");
                 //var selectedHabitatId = habitatDropdown.value;
                 //console.log("Selected Habitat ID: ", selectedHabitatId);
 
@@ -314,7 +315,10 @@
 
                         // Filter out 'Biota' from the options, add else
                         data.filter(media => media.media_type.toLowerCase() !== 'biota').forEach(function (media) {
-                            var option = new Option(media.media_type, media.id);
+                            var option = new Option(media.media_type, media.media_id);
+                            console.log("media_type: ", media.media_type);
+                            console.log("id: ", media.id);
+                            console.log("media_id: ", media.media_id);
                             mediaTypeDropdown.add(option);
                         });
                     })
@@ -332,12 +336,21 @@
 
             // Function to update Media Units based on the selected Media Type
             function updateMediaUnits() {
+                console.log("updateMediaUnits() started");
                 // Clear previous options
                 mediaUnitsDropdown.innerHTML = '';
                 mediaWetDryDropdown.innerHTML = '';
 
                 // Get the selected value of Media Type
-                var selectedMediaType = mediaTypeDropdown.value.toLowerCase();
+                //var selectedMediaType = mediaTypeDropdown.value.toLowerCase();
+                //var selectedMediaType = document.getElementById('id_media').innerHTML;
+                var selectedMedia = mediaTypeDropdown.options[mediaTypeDropdown.selectedIndex];
+                console.log("selectedMedia: ", selectedMedia);
+                var selectedMediaID = selectedMedia.value;
+                console.log("selectedMediaID: ", selectedMediaID);
+                var selectedMediaType = selectedMedia.text.toLowerCase();
+                console.log("selectedMediaType: ", selectedMediaType);
+
 
                 // Add unit options based on the selected Media Type
                 if (selectedMediaType === 'air') {
@@ -405,9 +418,16 @@
 
             // Function to update Concentration Ratio based on Media and Biota Concentration
             function updateConcentrationRatio() {
+                console.log("updateConcentrationRatio() started");
+
                 var mediaUnitSymbol = document.getElementById('id_media_units').value;
+                console.log("mediaUnitSymbol", mediaUnitSymbol);
                 var biotaUnitSymbol = document.getElementById('id_biota_units').value;
-                var mediaType = document.getElementById('id_media').value; // !!!!!!!!!!!
+                console.log("biotaUnitSymbol", biotaUnitSymbol);
+                //var mediaType = document.getElementById('id_media').text; // !!!!!!!!!!!
+                var mediaType = document.getElementById('id_media').options[document.getElementById('id_media').selectedIndex].text;
+                //var selectedMediaType = selectedMedia.text.toLowerCase();
+                console.log("mediaType", mediaType);
 
                 fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media_type=${mediaType}`)
                     .then(response => response.json())
@@ -441,8 +461,9 @@
             }
 
             // Attach the updateConcentrationRatio function to the input event of Media and Biota Concentration fields
+            console.log("testestetests");
             mediaConcField.addEventListener('input', updateConcentrationRatio);
-            mediaConcField.addEventListener('input', updateConcentrationRatio);
+            biotaConcField.addEventListener('input', updateConcentrationRatio);
             mediaUnitsDropdown.addEventListener('input', updateConcentrationRatio);
             biotaUnitsDropdown.addEventListener('input', updateConcentrationRatio);
             mediaUnitsDropdown.addEventListener('change', updateConcentrationRatio);

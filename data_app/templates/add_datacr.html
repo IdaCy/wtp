@@ -325,15 +325,6 @@
                     .catch(error => console.error('Error fetching media types:', error));
             }
 
-            // Helper function to add options to the dropdown
-            /*function addMediaTypeDropdown(text, value) {
-                console.log("addMediaTypeDropdown() started");
-                var option = document.createElement('option');
-                option.text = text;
-                option.value = value;
-                mediaTypeDropdown.add(option);
-            }*/
-
             // Function to update Media Units based on the selected Media Type
             function updateMediaUnits() {
                 console.log("updateMediaUnits() started");
@@ -342,15 +333,12 @@
                 mediaWetDryDropdown.innerHTML = '';
 
                 // Get the selected value of Media Type
-                //var selectedMediaType = mediaTypeDropdown.value.toLowerCase();
-                //var selectedMediaType = document.getElementById('id_media').innerHTML;
                 var selectedMedia = mediaTypeDropdown.options[mediaTypeDropdown.selectedIndex];
                 console.log("selectedMedia: ", selectedMedia);
                 var selectedMediaID = selectedMedia.value;
                 console.log("selectedMediaID: ", selectedMediaID);
                 var selectedMediaType = selectedMedia.text.toLowerCase();
                 console.log("selectedMediaType: ", selectedMediaType);
-
 
                 // Add unit options based on the selected Media Type
                 if (selectedMediaType === 'air') {
@@ -403,30 +391,35 @@
             mediaTypeDropdown.addEventListener('change', updateMediaUnits);
 
             // Initialize functions on page load
-            updateMediaType();
-            updateMediaUnits();
+            //updateMediaType();
+            //updateMediaUnits();
+
+            var mediaConcField = document.getElementById('id_media_conc');
+            var biotaConcField = document.getElementById('id_biota_conc');
+            mediaConcField.addEventListener('input', updateTest);
+            mediaUnitsDropdown.addEventListener('input', updateTest);
+
+            function updateTest() {
+                console.log("updateTest() started");
+                console.log("updateTest() started");
+                console.log("updateTest() started");
+                console.log("updateTest() started");
+            }
 
 
             /******************* CR CALCULATIONS ***************************/
 
                 // Get references to the relevant input fields and select dropdowns
-            var mediaConcField = document.getElementById('id_media_conc');
-            var biotaConcField = document.getElementById('id_biota_conc');
-            mediaUnitsDropdown = document.getElementById('id_media_units'); // already above
             var biotaUnitsDropdown = document.getElementById('id_biota_units');
-            var crField = document.getElementById('id_concentration_ratio');
 
             // Function to update Concentration Ratio based on Media and Biota Concentration
             function updateConcentrationRatio() {
                 console.log("updateConcentrationRatio() started");
-
                 var mediaUnitSymbol = document.getElementById('id_media_units').value;
                 console.log("mediaUnitSymbol", mediaUnitSymbol);
                 var biotaUnitSymbol = document.getElementById('id_biota_units').value;
                 console.log("biotaUnitSymbol", biotaUnitSymbol);
-                //var mediaType = document.getElementById('id_media').text; // !!!!!!!!!!!
                 var mediaType = document.getElementById('id_media').options[document.getElementById('id_media').selectedIndex].text;
-                //var selectedMediaType = selectedMedia.text.toLowerCase();
                 console.log("mediaType", mediaType);
 
                 fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media_type=${mediaType}`)
@@ -461,7 +454,6 @@
             }
 
             // Attach the updateConcentrationRatio function to the input event of Media and Biota Concentration fields
-            console.log("testestetests");
             mediaConcField.addEventListener('input', updateConcentrationRatio);
             biotaConcField.addEventListener('input', updateConcentrationRatio);
             mediaUnitsDropdown.addEventListener('input', updateConcentrationRatio);

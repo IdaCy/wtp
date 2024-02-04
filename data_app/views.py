@@ -110,6 +110,10 @@ def add_datacr(request):
             if lifestage_id:
                 datacr.lifestage = Lifestage.objects.get(pk=lifestage_id)
 
+            media_id = request.POST.get('media')
+            if media_id:
+                datacr.media = Media.objects.get(pk=media_id)
+
             datacr.save()
 
             #return redirect('dashboard')
@@ -128,7 +132,7 @@ def add_datacr(request):
 @login_required
 def get_media_for_habitat(request):
     habitat_id = request.GET.get('habitat_id')
-    media_options = Media.objects.filter(habitat_id=habitat_id).values('media_id', 'media_type')
+    media_options = Media.objects.filter(habitat_id=habitat_id).values('media_type', 'media_id')
 
     # Convert QuerySet to list of dicts
     media_options_list = list(media_options)

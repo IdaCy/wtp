@@ -13,6 +13,14 @@
 {% block content %}
     <h1>Add Record</h1>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <form method="post" action="{% url 'add_datacr' %}">
         {% csrf_token %}
 
@@ -142,8 +150,8 @@
             <div class="flex-container">
                 <div class="left-rim">
                     <div class="entry">
-                        <label for="id_media_type">Media Type:</label>
-                        <select id="id_media_type" name="media_type">
+                        <label for="id_media">Media Type:</label>
+                        <select id="id_media" name="media">
                             <option value="soil" selected>Soil</option>
                             <option value="air">Air</option>
                         </select>
@@ -275,7 +283,7 @@
 
             // Get references to the Media Type and Media Units dropdowns
             var habitatDropdown = document.getElementById('id_habitat');
-            var mediaTypeDropdown = document.getElementById('id_media_type');
+            var mediaTypeDropdown = document.getElementById('id_media');
             var mediaUnitsDropdown = document.getElementById('id_media_units');
             var mediaWetDryDropdown = document.getElementById('id_media_wet_dry');
 
@@ -311,7 +319,6 @@
                         });
                     })
                     .catch(error => console.error('Error fetching media types:', error));
-
             }
 
             // Helper function to add options to the dropdown
@@ -400,7 +407,7 @@
             function updateConcentrationRatio() {
                 var mediaUnitSymbol = document.getElementById('id_media_units').value;
                 var biotaUnitSymbol = document.getElementById('id_biota_units').value;
-                var mediaType = document.getElementById('id_media_type').value;
+                var mediaType = document.getElementById('id_media').value; // !!!!!!!!!!!
 
                 fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media_type=${mediaType}`)
                     .then(response => response.json())

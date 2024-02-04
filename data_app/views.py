@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName
-from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element
+from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName, RAP, Tissue
+from .models import Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element, Radionuclide
 from .forms import DataCRForm, ReferenceForm
 
 from django.http import JsonResponse
@@ -12,12 +12,18 @@ from django.views import View
 
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib import messages
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 
 
 @login_required
 def data_view(request):
     dataobj = ActivityConcUnit.objects.all()
     return render(request, 'data.html', {'data': dataobj})
+
 
 @login_required
 def download_summaries(request):
@@ -77,8 +83,11 @@ def add_datacr(request):
             # Check if a Reference with this ref_id already exists
             reference, created = Reference.objects.get_or_create(
                 ref_id=ref_id,
-                defaults={**reference_form.cleaned_data, 'user': request.user}
+                defaults=reference_form.cleaned_data
             )
+
+            # Add a success message
+            messages.success(request, "Successfully saved. Thank you for your submission!")
 
             # If the reference was not created (already exists), update its fields
             if not created:
@@ -91,12 +100,15 @@ def add_datacr(request):
             datacr.reference = reference
 
             # Fetching the actual model instances
-            wildlife_group_id = datacr_form.cleaned_data.get('wildlife_group').wildlife_group_id if datacr_form.cleaned_data.get(
+            wildlife_group_id = datacr_form.cleaned_data.get(
+                'wildlife_group').wildlife_group_id if datacr_form.cleaned_data.get(
                 'wildlife_group') else None
             icrp_rap_id = datacr_form.cleaned_data.get('icrp_rap').rap_id if datacr_form.cleaned_data.get(
                 'icrp_rap') else None
             lifestage_id = datacr_form.cleaned_data.get('lifestage').lifestage_id if datacr_form.cleaned_data.get(
                 'lifestage') else None
+            media_id = datacr_form.cleaned_data.get('media').media_id if datacr_form.cleaned_data.get(
+                'media') else None
 
             if wildlife_group_id:
                 datacr.wildlife_group = WildlifeGroup.objects.get(pk=wildlife_group_id)
@@ -107,31 +119,59 @@ def add_datacr(request):
             if lifestage_id:
                 datacr.lifestage = Lifestage.objects.get(pk=lifestage_id)
 
+<<<<<<< HEAD
+            if media_id:
+                datacr.media = Lifestage.objects.get(pk=media_id)
+
+            # Convert media string to Media instance
+            # media_type_string = request.POST.get('media')
+            # media_instance = Media.objects.filter(media_type=media_type_string).first()
+            # datacr.media = media_instance
+=======
+            # Check if a DataCR with this cr_id already exists
+            #cr_id = None  # Initialize cr_id to None
+            #datacr, created = DataCR.objects.get_or_create(
+                #cr_id=cr_id,
+                #defaults=datacr_form.cleaned_data
+            #)
+
+            #while True:
+                #try:
+                    #datacr.save()
+                    #break  # Break the loop if saved successfully
+                #except IntegrityError:
+                    # If IntegrityError occurs, generate a new cr_id and try again
+                    #datacr.cr_id = None
+>>>>>>> parent of b541b49 (full reference table successfully filled)
+
             datacr.save()
 
-            return redirect('dashboard')
+            # return redirect('dashboard')
         else:
             # Handling form errors
             print(reference_form.errors, datacr_form.errors)
+            messages.error(request, "There was a problem with your submission. Please try again or contact us.")
             return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
     else:
         reference_form = ReferenceForm()
         datacr_form = DataCRForm()
 
+    # Render the same page with either cleared forms or populated with POST data
     return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
 
 
 class GetCorrectionFactorView(View):
     def get(self, request, *args, **kwargs):
+        print("GetCorrectionFactorView called")
         unit_symbol = request.GET.get('unit_symbol', '')
-        media_type_string = request.GET.get('media_type', '')
+        media_string = request.GET.get('media', '')
 
         print("Unit Symbol:", unit_symbol)
-        print("Media Type:", media_type_string)
+        print("Media:", media_string)
 
         try:
             # Get the first Media object based on the selected media type name
-            media_obj = Media.objects.filter(media_type=media_type_string).first()
+            media_obj = Media.objects.filter(media_type=media_string).first()
 
             if media_obj:
                 # Get the correction factor based on both unit symbol and media type
@@ -150,6 +190,29 @@ class GetCorrectionFactorView(View):
 
         except Media.DoesNotExist:
             return JsonResponse({'error': 'Media not found'}, status=404)
+
+
+@require_http_methods(["GET"])
+def get_media_id(request, media_type, habitat_id):
+    try:
+        habitat_id = int(habitat_id)
+        print(f"habitat_id: {habitat_id}, media_type: {media_type}")
+
+        if habitat_id <= 0 or not media_type:
+            return JsonResponse({'error': 'Invalid habitat_id or media_type'}, status=400)
+
+        # media = Media.objects.filter(media_type=media_type, habitat_id=habitat_id).first()
+        media = Media.objects.filter(media_type=media_type, habitat__habitat_id=habitat_id).first()
+
+        if media:
+            return JsonResponse({'media_id': media.media_id})
+        else:
+            return JsonResponse({'error': 'Media not found'}, status=404)
+    except ValueError:
+        return JsonResponse({'error': 'Invalid habitat_id format'}, status=400)
+    except Exception as e:
+        print(f"Error in get_media_id: {e}")
+        return JsonResponse({'error': 'Internal Server Error'}, status=500)
 
 
 def view_all_data(request, ref_id=None):

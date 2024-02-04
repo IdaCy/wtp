@@ -9,8 +9,9 @@ from report_app import views as report_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('get_correction_factor/', GetCorrectionFactorView.as_view(), name='get_correction_factor'),
     path('get_correction_factor/', data_views.GetCorrectionFactorView.as_view(), name='get_correction_factor'),
+    #path('get_media_id/', data_views.get_media_id, name='get_media_id'),
+    path('get_media_id/<str:media_type>/<int:habitat_id>/', data_views.get_media_id, name='get_media_id'),
     path('dashboard/', dashboard_views.board_view, name='dashboard'),
     path('register/', manageuser_views.register_view, name='register'),
     path('login/', manageuser_views.login_view, name='login'),

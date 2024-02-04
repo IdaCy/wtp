@@ -96,7 +96,7 @@ class Media(models.Model):
         return f"{self.media_id} ({self.media_type})"
 
     def get_media_id(self):
-        return str(self.name_latin)
+        return str(self.media_id)
 
     def get_media_type(self):
         return str(self.media_type)
@@ -270,12 +270,7 @@ class Reference(models.Model):
     notes = models.CharField(max_length=500, default='', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     dc_id = models.IntegerField(null=True, blank=True, default=0)
-    approval_choices = [
-        ('PENDING', 'Pending'),
-        ('APPROVED', 'Approved'),
-        ('REJECTED', 'Rejected'),
-    ]
-    approval_status = models.CharField(max_length=20, choices=approval_choices, default='PENDING', null=True, blank=True)
+    approval_status = models.CharField(max_length=20)
     reason_approval_delete = models.CharField(max_length=500, default='', blank=True)
 
     def __str__(self):
@@ -375,7 +370,8 @@ class DataCR(models.Model):
     stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default=1.0)
     stand_biota_sd = models.CharField(max_length=30, null=True, blank=True, default='Default Stand Biota SD')
     stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True, default=1.0)
-    stand_media_sd = models.CharField(max_length=30, null=True, blank=True, default='Default Stand Media SD')
+    stand_media_sd = models.CharField(max_length=30, null=
+    True, blank=True, default='Default Stand Media SD')
     summary_approve = models.BooleanField(default=False)
     approval_choices = [
         ('PENDING', 'Pending'),

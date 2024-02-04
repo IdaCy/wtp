@@ -13,6 +13,14 @@
 {% block content %}
     <h1>Add Record</h1>
 
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <form method="post" action="{% url 'add_datacr' %}">
         {% csrf_token %}
 
@@ -23,7 +31,7 @@
             <div class="entry">
                 <!--<label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>-->
                 <label for="id_ref_id">Reference ID: <input type="text" id="ref_id"
-                                                                  name="ref_id" readonly></label>
+                                                            name="ref_id" readonly></label>
             </div>
 
             <div class="pub">
@@ -46,8 +54,8 @@
                         <input type="text" id="id_volume" name="volume">
                     </div>
                     <div class="entry">
-                        <label for="id_pages">Page Numbers:</label>
-                        <input type="text" id="id_pages" name="pages">
+                        <label for="id_page_numbers">Page Numbers:</label>
+                        <input type="text" id="id_page_numbers" name="page_numbers">
                     </div>
                     <div class="entry">
                         <label for="id_reference_language">Reference Language:</label>
@@ -69,8 +77,8 @@
                         <input type="text" id="id_part" name="part">
                     </div>
                     <div class="translation">
-                        <label for="id_translation">Translation into English Available:</label>
-                        <input type="checkbox" id="id_translation" name="translation">
+                        <label for="id_translation_available">Translation into English Available:</label>
+                        <input type="checkbox" id="id_translation_available" name="translation_available">
                     </div>
                 </div>
             </div>
@@ -83,7 +91,7 @@
             <div class="flex-container">
                 <div class="left-rim">
                     <div class="entry">
-                        <label for="habitat_specific_type">Habitat:</label>
+                        <label for="id_habitat">Habitat:</label>
                         {{ datacr_form.habitat | add_class:"limited" }}
                     </div>
                     <div class="entry">
@@ -101,7 +109,7 @@
                         {{ datacr_form.wildlife_group | add_class:"limited" }}
                     </div>
                     <div class="entry">
-                        <label for="id_studytype">Studytype:</label>
+                        <label for="id_study_type">Studytype:</label>
                         {{ datacr_form.study_type | add_class:"limited" }}
                     </div>
                     <div class="entry">
@@ -114,8 +122,8 @@
                         {{ datacr_form.species_name | add_class:"limited" }}
                     </div>
                     <div class="entry">
-                        <label for="id_sampling_date">Sampling Date:</label>
-                        <input type="date" id="id_sampling_date" name="sampling_date">
+                        <label for="id_measurement_date">Sampling Date:</label>
+                        <input type="date" id="id_measurement_date" name="measurement_date">
                     </div>
                     <div class="entry">
                         <label for="id_dynamic_info">Dynamic Info:</label>
@@ -142,11 +150,12 @@
             <div class="flex-container">
                 <div class="left-rim">
                     <div class="entry">
-                        <label for="id_media_type">Media Type:</label>
-                        <select id="id_media_type" name="media_type">
+                        <label for="id_media">Media Type:</label>
+                        {{ datacr_form.media | add_class:"limited" }}
+                        <!--<select id="id_media" name="media">
                             <option value="soil" selected>Soil</option>
                             <option value="air">Air</option>
-                        </select>
+                        </select>-->
                     </div>
                     <div class="entry">
                         <label for="id_n_for_media">N for Media:</label>
@@ -275,15 +284,16 @@
 
             // Get references to the Media Type and Media Units dropdowns
             var habitatDropdown = document.getElementById('id_habitat');
-            var mediaTypeDropdown = document.getElementById('id_media_type');
+            var mediaDropdown = document.getElementById('id_media');
             var mediaUnitsDropdown = document.getElementById('id_media_units');
             var mediaWetDryDropdown = document.getElementById('id_media_wet_dry');
 
             // Function to update Media Type based on the selected Habitat
-            function updateMediaType() {
-                console.log("updateMediaType() started");
+            async function updateMedia() {
+
+                console.log("updateMedia() started");
                 // Clear previous options
-                mediaTypeDropdown.innerHTML = '';
+                mediaDropdown.innerHTML = '';
 
                 // Get the selected value of Habitat
                 var selectedHabitat = habitatDropdown.value.toLowerCase();
@@ -293,32 +303,44 @@
 
                 console.log("Selected Habitat no: ", selectedHabitat);
 
-                // Add options based on the selected Habitat
-                if (selectedHabitatText.includes('terrestrial')) {
-                    console.log("Habitat: terrestrial");
-                    addMediaTypeDropdown('Air', 'Air');
-                    addMediaTypeDropdown('Soil', 'Soil');
-                } else if (
-                    selectedHabitatText.includes('estuarine') ||
-                    selectedHabitatText.includes('freshwater') ||
-                    selectedHabitatText.includes('marine')
-                ) {
-                    console.log("Habitat: aquatic");
-                    addMediaTypeDropdown('Sediment', 'Sediment');
-                    addMediaTypeDropdown('Water', 'Water');
-                } else {
-                    console.log("No matching habitat found");
+                // Define your media types based on habitat
+                let mediaTypes = selectedHabitatText.includes('terrestrial') ? ['Air', 'Soil'] :
+                    (selectedHabitatText.includes('estuarine') ||
+                        selectedHabitatText.includes('freshwater') ||
+                        selectedHabitatText.includes('marine')) ? ['Sediment', 'Water'] : [];
+
+                // Fetch and add media options asynchronously
+                for (let mediaType of mediaTypes) {
+                    await getMediaID(mediaType, selectedHabitat).then(mediaID => {
+                        addMediaDropdown(mediaType, mediaID);
+                    });
                 }
-                console.log("end of updateMediaType()");
+                console.log("end of updateType()");
             }
 
             // Helper function to add options to the dropdown
-            function addMediaTypeDropdown(text, value) {
-                console.log("addMediaTypeDropdown() started");
+            function addMediaDropdown(text, id) {
+                console.log("addMediaDropdown() started");
                 var option = document.createElement('option');
                 option.text = text;
-                option.value = value;
-                mediaTypeDropdown.add(option);
+                option.value = id;
+                mediaDropdown.add(option);
+            }
+
+            // Asynchronous function to fetch media ID
+            async function getMediaID(media_type, habitat_id) {
+                console.log("mediaType: ", media_type);
+                console.log("habitatID: ", habitat_id);
+                const url = `/get_media_id/${encodeURIComponent(media_type)}/${habitat_id}/`;
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.media_id) {
+                    console.log("Media ID for ", media_type, ": ", data.media_id);
+                    return data.media_id;
+                } else {
+                    console.error("Error fetching media ID for ", media_type);
+                    return ""; // Fallback or empty string if not found
+                }
             }
 
             // Function to update Media Units based on the selected Media Type
@@ -328,14 +350,14 @@
                 mediaWetDryDropdown.innerHTML = '';
 
                 // Get the selected value of Media Type
-                var selectedMediaType = mediaTypeDropdown.value.toLowerCase();
+                var selectedMedia = mediaDropdown.value.toLowerCase();
 
                 // Add unit options based on the selected Media Type
-                if (selectedMediaType === 'air') {
+                if (selectedMedia === 'air') {
                     addMediaUnitOption('Bq/m3', 'Bq/m3');
-                } else if ((selectedMediaType === 'soil')
-                    || (selectedMediaType === "sediment")
-                    || (selectedMediaType === "water")) {
+                } else if ((selectedMedia === 'soil')
+                    || (selectedMedia === "sediment")
+                    || (selectedMedia === "water")) {
                     addMediaUnitOption('µCi/kg', 'µCi/kg');
                     addMediaUnitOption('Bq/g', 'Bq/g');
                     addMediaUnitOption('Bq/m2', 'Bq/m2');
@@ -352,11 +374,11 @@
                 }
 
                 // Add wt/dry options based on the selected Media Type
-                if (selectedMediaType === 'air') {
+                if (selectedMedia === 'air') {
                     addWetDryOption('Air');
-                } else if (selectedMediaType === "water") {
+                } else if (selectedMedia === "water") {
                     addWetDryOption('Water');
-                } else if (selectedMediaType === 'soil') {
+                } else if (selectedMedia === 'soil') {
                     addWetDryOption('Dry');
                 }
             }
@@ -377,11 +399,11 @@
             }
 
             // Attach the functions to the change event of dropdowns
-            habitatDropdown.addEventListener('change', updateMediaType);
-            mediaTypeDropdown.addEventListener('change', updateMediaUnits);
+            habitatDropdown.addEventListener('change', updateMedia);
+            mediaDropdown.addEventListener('change', updateMediaUnits);
 
             // Initialize functions on page load
-            updateMediaType();
+            updateMedia();
             updateMediaUnits();
 
 
@@ -392,19 +414,19 @@
             var biotaConcField = document.getElementById('id_biota_conc');
             mediaUnitsDropdown = document.getElementById('id_media_units'); // already above
             var biotaUnitsDropdown = document.getElementById('id_biota_units');
-            var crField = document.getElementById('id_concentration_ratio');
+            //var crField = document.getElementById('id_concentration_ratio');
 
             // Function to update Concentration Ratio based on Media and Biota Concentration
             function updateConcentrationRatio() {
                 var mediaUnitSymbol = document.getElementById('id_media_units').value;
                 var biotaUnitSymbol = document.getElementById('id_biota_units').value;
-                var mediaType = document.getElementById('id_media_type').value;
+                var media = document.getElementById('id_media').value;
 
-                fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media_type=${mediaType}`)
+                fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media=${media}`)
                     .then(response => response.json())
                     .then(mediaData => {
                         // Make AJAX request for biota unit correction factor
-                        fetch(`/get_correction_factor/?unit_symbol=${biotaUnitSymbol}&media_type=${mediaType}`)
+                        fetch(`/get_correction_factor/?unit_symbol=${biotaUnitSymbol}&media=${media}`)
                             .then(response => response.json())
                             .then(biotaData => {
                                 // Display the result for media unit
@@ -433,7 +455,7 @@
 
             // Attach the updateConcentrationRatio function to the input event of Media and Biota Concentration fields
             mediaConcField.addEventListener('input', updateConcentrationRatio);
-            mediaConcField.addEventListener('input', updateConcentrationRatio);
+            biotaConcField.addEventListener('input', updateConcentrationRatio);
             mediaUnitsDropdown.addEventListener('input', updateConcentrationRatio);
             biotaUnitsDropdown.addEventListener('input', updateConcentrationRatio);
             mediaUnitsDropdown.addEventListener('change', updateConcentrationRatio);

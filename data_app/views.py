@@ -16,7 +16,7 @@ from django.contrib.postgres.aggregates import StringAgg
 from django.db.models.functions import Cast
 from django.db.models.fields import TextField
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib import messages
 
@@ -207,6 +207,28 @@ class GetCorrectionFactorView(View):
 
         except Media.DoesNotExist:
             return JsonResponse({'error': 'Media not found'}, status=404)
+
+
+@login_required
+def view_editable_data_records(request):
+    # Fetch records with 'PENDING' status and belong to the logged-in user
+    records = Reference.objects.filter(approval_status='PENDING', user=request.user)
+    return render(request, 'view_editable_data_records.html', {'records': records})
+
+
+@login_required
+def edit_data_record(request, ref_id):
+    record = get_object_or_404(Reference, pk=ref_id, user=request.user)
+    if request.method == 'POST':
+        # Process the form data and update the record
+        # Assuming you have a form for editing, not shown here for brevity
+        form = ReferenceForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('edit_data_record_list')
+    else:
+        form = ReferenceForm(instance=record)
+    return render(request, 'edit_data_record.html', {'form': form, 'record': record})
 
 
 def view_all_data(request, ref_id=None):

@@ -1,5 +1,9 @@
 {% extends 'base_form_data.html' %}
 
+{% block form_action %}
+{% url 'add_datacr' %}
+{% endblock %}
+
 {% block content %}
     {% with page_title="Add DataCR" heading="Add Record" form_action="add_datacr" button_value="add_all" button_label="Add All" %}
         {{ block.super }}

@@ -1,17 +1,36 @@
 {% extends 'base_form_data.html' %}
 
+{% load static %}
+
+{% block form_action %}
+    {{ reference.ref_id }}
+{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }} <!-- Keeps the base template's styles and adds new ones -->
+    <link rel="stylesheet" href="{% static 'css/add_datacr.css' %}">
+{% endblock %}
+
 {% block content %}
-<form method="post" action="{% url 'edit_data_record' ref_id=reference.ref_id %}">
-    {% csrf_token %}
-    <fieldset>
-        <legend>Reference Information</legend>
-        {{ reference_form.as_p }}
-    </fieldset>
-    <fieldset>
-        <legend>DataCR Information</legend>
-        {{ datacr_form.as_p }}
-    </fieldset>
+    <form method="post" action="{% url 'edit_data_record' reference.ref_id %}">
+        {{ block.super }}
+    </form>
+
+    {% with page_title="Edit Data Record" heading="Edit Record" button_value="save_changes" button_label="Update" %}
+        <!-- Note: No need to duplicate the form tag here since it's already defined in base_form_data.html -->
+        <fieldset>
+            <legend>Reference Information</legend>
+            {{ reference_form.as_p }}
+        </fieldset>
+        <fieldset>
+            <legend>DataCR Information</legend>
+            {{ datacr_form.as_p }}
+        </fieldset>
+        <!-- The form buttons will be rendered by the form_buttons block -->
+    {% endwith %}
+{% endblock %}
+
+{% block form_buttons %}
     <button type="submit">Save Changes</button>
     <a href="{% url 'view_editable_data_records' %}">Cancel</a>
-</form>
 {% endblock %}

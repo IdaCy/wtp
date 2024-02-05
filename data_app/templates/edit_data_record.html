@@ -227,6 +227,10 @@
                 </div>
             </div>
         </section>
+
+        {% block style %}
+            <script src="{% static 'js/edit_data_record.js' %}"></script>
+        {% endblock style %}
     {% endwith %}
 {% endblock %}
 

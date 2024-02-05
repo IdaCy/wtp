@@ -11,13 +11,10 @@ from django.http import JsonResponse
 from django.views import View
 
 from django.db.models import Avg, F
-from django.db.models.functions import StringAgg
-from django.db.models import Avg, F
 from django.db.models.functions import Concat
-#from django.db.models import Avg, StringAgg
-#from django.db.models.functions import Str
-#from django.db.models.functions import StringAgg
-#from django.db.models.aggregates import StringAgg
+from django.contrib.postgres.aggregates import StringAgg
+from django.db.models.functions import Cast
+from django.db.models.fields import TextField
 
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -36,18 +33,21 @@ def download_summaries(request):
 
 @login_required
 def view_summary_results(request):
-    habitat_query = request.GET.get('habitat')  # This will capture the selected habitat from the request
+    habitat_query = request.GET.get('habitat')
 
-    # Initialize the context with an empty list; it will hold our filtered data
     context = {'datacr_list': []}
 
-    # Check if there's a habitat query
     if habitat_query in ['Freshwater', 'Marine', 'Terrestrial']:
         datacr_list = DataCR.objects.filter(
             habitat__habitat_specific_type=habitat_query
-        ).select_related('habitat').values(
-            'radionuclide__element__element_symbol', 'cr', 'reference'
-        )
+        ).values(
+            'radionuclide__element__element_symbol'
+        ).annotate(
+            mean_cr=Avg('cr'),
+            # Cast reference__ref_id to a text field before aggregation
+            reference_ids=StringAgg(Cast('reference__ref_id', TextField()), delimiter=', ')
+        ).order_by('radionuclide__element__element_symbol')
+
         context['datacr_list'] = datacr_list
 
     return render(request, 'view_summary_results.html', context)

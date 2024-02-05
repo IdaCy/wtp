@@ -19,6 +19,7 @@
     <thead>
         <tr>
             <th>Element</th>
+            <th>Mean CR</th>
             <th>Reference ID</th>
         </tr>
     </thead>
@@ -26,11 +27,11 @@
         {% for item in datacr_list %}
         <tr>
             <td>{{ item.radionuclide__element__element_symbol }}</td>
-            <td>{{ item.cr }}</td>
-            <td>{{ item.reference }}</td>
+            <td>{{ item.mean_cr }}</td>
+            <td>{{ item.reference_ids }}</td>
         </tr>
         {% empty %}
-        <tr><td colspan="2">No data found.</td></tr>
+        <tr><td colspan="3">No data found.</td></tr>
         {% endfor %}
     </tbody>
 </table>

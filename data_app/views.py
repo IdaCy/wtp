@@ -10,6 +10,15 @@ from django.db.models import Sum, F
 from django.http import JsonResponse
 from django.views import View
 
+from django.db.models import Avg, F
+from django.db.models.functions import StringAgg
+from django.db.models import Avg, F
+from django.db.models.functions import Concat
+#from django.db.models import Avg, StringAgg
+#from django.db.models.functions import Str
+#from django.db.models.functions import StringAgg
+#from django.db.models.aggregates import StringAgg
+
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib import messages
@@ -37,7 +46,7 @@ def view_summary_results(request):
         datacr_list = DataCR.objects.filter(
             habitat__habitat_specific_type=habitat_query
         ).select_related('habitat').values(
-            'radionuclide__element__element_symbol', 'reference'
+            'radionuclide__element__element_symbol', 'cr', 'reference'
         )
         context['datacr_list'] = datacr_list
 

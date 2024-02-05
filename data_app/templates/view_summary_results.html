@@ -19,13 +19,14 @@
     <thead>
         <tr>
             <th>Element</th>
-            <th>Reference</th>
+            <th>Reference ID</th>
         </tr>
     </thead>
     <tbody>
         {% for item in datacr_list %}
         <tr>
             <td>{{ item.radionuclide__element__element_symbol }}</td>
+            <td>{{ item.cr }}</td>
             <td>{{ item.reference }}</td>
         </tr>
         {% empty %}

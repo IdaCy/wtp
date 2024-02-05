@@ -27,6 +27,25 @@ def download_summaries(request):
 
 @login_required
 def view_summary_results(request):
+    habitat_query = request.GET.get('habitat')  # This will capture the selected habitat from the request
+
+    # Initialize the context with an empty list; it will hold our filtered data
+    context = {'datacr_list': []}
+
+    # Check if there's a habitat query
+    if habitat_query in ['Freshwater', 'Marine', 'Terrestrial']:
+        datacr_list = DataCR.objects.filter(
+            habitat__habitat_specific_type=habitat_query
+        ).select_related('habitat').values(
+            'radionuclide__element__element_symbol', 'reference'
+        )
+        context['datacr_list'] = datacr_list
+
+    return render(request, 'view_summary_results.html', context)
+
+
+@login_required
+def view_xxx(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         # Extract query parameters from AJAX request
         habitat = request.GET.get('habitat')

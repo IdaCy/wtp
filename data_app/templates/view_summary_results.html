@@ -1,151 +1,45 @@
 {% extends 'base.html' %} {# !! comment like this #}
 
 {% block content %}
-    <h1>Summary of Records</h1>
+<h1>Summary of Records</h1>
 
-    <form id="datacr_form">
-        <label for="habitat">Select Habitat:</label>
-        <select id="habitat" name="habitat" onchange="updateOptions()">
-            <option value="Estuarine (terrestrial)">Estuarine (terrestrial)</option>
-            <option value="Estuarine (water)">Estuarine (water)</option>
-            <option value="Freshwater">Freshwater</option>
-            <option value="Marine">Marine</option>
-            <option value="Terrestrial">Terrestrial</option>
-        </select>
+<!-- Habitat selection form -->
+<form id="habitat_form">
+    <label for="habitat">Select Habitat:</label>
+    <select id="habitat" name="habitat" onchange="submitForm()">
+        <option value="">Please select</option>
+        <option value="Freshwater">Freshwater</option>
+        <option value="Marine">Marine</option>
+        <option value="Terrestrial">Terrestrial</option>
+    </select>
+</form>
 
-        <label for="choice">Select Option:</label>
-        <input type="radio" id="wildlife_group" name="choice" value="Wildlife group" checked onchange="updateOptions()">
-        <label for="wildlife_group">Wildlife group</label>
-        <input type="radio" id="icrp_rap" name="choice" value="ICRP RAP" onchange="updateOptions()">
-        <label for="icrp_rap">ICRP RAP</label>
+<!-- Data table -->
+<table>
+    <thead>
+        <tr>
+            <th>Element</th>
+            <th>Reference</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in datacr_list %}
+        <tr>
+            <td>{{ item.radionuclide__element__element_symbol }}</td>
+            <td>{{ item.reference }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2">No data found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-        <div id="additional_options" style="display: none;">
-            <label for="additional_dropdown">Additional Selection:</label>
-            <select id="additional_dropdown" name="additional_dropdown"></select>
-
-            <label for="media_type">Media Type:</label>
-
-
-            <input type="radio" id="air" name="media_type" value="Air" checked>
-            <label for="air">Air</label>
-
-            <input type="radio" id="soil" name="media_type" value="Soil">
-            <label for="soil">Soil</label>
-
-            <input type="radio" id="sediment" name="media_type" value="Sediment">
-            <label for="sediment">Sediment</label>
-
-            <input type="radio" id="water" name="media_type" value="Water">
-            <label for="water">Water</label>
-        </div>
-    </form>
-
-    <div id="datacr_table" style="display: none;">
-        <table class="data-table">
-            <thead>
-            <tr>
-                <th>Element</th>
-                <th>Arithmetic Mean</th>
-                <th>Arithmetic Standard Deviaton</th>
-                <th>Geometric Mean</th>
-                <th>N</th>
-                <th>Reference ID</th>
-            </tr>
-            </thead>
-            <tbody id="datacr_table_body">
-            <!-- Data rows are added here dynamically -->
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-        var additionalOptions = document.getElementById('additional_options');
-        var additionalDropdown = document.getElementById('additional_dropdown');
-        additionalOptions.addEventListener('change', updateDataCRTable);
-        additionalDropdown.addEventListener('change', updateDataCRTable);
-
-        function updateOptions() {
-            var habitat = document.getElementById('habitat').value;
-            var choice = document.querySelector('input[name="choice"]:checked').value;
-            additionalDropdown.innerHTML = '';
-
-            console.log("Selected Habitat: " + habitat);
-            console.log("Selected Choice: " + choice);
-
-            additionalOptions.style.display = 'block';
-
-            if (habitat.includes('Estuarine')) {
-                document.getElementById("air").style.display = "none";
-                document.getElementById("soil").style.display = "none";
-                document.getElementById("sediment").style.display = "none";
-                document.getElementById("water").style.display = "none";
-            } else if ((habitat === 'Freshwater') || (habitat === 'Marine')) {
-                document.getElementById("air").style.display = "none";
-                document.getElementById("soil").style.display = "none";
-                document.getElementById("sediment").style.display = "block";
-                document.getElementById("water").style.display = "block";
-            } else {
-                document.getElementById("air").style.display = "block";
-                document.getElementById("soil").style.display = "block";
-                document.getElementById("sediment").style.display = "none";
-                document.getElementById("water").style.display = "none";
-            }
-
-            if (choice === 'ICRP RAP') {
-                additionalDropdown.add(new Option('Amphibian', 'Amphibian'));
-                additionalDropdown.add(new Option('Bird', 'Bird'));
-            } else {
-                additionalDropdown.add(new Option('Crustacean', 'Crustacean'));
-                additionalDropdown.add(new Option('Fish', 'Fish'));
-            }
-
-            console.log("Updated additional options dropdown");
-            updateDataCRTable();
-        }
-
-        function updateDataCRTable() {
-            var habitat = document.getElementById('habitat').value;
-            var choice = document.querySelector('input[name="choice"]:checked').value;
-            var additionalChoice = document.getElementById('additional_dropdown').value;
-            var mediaType = document.querySelector('input[name="media_type"]:checked').value;
-
-            console.log("Updating DataCR Table with params:");
-            console.log("Habitat: " + habitat);
-            console.log("Choice: " + choice);
-            console.log("Additional Choice: " + additionalChoice);
-            console.log("Media Type: " + mediaType);
-
-            // AJAX request to the Django backend
-            fetch(`/get_datacr/?habitat=${habitat}&choice=${choice}&additionalChoice=${additionalChoice}&mediaType=${mediaType}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    console.log("Received response from server");
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("Data received:");
-                    console.log(data);
-                    var tableBody = document.getElementById('datacr_table_body');
-                    tableBody.innerHTML = '';  // Clear existing rows
-                    data.forEach(item => {
-                        var row = `<tr>
-                    <td>${item.element}</td>
-                    <td>${item.arithmetic_mean}</td>
-                    <td>${item.arithmetic_std_dev}</td>
-                    <td>${item.geometric_mean}</td>
-                    <td>${item.n}</td>
-                    <td>${item.ref_id}</td>
-                </tr>`;
-                        tableBody.innerHTML += row;
-                    });
-                    document.getElementById('datacr_table').style.display = 'block';
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to fetch data');
-                });
-        }
-    </script>
+<script>
+function submitForm() {
+    var habitat = document.getElementById('habitat').value;
+    var form = document.getElementById('habitat_form');
+    form.action = '/view_summary_results/?habitat=' + habitat;
+    form.submit();
+}
+</script>
 {% endblock %}

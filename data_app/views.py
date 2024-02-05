@@ -44,7 +44,7 @@ def view_summary_results(request):
             'radionuclide__element__element_symbol'
         ).annotate(
             mean_cr=Avg('cr'),
-            # Cast reference__ref_id to a text field before aggregation
+            # needing to cast reference__ref_id to a text field before aggregation
             reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
         ).order_by('radionuclide__element__element_symbol')
 

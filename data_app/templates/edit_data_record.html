@@ -1,13 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'base_form_data.html' %}
 
 {% block content %}
-<h2>Edit Record: {{ record.article_title }}</h2>
-
-<form method="post">
+<form method="post" action="{% url 'edit_data_record' datacr.pk %}">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save changes</button>
+    <fieldset>
+        <legend>Reference Information</legend>
+        {{ reference_form.as_p }}
+    </fieldset>
+    <fieldset>
+        <legend>DataCR Information</legend>
+        {{ datacr_form.as_p }}
+    </fieldset>
+    <button type="submit">Save Changes</button>
+    <a href="{% url 'view_editable_data_records' %}">Cancel</a>
 </form>
-
-<a href="{% url 'edit_data_record_list' %}">Back to list</a>
 {% endblock %}

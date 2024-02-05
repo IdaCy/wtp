@@ -217,18 +217,27 @@ def view_editable_data_records(request):
 
 
 @login_required
-def edit_data_record(request, ref_id):
-    record = get_object_or_404(Reference, pk=ref_id, user=request.user)
+def edit_data_record(request, cr_id):
+    datacr = get_object_or_404(DataCR, pk=cr_id)
+    reference = datacr.reference
+
     if request.method == 'POST':
-        # Process the form data and update the record
-        # Assuming you have a form for editing, not shown here for brevity
-        form = ReferenceForm(request.POST, instance=record)
-        if form.is_valid():
-            form.save()
-            return redirect('edit_data_record_list')
+        reference_form = ReferenceForm(request.POST, instance=reference)
+        datacr_form = DataCRForm(request.POST, instance=datacr)
+        if reference_form.is_valid() and datacr_form.is_valid():
+            reference_form.save()
+            datacr_form.save()
+            messages.success(request, 'Record updated successfully!')
+            return redirect('some_view_name')  # Redirect as needed
     else:
-        form = ReferenceForm(instance=record)
-    return render(request, 'edit_data_record.html', {'form': form, 'record': record})
+        reference_form = ReferenceForm(instance=reference)
+        datacr_form = DataCRForm(instance=datacr)
+
+    return render(request, 'edit_data_record.html', {
+        'reference_form': reference_form,
+        'datacr_form': datacr_form,
+        'datacr': datacr  # Pass the DataCR instance to use in the template (for the action URL, for example)
+    })
 
 
 def view_all_data(request, ref_id=None):

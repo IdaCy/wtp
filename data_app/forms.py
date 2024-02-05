@@ -11,6 +11,7 @@ class ReferenceForm(forms.ModelForm):
         required=False,
         label='Article Title'
     )
+    translation = forms.BooleanField(required=False)
 
     class Meta:
         model = Reference

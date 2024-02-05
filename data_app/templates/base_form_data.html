@@ -24,259 +24,253 @@
 
 
         <!-- Reference Section -->
-        {% block reference_section %}
-            <section class="reference">
-                <!--<h2>Reference</h2>-->
-                <div class="entry">
-                    <!--<label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>-->
-                    <label for="id_ref_id">Reference ID: <input type="text" id="ref_id"
-                                                                name="ref_id" readonly></label>
-                </div>
+        <section class="reference">
+            <!--<h2>Reference</h2>-->
+            <div class="entry">
+                <!--<label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>-->
+                <label for="id_ref_id">Reference ID: <input type="text" id="ref_id"
+                                                            name="ref_id" readonly></label>
+            </div>
 
-                <div class="pub">
-                    <label for="id_article_title">Article Title:</label>
-                    {{ reference_form.article_title }}
-                </div>
-                <div class="pub">
-                    <label for="id_publication_title">Publication Title:</label>
-                    {{ reference_form.pub_title }}
-                </div>
+            <div class="pub">
+                <label for="id_article_title">Article Title:</label>
+                {{ reference_form.article_title }}
+            </div>
+            <div class="pub">
+                <label for="id_publication_title">Publication Title:</label>
+                {{ reference_form.pub_title }}
+            </div>
 
-                <div class="flex-container">
-                    {% block reference_entries %}
-                    <div class="left">
-                        <div class="entry">
-                            <label for="id_author">Author:</label>
-                            <input type="text" id="id_author" name="author">
-                        </div>
-                        <div class="entry">
-                            <label for="id_volume">Volume:</label>
-                            <input type="text" id="id_volume" name="volume">
-                        </div>
-                        <div class="entry">
-                            <label for="id_pages">Page Numbers:</label>
-                            <input type="text" id="id_pages" name="pages">
-                        </div>
-                        <div class="entry">
-                            <label for="id_reference_language">Reference Language:</label>
-                            {{ reference_form.language }}
-                        </div>
-                    {% endblock reference_entries %}
+            <div class="flex-container">
+                <div class="left">
+                    <div class="entry">
+                        <label for="id_author">Author:</label>
+                        <input type="text" id="id_author" name="author">
                     </div>
-
-                    <div class="right">
-                        <div class="entry">
-                            <label for="id_publication_type">Publication Type:</label>
-                            {{ reference_form.pub_type }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_year">Year:</label>
-                            <input type="text" id="id_year" name="year">
-                        </div>
-                        <div class="entry">
-                            <label for="id_part">Part:</label>
-                            <input type="text" id="id_part" name="part">
-                        </div>
-                        <div class="translation">
-                            <label for="id_translation">Translation into English Available:</label>
-                            <input type="checkbox" id="id_translation" name="translation">
-                        </div>
+                    <div class="entry">
+                        <label for="id_volume">Volume:</label>
+                        <input type="text" id="id_volume" name="volume">
+                    </div>
+                    <div class="entry">
+                        <label for="id_pages">Page Numbers:</label>
+                        <input type="text" id="id_pages" name="pages">
+                    </div>
+                    <div class="entry">
+                        <label for="id_reference_language">Reference Language:</label>
+                        {{ reference_form.language }}
                     </div>
                 </div>
-            </section>
-        {% endblock reference_section %}
+
+                <div class="right">
+                    <div class="entry">
+                        <label for="id_publication_type">Publication Type:</label>
+                        {{ reference_form.pub_type }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_year">Year:</label>
+                        <input type="text" id="id_year" name="year">
+                    </div>
+                    <div class="entry">
+                        <label for="id_part">Part:</label>
+                        <input type="text" id="id_part" name="part">
+                    </div>
+                    <div class="translation">
+                        <label for="id_translation">Translation into English Available:</label>
+                        <input type="checkbox" id="id_translation" name="translation">
+                    </div>
+                </div>
+            </div>
+        </section>
 
 
         <!-- Species Section -->
-        {% block datacr_section %}
-            <section class="species">
-                <!--<h2>Species</h2>-->
-                <div class="flex-container">
-                    <div class="left-rim">
-                        <div class="entry">
-                            <label for="habitat_specific_type">Habitat:</label>
-                            {{ datacr_form.habitat | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_icrp_rap">ICRP RAP:</label>
-                            {{ datacr_form.icrp_rap | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_lifestage">Lifestage:</label>
-                            {{ datacr_form.lifestage | add_class:"limited" }}
-                        </div>
+        <section class="species">
+            <!--<h2>Species</h2>-->
+            <div class="flex-container">
+                <div class="left-rim">
+                    <div class="entry">
+                        <label for="habitat_specific_type">Habitat:</label>
+                        {{ datacr_form.habitat | add_class:"limited" }}
                     </div>
-                    <div class="left-mid">
-                        <div class="entry">
-                            <label for="id_wildlife_group">Wildlife Group:</label>
-                            {{ datacr_form.wildlife_group | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_studytype">Studytype:</label>
-                            {{ datacr_form.study_type | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
-                        </div>
+                    <div class="entry">
+                        <label for="id_icrp_rap">ICRP RAP:</label>
+                        {{ datacr_form.icrp_rap | add_class:"limited" }}
                     </div>
-                    <div class="right-mid">
-                        <div class="entry">
-                            <label for="id_name_common">Species Common:</label>
-                            {{ datacr_form.species_name | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_measurement_date">Sampling Date:</label>
-                            <input type="date" id="id_measurement_date" name="measurement_date">
-                        </div>
-                        <div class="entry">
-                            <label for="id_dynamic_info">Dynamic Info:</label>
-                            <input type="text" id="id_dynamic_info" name="dynamic_info" readonly>
-                        </div>
+                    <div class="entry">
+                        <label for="id_lifestage">Lifestage:</label>
+                        {{ datacr_form.lifestage | add_class:"limited" }}
                     </div>
-                    <div class="right-rim">
-                        <!--<div class="entry">
+                </div>
+                <div class="left-mid">
+                    <div class="entry">
+                        <label for="id_wildlife_group">Wildlife Group:</label>
+                        {{ datacr_form.wildlife_group | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_studytype">Studytype:</label>
+                        {{ datacr_form.study_type | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
+                    </div>
+                </div>
+                <div class="right-mid">
+                    <div class="entry">
+                        <label for="id_name_common">Species Common:</label>
+                        {{ datacr_form.species_name | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_measurement_date">Sampling Date:</label>
+                        <input type="date" id="id_measurement_date" name="measurement_date">
+                    </div>
+                    <div class="entry">
+                        <label for="id_dynamic_info">Dynamic Info:</label>
+                        <input type="text" id="id_dynamic_info" name="dynamic_info" readonly>
+                    </div>
+                </div>
+                <div class="right-rim">
+                    <!--<div class="entry">
                         <label for="id_name_latin">Species Latin:</label>
                         {{ datacr_form.species_name | add_class:"limited" }}
                     </div>-->
-                        <div class="entry">
-                            <label for="id_radionuclide">Element/Nuclide:</label>
-                            {{ datacr_form.radionuclide | add_class:"limited" }}
-                        </div>
+                    <div class="entry">
+                        <label for="id_radionuclide">Element/Nuclide:</label>
+                        {{ datacr_form.radionuclide | add_class:"limited" }}
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Sample Section -->
+        <!-- Sample Section -->
 
 
-            <section class="media">
-                <div class="flex-container">
-                    <div class="left-rim">
-                        <div class="entry">
-                            <label for="id_media">Media Type:</label>
-                            {{ datacr_form.media | add_class:"limited" }}
-                            <!--<select id="id_media" name="media">
-                                <option value="soil" selected>Soil</option>
-                                <option value="air">Air</option>
-                            </select>-->
-                        </div>
-                        <div class="entry">
-                            <label for="id_biota_n">N for Media:</label>
-                            <input type="text" id="id_biota_n" name="n_biota_n">
-                        </div>
+        <section class="media">
+            <div class="flex-container">
+                <div class="left-rim">
+                    <div class="entry">
+                        <label for="id_media">Media Type:</label>
+                        {{ datacr_form.media | add_class:"limited" }}
+                        <!--<select id="id_media" name="media">
+                            <option value="soil" selected>Soil</option>
+                            <option value="air">Air</option>
+                        </select>-->
                     </div>
-                    <div class="left-mid">
-                        <div class="entry">
-                            <label for="id_media_wet_dry">Media Wet/Dry:</label>
-                            <select id="id_media_wet_dry" name="media_wet_dry">
-                                <option value="Wet">Wet</option>
-                                <option value="Dry">Dry</option>
-                            </select>
-                        </div>
-                        <div class="entry">
-                            <label for="id_media_sd">SD for Media:</label>
-                            <input type="text" id="id_media_sd" name="media_sd">
-                        </div>
-                    </div>
-                    <div class="right-mid">
-                        <div class="entry">
-                            <label for="id_media_conc">Media Concentration:</label>
-                            <input type="text" id="id_media_conc" name="media_conc">
-                        </div>
-                    </div>
-                    <div class="right-rim">
-                        <div class="entry">
-                            <label for="id_media_conc_units">Media Units:</label>
-                            <select id="id_media_conc_units" name="media_conc_units">
-                            </select>
-                            <!-- in-between calculations result - but saved, too -->
-                            <input type="hidden" id="id_media_standardised" name="media_standardised" value="">
-                        </div>
+                    <div class="entry">
+                        <label for="id_biota_n">N for Media:</label>
+                        <input type="text" id="id_biota_n" name="n_biota_n">
                     </div>
                 </div>
-            </section>
-
-            <section class="tissue">
-                <div class="flex-container">
-                    <div class="left-rim">
-                        <div class="entry">
-                            <label for="id_tissue_name">Tissue Type:</label>
-                            {{ datacr_form.tissue | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_biota_n">N for Biota:</label>
-                            <input type="text" id="id_biota_n" name="biota_n">
-                        </div>
+                <div class="left-mid">
+                    <div class="entry">
+                        <label for="id_media_wet_dry">Media Wet/Dry:</label>
+                        <select id="id_media_wet_dry" name="media_wet_dry">
+                            <option value="Wet">Wet</option>
+                            <option value="Dry">Dry</option>
+                        </select>
                     </div>
-                    <div class="left-mid">
-                        <div class="entry">
-                            <label for="id_biota_wet_dry">Status of Biota:</label>
-                            <select id="id_biota_wet_dry" name="biota_wet_dry">
-                                <option value="Wet">Wet</option>
-                                <option value="Dry">Dry</option>
-                                <option value="Ash">Ash</option>
-                            </select>
-                        </div>
-                        <div class="entry">
-                            <label for="id_biota_sd">SD for Biota:</label>
-                            <input type="text" id="id_biota_sd" name="biota_sd">
-                        </div>
-                    </div>
-                    <div class="right-mid">
-                        <div class="entry">
-                            <label for="id_biota_conc">Biota Concentration:</label>
-                            <input type="text" id="id_biota_conc" name="biota_conc">
-                        </div>
-                    </div>
-                    <div class="right-rim">
-                        <div class="entry">
-                            <label for="id_biota_conc_units">Biota Units:</label>
-                            <select id="id_biota_conc_units" name="biota_conc_units">
-                                <option value="Bq/l">Bq/l</option>
-                                <option value="Bq/m3">Bq/m3</option>
-                                <option value="mBq/l">mBq/l</option>
-                                <option value="mg/l">mg/l</option>
-                                <option value="p/Ci/l">p/Ci/l</option>
-                                <option value="ppb">ppb</option>
-                                <option value="ppm">ppm</option>
-                                <option value="uCi/l">uCi/l</option>
-                                <option value="ug/l">ug/l</option>
-                            </select>
-
-                            <!-- in-between calculations result - but saved, too -->
-                            <input type="hidden" id="id_biota_standardised" name="biota_standardised" value="">
-                        </div>
+                    <div class="entry">
+                        <label for="id_media_sd">SD for Media:</label>
+                        <input type="text" id="id_media_sd" name="media_sd">
                     </div>
                 </div>
-            </section>
-
-            <section class="cr">
-                <div class="flex-container">
-                    <div class="left-rim">
-                        <div class="entry">
-                            <label for="id_cr">Concentration Ratio:</label>
-                            <input type="text" id="id_cr" name="cr" readonly>
-                        </div>
-                    </div>
-                    <div class="left-mid">
-                        <div class="entry">
-                            <label for="id_crn">N of CR:</label>
-                            <input type="text" id="id_crn" name="crn">
-                        </div>
-                    </div>
-                    <div class="right-mid">
-                        <div class="entry">
-                            <label for="id_cr_sd">SD of CR:</label>
-                            <input type="text" id="id_cr_sd" name="cr_sd">
-                        </div>
-                    </div>
-                    <div class="right-rim">
-                        <div class="entry">
-                        </div>
+                <div class="right-mid">
+                    <div class="entry">
+                        <label for="id_media_conc">Media Concentration:</label>
+                        <input type="text" id="id_media_conc" name="media_conc">
                     </div>
                 </div>
-            </section>
-        {% endblock datacr_section %}
+                <div class="right-rim">
+                    <div class="entry">
+                        <label for="id_media_conc_units">Media Units:</label>
+                        <select id="id_media_conc_units" name="media_conc_units">
+                        </select>
+                        <!-- in-between calculations result - but saved, too -->
+                        <input type="hidden" id="id_media_standardised" name="media_standardised" value="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tissue">
+            <div class="flex-container">
+                <div class="left-rim">
+                    <div class="entry">
+                        <label for="id_tissue_name">Tissue Type:</label>
+                        {{ datacr_form.tissue | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_biota_n">N for Biota:</label>
+                        <input type="text" id="id_biota_n" name="biota_n">
+                    </div>
+                </div>
+                <div class="left-mid">
+                    <div class="entry">
+                        <label for="id_biota_wet_dry">Status of Biota:</label>
+                        <select id="id_biota_wet_dry" name="biota_wet_dry">
+                            <option value="Wet">Wet</option>
+                            <option value="Dry">Dry</option>
+                            <option value="Ash">Ash</option>
+                        </select>
+                    </div>
+                    <div class="entry">
+                        <label for="id_biota_sd">SD for Biota:</label>
+                        <input type="text" id="id_biota_sd" name="biota_sd">
+                    </div>
+                </div>
+                <div class="right-mid">
+                    <div class="entry">
+                        <label for="id_biota_conc">Biota Concentration:</label>
+                        <input type="text" id="id_biota_conc" name="biota_conc">
+                    </div>
+                </div>
+                <div class="right-rim">
+                    <div class="entry">
+                        <label for="id_biota_conc_units">Biota Units:</label>
+                        <select id="id_biota_conc_units" name="biota_conc_units">
+                            <option value="Bq/l">Bq/l</option>
+                            <option value="Bq/m3">Bq/m3</option>
+                            <option value="mBq/l">mBq/l</option>
+                            <option value="mg/l">mg/l</option>
+                            <option value="p/Ci/l">p/Ci/l</option>
+                            <option value="ppb">ppb</option>
+                            <option value="ppm">ppm</option>
+                            <option value="uCi/l">uCi/l</option>
+                            <option value="ug/l">ug/l</option>
+                        </select>
+
+                        <!-- in-between calculations result - but saved, too -->
+                        <input type="hidden" id="id_biota_standardised" name="biota_standardised" value="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cr">
+            <div class="flex-container">
+                <div class="left-rim">
+                    <div class="entry">
+                        <label for="id_cr">Concentration Ratio:</label>
+                        <input type="text" id="id_cr" name="cr" readonly>
+                    </div>
+                </div>
+                <div class="left-mid">
+                    <div class="entry">
+                        <label for="id_crn">N of CR:</label>
+                        <input type="text" id="id_crn" name="crn">
+                    </div>
+                </div>
+                <div class="right-mid">
+                    <div class="entry">
+                        <label for="id_cr_sd">SD of CR:</label>
+                        <input type="text" id="id_cr_sd" name="cr_sd">
+                    </div>
+                </div>
+                <div class="right-rim">
+                    <div class="entry">
+                    </div>
+                </div>
+            </div>
+        </section>
 
 
         {% block form_buttons %}

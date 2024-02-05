@@ -1,4 +1,5 @@
 {% extends 'base_form_data.html' %}
+{% load widget_tweaks %}
 
 {% load static %}
 
@@ -13,19 +14,219 @@
 
 {% block content %}
     {% with page_title="Edit Data Record" heading="Edit Record" button_value="save_changes" button_label="Update" %}
-        <!-- Note: No need to duplicate the form tag here since it's already defined in base_form_data.html -->
-        {% block reference_section %}
-            <legend>Reference Information</legend>
+        <section class="reference">
             <div class="entry">
+                <label for="id_ref_id">Reference ID:</label>
                 {{ reference_form.ref_id }}
             </div>
-            {{ reference_form.as_p }}
-        {% endblock %}
-        {% block datacr_section %}
-            <legend>DataCR Information</legend>
-            {{ datacr_form.as_p }}
-        {% endblock %}
-        <!-- The form buttons will be rendered by the form_buttons block -->
+            <div class="pub">
+                <label for="id_article_title">Article Title:</label>
+                {{ reference_form.article_title }}
+            </div>
+            <div class="pub">
+                <label for="id_publication_title">Publication Title:</label>
+                {{ reference_form.pub_title }}
+            </div>
+            <div class="flex-container">
+                <div class="left">
+                    <div class="entry">
+                        <label for="id_author">Author:</label>
+                        {{ reference_form.author }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_volume">Volume:</label>
+                        {{ reference_form.volume }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_pages">Page Numbers:</label>
+                        {{ reference_form.pages }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_reference_language">Reference Language:</label>
+                        {{ reference_form.language }}
+                    </div>
+                </div>
+
+                <div class="right">
+                    <div class="entry">
+                        <label for="id_publication_type">Publication Type:</label>
+                        {{ reference_form.pub_type }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_year">Year:</label>
+                        {{ reference_form.year }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_part">Part:</label>
+                        {{ reference_form.part }}
+                    </div>
+                    <div class="translation">
+                        <label for="id_translation">Translation into English Available:</label>
+                        {{ reference_form.translation }}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Species Section -->
+        <section class="species">
+            <!--<h2>Species</h2>-->
+            <div class="flex-container">
+                <div class="left-rim">
+                    <div class="entry">
+                        <label for="habitat_specific_type">Habitat:</label>
+                        {{ datacr_form.habitat | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_icrp_rap">ICRP RAP:</label>
+                        {{ datacr_form.icrp_rap | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_lifestage">Lifestage:</label>
+                        {{ datacr_form.lifestage | add_class:"limited" }}
+                    </div>
+                </div>
+                <div class="left-mid">
+                    <div class="entry">
+                        <label for="id_wildlife_group">Wildlife Group:</label>
+                        {{ datacr_form.wildlife_group | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_studytype">Studytype:</label>
+                        {{ datacr_form.study_type | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
+                    </div>
+                </div>
+                <div class="right-mid">
+                    <div class="entry">
+                        <label for="id_name_common">Species Common:</label>
+                        {{ datacr_form.species_name | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_measurement_date">Sampling Date:</label>
+                        {{ datacr_form.measurement_date | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_dynamic_info">Dynamic Info:</label>
+                        <input type="text" id="id_dynamic_info" name="dynamic_info" readonly>
+                    </div>
+                </div>
+                <div class="right-rim">
+                    <!--<div class="entry">
+                        <label for="id_name_latin">Species Latin:</label>
+                        {{ datacr_form.species_name | add_class:"limited" }}
+                    </div>-->
+                    <div class="entry">
+                        <label for="id_radionuclide">Element/Nuclide:</label>
+                        {{ datacr_form.radionuclide | add_class:"limited" }}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="media">
+            <div class="flex-container">
+                <div class="left-rim">
+                    <div class="entry">
+                        <label for="id_media">Media Type:</label>
+                        {{ datacr_form.media | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_biota_n">N for Media:</label>
+                        {{ datacr_form.biota_n | add_class:"limited" }}
+                    </div>
+                </div>
+                <div class="left-mid">
+                    <div class="entry">
+                        <label for="id_media_wet_dry">Media Wet/Dry:</label>
+                        {{ datacr_form.media_wet_dry | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_media_sd">SD for Media:</label>
+                        {{ datacr_form.media_sd | add_class:"limited" }}
+                    </div>
+                </div>
+                <div class="right-mid">
+                    <div class="entry">
+                        <label for="id_media_conc">Media Concentration:</label>
+                        {{ datacr_form.media_conc | add_class:"limited" }}
+                    </div>
+                </div>
+                <div class="right-rim">
+                    <div class="entry">
+                        <label for="id_media_conc_units">Media Units:</label>
+                        {{ datacr_form.media_conc_units | add_class:"limited" }}
+                        <!-- in-between calculations result - but saved, too -->
+                        <input type="hidden" id="id_media_standardised" name="media_standardised" value="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tissue">
+            <div class="flex-container">
+                <div class="left-rim">
+                    <div class="entry">
+                        <label for="id_tissue_name">Tissue Type:</label>
+                        {{ datacr_form.tissue | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_biota_n">N for Biota:</label>
+                        {{ datacr_form.biota_n | add_class:"limited" }}
+                    </div>
+                </div>
+                <div class="left-mid">
+                    <div class="entry">
+                        <label for="id_biota_wet_dry">Status of Biota:</label>
+                        {{ datacr_form.biota_wet_dry | add_class:"limited" }}
+                    </div>
+                    <div class="entry">
+                        <label for="id_biota_sd">SD for Biota:</label>
+                        {{ datacr_form.biota_sd | add_class:"limited" }}
+                    </div>
+                </div>
+                <div class="right-mid">
+                    <div class="entry">
+                        <label for="id_biota_conc">Biota Concentration:</label>
+                        {{ datacr_form.biota_conc | add_class:"limited" }}
+                    </div>
+                </div>
+                <div class="right-rim">
+                    <div class="entry">
+                        <label for="id_biota_conc_units">Biota Units:</label>
+                        {{ datacr_form.biota_conc_units | add_class:"limited" }}
+
+                        <!-- in-between calculations result - but saved, too -->
+                        <input type="hidden" id="id_biota_standardised" name="biota_standardised" value="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cr">
+            <div class="flex-container">
+                <div class="left-rim">
+                    <div class="entry">
+                        <label for="id_cr">Concentration Ratio:</label>
+                        {{ datacr_form.cr | add_class:"limited" }}
+                    </div>
+                </div>
+                <div class="left-mid">
+                    <div class="entry">
+                        <label for="id_crn">N of CR:</label>
+                        {{ datacr_form.crn | add_class:"limited" }}
+                    </div>
+                </div>
+                <div class="right-mid">
+                    <div class="entry">
+                        <label for="id_cr_sd">SD of CR:</label>
+                        {{ datacr_form.cr_sd | add_class:"limited" }}
+                    </div>
+                </div>
+            </div>
+        </section>
     {% endwith %}
 {% endblock %}
 

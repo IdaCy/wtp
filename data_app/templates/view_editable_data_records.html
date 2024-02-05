@@ -1,12 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Edit Your Records</h2>
-<ul>
-    {% for record in records %}
-    <li>
-        <a href="{% url 'edit_data_record' record.ref_id %}">{{ record.article_title }} (Reference ID: {{ record.ref_id }})</a>
-    </li>
-    {% endfor %}
-</ul>
+    <h2>Edit Your Records</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Reference ID</th>
+                <th>Article Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+                <tr>
+                    <td>
+                        <a href="{% url 'edit_data_record' record.ref_id %}">
+                            {{ record.ref_id }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'edit_data_record' record.ref_id %}">
+                            {{ record.article_title }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

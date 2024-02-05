@@ -43,6 +43,7 @@
                 </div>
 
                 <div class="flex-container">
+                    {% block reference_entries %}
                     <div class="left">
                         <div class="entry">
                             <label for="id_author">Author:</label>
@@ -60,6 +61,7 @@
                             <label for="id_reference_language">Reference Language:</label>
                             {{ reference_form.language }}
                         </div>
+                    {% endblock reference_entries %}
                     </div>
 
                     <div class="right">
@@ -82,7 +84,7 @@
                     </div>
                 </div>
             </section>
-        {% endblock %}
+        {% endblock reference_section %}
 
 
         <!-- Species Section -->
@@ -274,7 +276,7 @@
                     </div>
                 </div>
             </section>
-        {% endblock %}
+        {% endblock datacr_section %}
 
 
         {% block form_buttons %}

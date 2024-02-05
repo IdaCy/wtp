@@ -12,20 +12,19 @@
 {% endblock %}
 
 {% block content %}
-    <form method="post" action="{% url 'edit_data_record' reference.ref_id %}">
-        {{ block.super }}
-    </form>
-
     {% with page_title="Edit Data Record" heading="Edit Record" button_value="save_changes" button_label="Update" %}
         <!-- Note: No need to duplicate the form tag here since it's already defined in base_form_data.html -->
-        <fieldset>
+        {% block reference_section %}
             <legend>Reference Information</legend>
+            <div class="entry">
+                {{ reference_form.ref_id }}
+            </div>
             {{ reference_form.as_p }}
-        </fieldset>
-        <fieldset>
+        {% endblock %}
+        {% block datacr_section %}
             <legend>DataCR Information</legend>
             {{ datacr_form.as_p }}
-        </fieldset>
+        {% endblock %}
         <!-- The form buttons will be rendered by the form_buttons block -->
     {% endwith %}
 {% endblock %}

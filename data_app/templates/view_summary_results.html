@@ -24,10 +24,19 @@
             <select id="additional_dropdown" name="additional_dropdown"></select>
 
             <label for="media_type">Media Type:</label>
+
+
             <input type="radio" id="air" name="media_type" value="Air" checked>
             <label for="air">Air</label>
+
             <input type="radio" id="soil" name="media_type" value="Soil">
             <label for="soil">Soil</label>
+
+            <input type="radio" id="sediment" name="media_type" value="Sediment">
+            <label for="sediment">Sediment</label>
+
+            <input type="radio" id="water" name="media_type" value="Water">
+            <label for="water">Water</label>
         </div>
     </form>
 
@@ -63,15 +72,33 @@
             console.log("Selected Habitat: " + habitat);
             console.log("Selected Choice: " + choice);
 
-            if (habitat === 'Terrestrial') {
-                additionalDropdown.add(new Option('Amphibian', 'Amphibian'));
-                additionalDropdown.add(new Option('Bird', 'Bird'));
-            } else if (choice === 'ICRP RAP') {
-                additionalDropdown.add(new Option('Bee', 'Bee'));
-                additionalDropdown.add(new Option('Earthworm', 'Earthworm'));
+            additionalOptions.style.display = 'block';
+
+            if (habitat.includes('Estuarine')) {
+                document.getElementById("air").style.display = "none";
+                document.getElementById("soil").style.display = "none";
+                document.getElementById("sediment").style.display = "none";
+                document.getElementById("water").style.display = "none";
+            } else if ((habitat === 'Freshwater') || (habitat === 'Marine')) {
+                document.getElementById("air").style.display = "none";
+                document.getElementById("soil").style.display = "none";
+                document.getElementById("sediment").style.display = "block";
+                document.getElementById("water").style.display = "block";
+            } else {
+                document.getElementById("air").style.display = "block";
+                document.getElementById("soil").style.display = "block";
+                document.getElementById("sediment").style.display = "none";
+                document.getElementById("water").style.display = "none";
             }
 
-            additionalOptions.style.display = 'block';
+            if (choice === 'ICRP RAP') {
+                additionalDropdown.add(new Option('Amphibian', 'Amphibian'));
+                additionalDropdown.add(new Option('Bird', 'Bird'));
+            } else {
+                additionalDropdown.add(new Option('Crustacean', 'Crustacean'));
+                additionalDropdown.add(new Option('Fish', 'Fish'));
+            }
+
             console.log("Updated additional options dropdown");
             updateDataCRTable();
         }

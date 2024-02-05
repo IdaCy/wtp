@@ -51,6 +51,11 @@ class DataCRForm(forms.ModelForm):
         label='Media',
         empty_label="Select Media"
     )
+    media_wet_dry = forms.ChoiceField(
+        choices=DataCR.media_wet_dry_choices,
+        required=False,
+        label='Media Wet/Dry'
+    )
 
     class Meta:
         model = DataCR

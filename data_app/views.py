@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName
-from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element
+from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element, Radionuclide, Tissue
 from .forms import DataCRForm, ReferenceForm
 
 from django.http import JsonResponse
@@ -118,6 +118,11 @@ def add_datacr(request):
             #media_id = request.POST.get('media')
             #if media_id:
             #    datacr.media = Media.objects.get(pk=media_id)
+
+            # from invisible in-between calculation field
+            #datacr.biota_n = request.POST.get('biota_n', 0)
+
+            datacr.media_wet_dry = datacr_form.cleaned_data['media_wet_dry']
 
             datacr.save()
 

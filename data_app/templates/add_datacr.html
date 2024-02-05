@@ -127,7 +127,7 @@
                     </div>
                     <div class="entry">
                         <label for="id_dynamic_info">Dynamic Info:</label>
-                        <input type="text" id="id_dynamic_info" name="dynamic_info">
+                        <input type="text" id="id_dynamic_info" name="dynamic_info" readonly>
                     </div>
                 </div>
                 <div class="right-rim">
@@ -136,7 +136,7 @@
                         {{ datacr_form.species_name | add_class:"limited" }}
                     </div>-->
                     <div class="entry">
-                        <label for="id_element_nuclide">Element/Nuclide:</label>
+                        <label for="id_radionuclide">Element/Nuclide:</label>
                         {{ datacr_form.radionuclide | add_class:"limited" }}
                     </div>
                 </div>
@@ -158,19 +158,21 @@
                         </select>-->
                     </div>
                     <div class="entry">
-                        <label for="id_n_for_media">N for Media:</label>
-                        <input type="text" id="id_n_for_media" name="n_for_media">
+                        <label for="id_biota_n">N for Media:</label>
+                        <input type="text" id="id_biota_n" name="n_biota_n">
                     </div>
                 </div>
                 <div class="left-mid">
                     <div class="entry">
                         <label for="id_media_wet_dry">Media Wet/Dry:</label>
                         <select id="id_media_wet_dry" name="media_wet_dry">
+                            <option value="Wet">Wet</option>
+                            <option value="Dry">Dry</option>
                         </select>
                     </div>
                     <div class="entry">
-                        <label for="id_sd_for_media">SD for Media:</label>
-                        <input type="text" id="id_sd_for_media" name="sd_for_media">
+                        <label for="id_media_sd">SD for Media:</label>
+                        <input type="text" id="id_media_sd" name="media_sd">
                     </div>
                 </div>
                 <div class="right-mid">
@@ -181,9 +183,11 @@
                 </div>
                 <div class="right-rim">
                     <div class="entry">
-                        <label for="id_media_units">Media Units:</label>
-                        <select id="id_media_units" name="media_units">
+                        <label for="id_media_conc_units">Media Units:</label>
+                        <select id="id_media_conc_units" name="media_conc_units">
                         </select>
+                        <!-- in-between calculations result - but saved, too -->
+                        <input type="hidden" id="id_media_standardised" name="media_standardised" value="">
                     </div>
                 </div>
             </div>
@@ -197,22 +201,22 @@
                         {{ datacr_form.tissue | add_class:"limited" }}
                     </div>
                     <div class="entry">
-                        <label for="id_n_for_biota">N for Biota:</label>
-                        <input type="text" id="id_n_for_biota" name="n_for_biota">
+                        <label for="id_biota_n">N for Biota:</label>
+                        <input type="text" id="id_biota_n" name="biota_n">
                     </div>
                 </div>
                 <div class="left-mid">
                     <div class="entry">
-                        <label for="id_status_of_biota">Status of Biota:</label>
-                        <select id="id_status_of_biota" name="status_of_biota">
+                        <label for="id_biota_wet_dry">Status of Biota:</label>
+                        <select id="id_biota_wet_dry" name="biota_wet_dry">
                             <option value="Wet">Wet</option>
                             <option value="Dry">Dry</option>
                             <option value="Ash">Ash</option>
                         </select>
                     </div>
                     <div class="entry">
-                        <label for="id_sd_for_biota">SD for Biota:</label>
-                        <input type="text" id="id_sd_for_biota" name="sd_for_biota">
+                        <label for="id_biota_sd">SD for Biota:</label>
+                        <input type="text" id="id_biota_sd" name="biota_sd">
                     </div>
                 </div>
                 <div class="right-mid">
@@ -223,8 +227,8 @@
                 </div>
                 <div class="right-rim">
                     <div class="entry">
-                        <label for="id_biota_units">Biota Units:</label>
-                        <select id="id_biota_units" name="biota_units">
+                        <label for="id_biota_conc_units">Biota Units:</label>
+                        <select id="id_biota_conc_units" name="biota_conc_units">
                             <option value="Bq/l">Bq/l</option>
                             <option value="Bq/m3">Bq/m3</option>
                             <option value="mBq/l">mBq/l</option>
@@ -235,6 +239,9 @@
                             <option value="uCi/l">uCi/l</option>
                             <option value="ug/l">ug/l</option>
                         </select>
+
+                        <!-- in-between calculations result - but saved, too -->
+                        <input type="hidden" id="id_biota_standardised" name="biota_standardised" value="">
                     </div>
                 </div>
             </div>
@@ -244,20 +251,20 @@
             <div class="flex-container">
                 <div class="left-rim">
                     <div class="entry">
-                        <label for="id_concentration_ratio">Concentration Ratio:</label>
-                        <input type="text" id="id_concentration_ratio" name="concentration_ratio" readonly>
+                        <label for="id_cr">Concentration Ratio:</label>
+                        <input type="text" id="id_cr" name="cr" readonly>
                     </div>
                 </div>
                 <div class="left-mid">
                     <div class="entry">
-                        <label for="id_n_of_cr">N of CR:</label>
-                        <input type="text" id="id_n_of_cr" name="n_of_cr">
+                        <label for="id_crn">N of CR:</label>
+                        <input type="text" id="id_crn" name="crn">
                     </div>
                 </div>
                 <div class="right-mid">
                     <div class="entry">
-                        <label for="id_sd_of_cr">SD of CR:</label>
-                        <input type="text" id="id_sd_of_cr" name="sd_of_cr">
+                        <label for="id_cr_sd">SD of CR:</label>
+                        <input type="text" id="id_cr_sd" name="cr_sd">
                     </div>
                 </div>
                 <div class="right-rim">
@@ -285,7 +292,7 @@
             // Get references to the Media Type and Media Units dropdowns
             var habitatDropdown = document.getElementById('id_habitat');
             var mediaTypeDropdown = document.getElementById('id_media');
-            var mediaUnitsDropdown = document.getElementById('id_media_units');
+            var mediaUnitsDropdown = document.getElementById('id_media_conc_units');
             var mediaWetDryDropdown = document.getElementById('id_media_wet_dry');
 
             // Function to update Media Type based on the selected Habitat
@@ -363,11 +370,11 @@
 
                 // Add wt/dry options based on the selected Media Type
                 if (selectedMediaType === 'air') {
-                    addWetDryOption('Air');
+                    addWetDryOption('Air', 'Air');
                 } else if (selectedMediaType === "water") {
-                    addWetDryOption('Water');
+                    addWetDryOption('Water', 'Water');
                 } else if (selectedMediaType === 'soil') {
-                    addWetDryOption('Dry');
+                    addWetDryOption('Dry', 'Dry');
                 }
             }
 
@@ -410,14 +417,14 @@
             /******************* CR CALCULATIONS ***************************/
 
                 // Get references to the relevant input fields and select dropdowns
-            var biotaUnitsDropdown = document.getElementById('id_biota_units');
+            var biotaUnitsDropdown = document.getElementById('id_biota_conc_units');
 
             // Function to update Concentration Ratio based on Media and Biota Concentration
             function updateConcentrationRatio() {
                 console.log("updateConcentrationRatio() started");
-                var mediaUnitSymbol = document.getElementById('id_media_units').value;
+                var mediaUnitSymbol = document.getElementById('id_media_conc_units').value;
                 console.log("mediaUnitSymbol", mediaUnitSymbol);
-                var biotaUnitSymbol = document.getElementById('id_biota_units').value;
+                var biotaUnitSymbol = document.getElementById('id_biota_conc_units').value;
                 console.log("biotaUnitSymbol", biotaUnitSymbol);
                 var mediaType = document.getElementById('id_media').options[document.getElementById('id_media').selectedIndex].text;
                 console.log("mediaType", mediaType);
@@ -433,14 +440,19 @@
                                 var mediaCorrectionFactor = mediaData.correction_factor || 1.0;
                                 var mediaConcentration = parseFloat(mediaConcField.value);
                                 var mediaResult = mediaCorrectionFactor * mediaConcentration;
+                                // updating invisible field to save this too
+                                console.log("setting media_standardised with ", mediaResult);
+                                document.getElementById('id_media_standardised').value = mediaResult;
 
                                 // Display the result for biota unit
                                 var biotaCorrectionFactor = biotaData.correction_factor || 1.0;
                                 var biotaConcentration = parseFloat(biotaConcField.value);
                                 var biotaResult = biotaCorrectionFactor * biotaConcentration;
+                                console.log("setting biota_standardised with ", biotaResult);
+                                document.getElementById('id_biota_standardised').value = biotaResult;
 
                                 // Calculate and display the Concentration Ratio
-                                var crField = document.getElementById('id_concentration_ratio');
+                                var crField = document.getElementById('id_cr');
                                 var concentrationRatio = biotaResult / mediaResult;
                                 crField.value = concentrationRatio.toFixed(2);
                             })

@@ -325,6 +325,7 @@ class DataCR(models.Model):
     biota_sd = models.CharField(max_length=30, null=True, blank=True, default='Default Biota SD')
     biota_wet_dry_choices = [
         ('Water', 'Water'),
+        ('Wet', 'Wet'),
         ('Dry', 'Dry'),
         ('Air', 'Air'),
         ('Soil', 'Soil'),
@@ -354,6 +355,7 @@ class DataCR(models.Model):
     media_sd = models.CharField(max_length=30, null=True, blank=True, default='Default Media SD')
     media_wet_dry_choices = [
         ('Water', 'Water'),
+        ('Wet', 'Wet'),
         ('Dry', 'Dry'),
         ('Air', 'Air'),
         ('Soil', 'Soil'),
@@ -366,6 +368,7 @@ class DataCR(models.Model):
     reproductive_organ = models.CharField(max_length=30, null=True, blank=True, default='Default Reproductive Organ')
     rep_wet_dry_choices = [
         ('Water', 'Water'),
+        ('Wet', 'Wet'),
         ('Dry', 'Dry'),
         ('Air', 'Air'),
         ('Soil', 'Soil'),

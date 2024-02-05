@@ -26,6 +26,7 @@ def data_view(request):
     dataobj = ActivityConcUnit.objects.all()
     return render(request, 'data.html', {'data': dataobj})
 
+
 @login_required
 def download_summaries(request):
     return render(request, 'download_summaries.html')
@@ -122,7 +123,8 @@ def add_datacr(request):
             datacr.reference = reference
 
             # Fetching the actual model instances
-            wildlife_group_id = datacr_form.cleaned_data.get('wildlife_group').wildlife_group_id if datacr_form.cleaned_data.get(
+            wildlife_group_id = datacr_form.cleaned_data.get(
+                'wildlife_group').wildlife_group_id if datacr_form.cleaned_data.get(
                 'wildlife_group') else None
             icrp_rap_id = datacr_form.cleaned_data.get('icrp_rap').rap_id if datacr_form.cleaned_data.get(
                 'icrp_rap') else None
@@ -143,18 +145,18 @@ def add_datacr(request):
             if media_id:
                 datacr.media = Media.objects.get(pk=media_id)
 
-            #media_id = request.POST.get('media')
-            #if media_id:
+            # media_id = request.POST.get('media')
+            # if media_id:
             #    datacr.media = Media.objects.get(pk=media_id)
 
             # from invisible in-between calculation field
-            #datacr.biota_n = request.POST.get('biota_n', 0)
+            # datacr.biota_n = request.POST.get('biota_n', 0)
 
             datacr.media_wet_dry = datacr_form.cleaned_data['media_wet_dry']
 
             datacr.save()
 
-            #return redirect('dashboard')
+            # return redirect('dashboard')
         else:
             # Handling form errors
             print(reference_form.errors, datacr_form.errors)
@@ -217,9 +219,17 @@ def view_editable_data_records(request):
 
 
 @login_required
-def edit_data_record(request, cr_id):
-    datacr = get_object_or_404(DataCR, pk=cr_id)
-    reference = datacr.reference
+def edit_data_record(request, ref_id):
+    reference = get_object_or_404(Reference, pk=ref_id)
+    print(reference.ref_id)
+    try:
+        datacr = DataCR.objects.filter(reference=reference).first()
+        if not datacr:
+            messages.error(request, 'No associated DataCR record found.')
+            return redirect('some_error_handling_view')
+    except DataCR.DoesNotExist:
+        messages.error(request, 'No associated DataCR record found.')
+        return redirect('some_error_handling_view')
 
     if request.method == 'POST':
         reference_form = ReferenceForm(request.POST, instance=reference)
@@ -236,7 +246,7 @@ def edit_data_record(request, cr_id):
     return render(request, 'edit_data_record.html', {
         'reference_form': reference_form,
         'datacr_form': datacr_form,
-        'datacr': datacr  # Pass the DataCR instance to use in the template (for the action URL, for example)
+        'reference': reference
     })
 
 

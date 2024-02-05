@@ -1,7 +1,7 @@
 {% extends 'base_form_data.html' %}
 
 {% block content %}
-<form method="post" action="{% url 'edit_data_record' datacr.pk %}">
+<form method="post" action="{% url 'edit_data_record' ref_id=reference.ref_id %}">
     {% csrf_token %}
     <fieldset>
         <legend>Reference Information</legend>

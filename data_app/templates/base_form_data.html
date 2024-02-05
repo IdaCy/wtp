@@ -5,7 +5,7 @@
 {% block title %}{{ page_title }} - Wildlife Transfer Parameter DB{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/add_datacr.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base_form_data.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -273,6 +273,7 @@
         </section>
 
         {% block style %}
+            <script src="{% static 'js/base_form_data.js' %}"></script>
             <script src="{% static 'js/add_datacr.js' %}"></script>
         {% endblock style %}
 

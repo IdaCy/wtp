@@ -9,7 +9,7 @@
 
 {% block extra_css %}
     {{ block.super }} <!-- Keeps the base template's styles and adds new ones -->
-    <link rel="stylesheet" href="{% static 'css/add_datacr.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base_form_data.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -229,6 +229,7 @@
         </section>
 
         {% block style %}
+            <script src="{% static 'js/base_form_data.js' %}"></script>
             <script src="{% static 'js/edit_data_record.js' %}"></script>
         {% endblock style %}
     {% endwith %}

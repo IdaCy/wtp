@@ -3,6 +3,7 @@ from django.forms import ModelChoiceField
 from .models import DataCR, Reference, PubType, PubTitle, Language, Habitat, SpeciesName
 from .models import RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup, Tissue, Media
 
+
 class ReferenceForm(forms.ModelForm):
     ref_id = forms.IntegerField(required=True)
 
@@ -15,10 +16,12 @@ class ReferenceForm(forms.ModelForm):
 
     class Meta:
         model = Reference
-        fields = ['ref_id', 'author', 'article_title', 'pub_title', 'year', 'volume', 'part', 'pages', 'language', 'pub_type', 'translation', 'notes']
+        fields = ['ref_id', 'author', 'article_title', 'pub_title', 'year', 'volume', 'part', 'pages', 'language',
+                  'pub_type', 'translation', 'notes']
 
         # Set distinct article title
-        distinct_article_title = Reference.objects.order_by('article_title').values_list('article_title', flat=True).distinct()
+        distinct_article_title = Reference.objects.order_by('article_title').values_list('article_title',
+                                                                                         flat=True).distinct()
 
 
 class DataCRForm(forms.ModelForm):
@@ -71,6 +74,11 @@ class DataCRForm(forms.ModelForm):
         self.fields['media'].queryset = Media.objects.all()
 
         # Modify the choices for wildlife_group, icrp_rap, and lifestage
-        self.fields['wildlife_group'].choices = [(wg.wildlife_group_id, wg.wildlife_group_name) for wg in WildlifeGroup.objects.all().order_by('wildlife_group_name').distinct('wildlife_group_name')]
-        self.fields['icrp_rap'].choices = [(rap.rap_id, rap.rap_name) for rap in RAP.objects.all().order_by('rap_name').distinct('rap_name')]
-        self.fields['lifestage'].choices = [(ls.lifestage_id, ls.lifestage_name) for ls in Lifestage.objects.all().order_by('lifestage_name').distinct('lifestage_name')]
+        self.fields['wildlife_group'].choices = [(wg.wildlife_group_id, wg.wildlife_group_name) for wg in
+                                                 WildlifeGroup.objects.all().order_by('wildlife_group_name').distinct(
+                                                     'wildlife_group_name')]
+        self.fields['icrp_rap'].choices = [(rap.rap_id, rap.rap_name) for rap in
+                                           RAP.objects.all().order_by('rap_name').distinct('rap_name')]
+        self.fields['lifestage'].choices = [(ls.lifestage_id, ls.lifestage_name) for ls in
+                                            Lifestage.objects.all().order_by('lifestage_name').distinct(
+                                                'lifestage_name')]

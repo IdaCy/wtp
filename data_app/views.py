@@ -45,7 +45,7 @@ def view_summary_results(request):
         ).annotate(
             mean_cr=Avg('cr'),
             # Cast reference__ref_id to a text field before aggregation
-            reference_ids=StringAgg(Cast('reference__ref_id', TextField()), delimiter=', ')
+            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
         ).order_by('radionuclide__element__element_symbol')
 
         context['datacr_list'] = datacr_list

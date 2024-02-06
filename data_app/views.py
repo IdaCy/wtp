@@ -94,27 +94,18 @@ def ref_view(request):
     return render(request, 'reference.html', {'reference': refobj})
 
 
-def handle_reference_datacr(reference_data, datacr_data, reference_instance=None, datacr_instance=None, user=None):
-    if reference_instance is None:
-        reference_form = ReferenceForm(reference_data)
-    else:
-        reference_form = ReferenceForm(reference_data, instance=reference_instance)
-
-    if datacr_instance is None:
-        datacr_form = DataCRForm(datacr_data)
-    else:
-        datacr_form = DataCRForm(datacr_data, instance=datacr_instance)
-
+def handle_reference_datacr(reference_form, datacr_form, user):
     if reference_form.is_valid() and datacr_form.is_valid():
+        print("CR Value from Form:", datacr_form.cleaned_data.get('cr'))
         reference = reference_form.save(commit=False)
-        if user and not reference_instance:
+        if not reference.pk:  # Check if this is a new reference to set the user
             reference.user = user
         reference.save()
 
         datacr = datacr_form.save(commit=False)
         datacr.reference = reference
         datacr.save()
-        return True, reference, datacr
+        return True, reference_form, datacr_form
     else:
         return False, reference_form, datacr_form
 
@@ -124,27 +115,25 @@ def add_datacr(request):
     if request.method == 'POST':
         print("POST Data:", request.POST)
 
-        success, reference, datacr = handle_reference_datacr(
-            reference_data=request.POST,
-            datacr_data=request.POST,
+        reference_form = ReferenceForm(request.POST)
+        datacr_form = DataCRForm(request.POST)
+
+        success, reference_form, datacr_form = handle_reference_datacr(
+            reference_form=reference_form,
+            datacr_form=datacr_form,
             user=request.user
         )
+
         if success:
             messages.success(request, "Successfully saved. Thank you for your submission!")
-            return redirect('dashboard')
+            #return redirect('your_success_url_here')  # Redirect to prevent form resubmission
         else:
             messages.error(request, "There was a problem with your submission. Please try again or contact us.")
-            # Return the forms with errors
-            reference_form, datacr_form = reference, datacr
     else:
         reference_form = ReferenceForm()
         datacr_form = DataCRForm()
-        messages.error(request, "There was a problem with your submission. Please try again or contact us.")
 
-    return render(request, 'add_datacr.html', {
-        'reference_form': reference_form,
-        'datacr_form': datacr_form
-    })
+    return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
 
 
 @login_required
@@ -158,35 +147,39 @@ def get_media_for_habitat(request):
     return JsonResponse(media_options_list, safe=False)
 
 
-class GetCorrectionFactorView(View):
-    def get(self, request, *args, **kwargs):
-        unit_symbol = request.GET.get('unit_symbol', '')
-        media_type_string = request.GET.get('media_type', '')
+#def get_correction_factor(request, unit_symbol, media_type):
+    #unit_symbol = unit_symbol
+    #media_type_string = media_type
 
-        print("Unit Symbol:", unit_symbol)
-        print("Media Type:", media_type_string)
+@login_required
+def get_correction_factor(request):
+    unit_symbol = request.GET.get('unit_symbol', '')
+    media_type_string = request.GET.get('media_type', '')
 
-        try:
-            # Get the first Media object based on the selected media type name
-            media_obj = Media.objects.filter(media_type=media_type_string).first()
+    print("Unit Symbol:", unit_symbol)
+    print("Media Type:", media_type_string)
 
-            if media_obj:
-                # Get the correction factor based on both unit symbol and media type
-                correction_factor_entry = ActivityConcUnit.objects.filter(
-                    act_conc_unit_symbol=unit_symbol,
-                    media=media_obj
-                ).first()
+    try:
+        # Get the first Media object based on the selected media type name
+        media_obj = Media.objects.filter(media_type=media_type_string).first()
 
-                if correction_factor_entry:
-                    correction_factor = correction_factor_entry.correction_factor_act_conc
-                    return JsonResponse({'correction_factor': correction_factor})
-                else:
-                    return JsonResponse({'error': 'Unit not found for the given media type'}, status=404)
+        if media_obj:
+            # Get the correction factor based on both unit symbol and media type
+            correction_factor_entry = ActivityConcUnit.objects.filter(
+                act_conc_unit_symbol=unit_symbol,
+                media=media_obj
+            ).first()
+
+            if correction_factor_entry:
+                correction_factor = correction_factor_entry.correction_factor_act_conc
+                return JsonResponse({'correction_factor': correction_factor})
             else:
-                return JsonResponse({'error': 'Media not found'}, status=404)
-
-        except Media.DoesNotExist:
+                return JsonResponse({'error': 'Unit not found for the given media type'}, status=404)
+        else:
             return JsonResponse({'error': 'Media not found'}, status=404)
+
+    except Media.DoesNotExist:
+        return JsonResponse({'error': 'Media not found'}, status=404)
 
 
 @login_required

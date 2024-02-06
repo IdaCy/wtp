@@ -295,7 +295,7 @@ class DataCR(models.Model):
     tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE, null=True, blank=True)
     media = models.ForeignKey(Media, on_delete=models.CASCADE, null=True, blank=True)
     crn = models.IntegerField(null=True, blank=True, default=1)
-    cr = models.DecimalField(max_digits=25, decimal_places=10, null=True, blank=True, default=1.0)
+    cr = models.DecimalField(max_digits=25, decimal_places=10, null=True)
     cr_sd = models.DecimalField(max_digits=25, decimal_places=10, null=True, blank=True, default=1.0)
     notes = models.CharField(max_length=500, null=True, blank=True, default='')
     radionuclide = models.ForeignKey(Radionuclide, on_delete=models.CASCADE, null=True, blank=True)

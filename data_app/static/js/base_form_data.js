@@ -166,7 +166,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Calculate and display the Concentration Ratio
                         var crField = document.getElementById('id_cr');
                         var concentrationRatio = biotaResult / mediaResult;
-                        crField.value = concentrationRatio.toFixed(2);
+                        console.log("Concentration Ratio before conversion:", concentrationRatio);
+                        concentrationRatio = concentrationRatio.toFixed(10); // limit to 10 decimal places
+                        console.log("Concentration Ratio after conversion:", concentrationRatio);
+                        crField.value = concentrationRatio;
+                        document.getElementById('id_cr').value = concentrationRatio;
                     })
                     .catch(biotaError => {
                         console.error('Error fetching biota correction factor:', biotaError);

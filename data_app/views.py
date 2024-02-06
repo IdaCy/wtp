@@ -145,18 +145,10 @@ def add_datacr(request):
             if media_id:
                 datacr.media = Media.objects.get(pk=media_id)
 
-            # media_id = request.POST.get('media')
-            # if media_id:
-            #    datacr.media = Media.objects.get(pk=media_id)
-
-            # from invisible in-between calculation field
-            # datacr.biota_n = request.POST.get('biota_n', 0)
-
             datacr.media_wet_dry = datacr_form.cleaned_data['media_wet_dry']
 
             datacr.save()
 
-            # return redirect('dashboard')
         else:
             # Handling form errors
             print(reference_form.errors, datacr_form.errors)

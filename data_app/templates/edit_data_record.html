@@ -21,7 +21,7 @@
             </div>
             <div class="pub">
                 <label for="id_article_title">Article Title:</label>
-                {{ reference_form.article_title }}
+                {{ reference_form.article_title | add_class:"full-width" }}
             </div>
             <div class="pub">
                 <label for="id_publication_title">Publication Title:</label>
@@ -97,7 +97,8 @@
                         {{ datacr_form.study_type | add_class:"limited" }}
                     </div>
                     <div class="entry">
-                        <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
+                        <label for="id_notes">Notes:</label>
+                        {{ datacr_form.notes | add_class:"limited" }}
                     </div>
                 </div>
                 <div class="right-mid">
@@ -233,9 +234,10 @@
             <script src="{% static 'js/edit_data_record.js' %}"></script>
         {% endblock style %}
     {% endwith %}
-{% endblock %}
 
 {% block form_buttons %}
     <button type="submit">Save Changes</button>
-    <a href="{% url 'view_editable_data_records' %}">Cancel</a>
+    <a href="{% url 'view_editable_data_records' %}">Back to Editable Records</a>
+{% endblock %}
+
 {% endblock %}

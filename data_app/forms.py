@@ -7,11 +7,12 @@ from .models import RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup, Tiss
 class ReferenceForm(forms.ModelForm):
     ref_id = forms.IntegerField(required=True)
 
-    article_title = forms.ModelChoiceField(
+    """article_title = forms.ModelChoiceField(
         queryset=Reference.objects.all().order_by('article_title'),
         required=False,
-        label='Article Title'
-    )
+        label='Article Title',
+        empty_label="Select Article Title"
+    )"""
     translation = forms.BooleanField(required=False)
 
     class Meta:

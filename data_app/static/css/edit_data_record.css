@@ -22,7 +22,9 @@ button, a {
     margin-top: 10px;
 }
 
-
+input.full-width {
+    width: 100%;
+}
 
 
 

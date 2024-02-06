@@ -85,3 +85,7 @@ div.entry select.limited {
     width: 100%;
     max-width: 120px;
 }
+
+input.full-width {
+    width: 100%;
+}

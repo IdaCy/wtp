@@ -98,8 +98,9 @@ def handle_reference_datacr(reference_form, datacr_form, user):
     if reference_form.is_valid() and datacr_form.is_valid():
         print("CR Value from Form:", datacr_form.cleaned_data.get('cr'))
         reference = reference_form.save(commit=False)
-        if not reference.pk:  # Check if this is a new reference to set the user
-            reference.user = user
+        reference.user = user
+        #if not reference.pk:  # Check if this is a new reference to set the user
+        #    reference.user = user
         reference.save()
 
         datacr = datacr_form.save(commit=False)

@@ -94,71 +94,57 @@ def ref_view(request):
     return render(request, 'reference.html', {'reference': refobj})
 
 
+def handle_reference_datacr(reference_data, datacr_data, reference_instance=None, datacr_instance=None, user=None):
+    if reference_instance is None:
+        reference_form = ReferenceForm(reference_data)
+    else:
+        reference_form = ReferenceForm(reference_data, instance=reference_instance)
+
+    if datacr_instance is None:
+        datacr_form = DataCRForm(datacr_data)
+    else:
+        datacr_form = DataCRForm(datacr_data, instance=datacr_instance)
+
+    if reference_form.is_valid() and datacr_form.is_valid():
+        reference = reference_form.save(commit=False)
+        if user and not reference_instance:
+            reference.user = user
+        reference.save()
+
+        datacr = datacr_form.save(commit=False)
+        datacr.reference = reference
+        datacr.save()
+        return True, reference, datacr
+    else:
+        return False, reference_form, datacr_form
+
+
 @login_required
 def add_datacr(request):
     if request.method == 'POST':
         print("POST Data:", request.POST)
-        reference_form = ReferenceForm(request.POST)
-        datacr_form = DataCRForm(request.POST)
 
-        if reference_form.is_valid() and datacr_form.is_valid():
-            ref_id = reference_form.cleaned_data['ref_id']
-
-            # Check if a Reference with this ref_id already exists
-            reference, created = Reference.objects.get_or_create(
-                ref_id=ref_id,
-                defaults={**reference_form.cleaned_data, 'user': request.user}
-            )
-
+        success, reference, datacr = handle_reference_datacr(
+            reference_data=request.POST,
+            datacr_data=request.POST,
+            user=request.user
+        )
+        if success:
             messages.success(request, "Successfully saved. Thank you for your submission!")
-
-            # If the reference was not created (already exists), update its fields
-            if not created:
-                for field, value in reference_form.cleaned_data.items():
-                    setattr(reference, field, value)
-                reference.save()
-
-            # Save DataCR instance
-            datacr = datacr_form.save(commit=False)
-            datacr.reference = reference
-
-            # Fetching the actual model instances
-            wildlife_group_id = datacr_form.cleaned_data.get(
-                'wildlife_group').wildlife_group_id if datacr_form.cleaned_data.get(
-                'wildlife_group') else None
-            icrp_rap_id = datacr_form.cleaned_data.get('icrp_rap').rap_id if datacr_form.cleaned_data.get(
-                'icrp_rap') else None
-            lifestage_id = datacr_form.cleaned_data.get('lifestage').lifestage_id if datacr_form.cleaned_data.get(
-                'lifestage') else None
-            media_id = datacr_form.cleaned_data.get('media').media_id if datacr_form.cleaned_data.get(
-                'media') else None
-
-            if wildlife_group_id:
-                datacr.wildlife_group = WildlifeGroup.objects.get(pk=wildlife_group_id)
-
-            if icrp_rap_id:
-                datacr.icrp_rap = RAP.objects.get(pk=icrp_rap_id)
-
-            if lifestage_id:
-                datacr.lifestage = Lifestage.objects.get(pk=lifestage_id)
-
-            if media_id:
-                datacr.media = Media.objects.get(pk=media_id)
-
-            datacr.media_wet_dry = datacr_form.cleaned_data['media_wet_dry']
-
-            datacr.save()
-
+            return redirect('dashboard')
         else:
-            # Handling form errors
-            print(reference_form.errors, datacr_form.errors)
             messages.error(request, "There was a problem with your submission. Please try again or contact us.")
-            return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
+            # Return the forms with errors
+            reference_form, datacr_form = reference, datacr
     else:
         reference_form = ReferenceForm()
         datacr_form = DataCRForm()
+        messages.error(request, "There was a problem with your submission. Please try again or contact us.")
 
-    return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
+    return render(request, 'add_datacr.html', {
+        'reference_form': reference_form,
+        'datacr_form': datacr_form
+    })
 
 
 @login_required

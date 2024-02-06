@@ -99,8 +99,6 @@ def handle_reference_datacr(reference_form, datacr_form, user):
         print("CR Value from Form:", datacr_form.cleaned_data.get('cr'))
         reference = reference_form.save(commit=False)
         reference.user = user
-        #if not reference.pk:  # Check if this is a new reference to set the user
-        #    reference.user = user
         reference.save()
 
         datacr = datacr_form.save(commit=False)
@@ -127,7 +125,6 @@ def add_datacr(request):
 
         if success:
             messages.success(request, "Successfully saved. Thank you for your submission!")
-            #return redirect('your_success_url_here')  # Redirect to prevent form resubmission
         else:
             messages.error(request, "There was a problem with your submission. Please try again or contact us.")
     else:
@@ -148,9 +145,9 @@ def get_media_for_habitat(request):
     return JsonResponse(media_options_list, safe=False)
 
 
-#def get_correction_factor(request, unit_symbol, media_type):
-    #unit_symbol = unit_symbol
-    #media_type_string = media_type
+# def get_correction_factor(request, unit_symbol, media_type):
+# unit_symbol = unit_symbol
+# media_type_string = media_type
 
 @login_required
 def get_correction_factor(request):
@@ -192,6 +189,7 @@ def view_editable_data_records(request):
 
 @login_required
 def edit_data_record(request, ref_id):
+    print("Edit data record POST data:", request.POST)
     reference = get_object_or_404(Reference, pk=ref_id)
     print(reference.ref_id)
     try:
@@ -206,11 +204,13 @@ def edit_data_record(request, ref_id):
     if request.method == 'POST':
         reference_form = ReferenceForm(request.POST, instance=reference)
         datacr_form = DataCRForm(request.POST, instance=datacr)
-        if reference_form.is_valid() and datacr_form.is_valid():
-            reference_form.save()
-            datacr_form.save()
+
+        success, _, _ = handle_reference_datacr(reference_form, datacr_form, request.user)
+        if success:
             messages.success(request, 'Record updated successfully!')
-            return redirect('some_view_name')  # Redirect as needed
+            # return redirect('some_view_name')
+        else:
+            messages.error(request, "There was a problem with your submission. Please review the form and try again.")
     else:
         reference_form = ReferenceForm(instance=reference)
         datacr_form = DataCRForm(instance=datacr)
@@ -218,7 +218,10 @@ def edit_data_record(request, ref_id):
     return render(request, 'edit_data_record.html', {
         'reference_form': reference_form,
         'datacr_form': datacr_form,
-        'reference': reference
+        # 'reference': reference,
+        'ref_id': ref_id,
+        'reference': reference,
+        'form_action': reverse('edit_data_record', kwargs={'ref_id': ref_id})
     })
 
 

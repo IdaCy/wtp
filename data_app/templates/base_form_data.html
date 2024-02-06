@@ -20,8 +20,8 @@
     {% endif %}
 
     <!--<form method="post" action="{ block form_action_url %}{ endblock form_action_url %}">-->
-    <!--<form method="post" action="{ block form_action %}{ endblock form_action %}">-->
-    <form method="post" action="{{ form_action }}">
+    <form method="post" action="{% block form_action %}{% endblock form_action %}">
+    <!--<form method="post" action="{#  #}{ form_action }}">-->
         {% csrf_token %}
 
         <!-- Reference Section -->

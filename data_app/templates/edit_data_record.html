@@ -9,10 +9,18 @@
 {% endblock extra_css %}
 
 {% block content %}
-    <form method="post" action="{% url 'edit_data_record' ref_id=402062034 %}">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'edit_data_record' ref_id=ref_id %}">
         {% csrf_token %}
         {% with page_title="Edit Data Record" heading="Edit Record" button_value="save_changes" button_label="Update" %}
-            <!-- form_action="edit_data_record/edit_data_record/402062034"  -->
             <section class="reference">
                 <div class="entry">
                     <label for="id_ref_id">Reference ID:</label>
@@ -235,10 +243,5 @@
         {% endwith %}
         <button type="submit">Save Changes</button>
     </form>
-
-    {% block form_buttons %}
-        <button type="submit">Save Changes</button>
-        <a href="{% url 'view_editable_data_records' %}">Back to Editable Records</a>
-    {% endblock form_buttons %}
 
 {% endblock content %}

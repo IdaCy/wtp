@@ -201,15 +201,20 @@ def edit_data_record(request, ref_id):
         messages.error(request, 'No associated DataCR record found.')
         return redirect('some_error_handling_view')
 
+    print("next comes 'POST'")
     if request.method == 'POST':
         reference_form = ReferenceForm(request.POST, instance=reference)
         datacr_form = DataCRForm(request.POST, instance=datacr)
 
+        print("next comes 'success' and entering my method")
         success, _, _ = handle_reference_datacr(reference_form, datacr_form, request.user)
+        print("my method is through")
         if success:
+            print("was successful actually - so should print message in cmd !")
             messages.success(request, 'Record updated successfully!')
-            # return redirect('some_view_name')
+            print("printed it in cmd???")
         else:
+            print("aha! that's why... error after all")
             messages.error(request, "There was a problem with your submission. Please review the form and try again.")
     else:
         reference_form = ReferenceForm(instance=reference)
@@ -218,7 +223,6 @@ def edit_data_record(request, ref_id):
     return render(request, 'edit_data_record.html', {
         'reference_form': reference_form,
         'datacr_form': datacr_form,
-        # 'reference': reference,
         'ref_id': ref_id,
         'reference': reference,
         'form_action': reverse('edit_data_record', kwargs={'ref_id': ref_id})

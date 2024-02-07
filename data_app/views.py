@@ -229,88 +229,71 @@ def edit_data_record(request, ref_id):
     })
 
 
-def view_all_data(request, ref_id=None):
+def view_all_data(request, ref_id=None, cr_id=None):
+    # Redirect to a URL with the first Reference's ID if ref_id is not provided
     if ref_id is None:
-        # If ref_id is not provided - redirecting to a default reference?
-        # trying to redirect to the first reference if available
         first_reference = Reference.objects.order_by('ref_id').first()
         if first_reference:
-            return redirect('view_all_data', ref_id=first_reference.ref_id)
+            first_datacr = first_reference.datacr_set.order_by('cr_id').first()
+            if first_datacr:
+                # Redirect to a URL with both ref_id and cr_id for the first Reference and its first DataCR
+                return redirect('view_all_data', ref_id=first_reference.ref_id, cr_id=first_datacr.cr_id)
+            else:
+                # Redirect to a URL with only ref_id if there are no DataCR objects
+                return redirect('view_all_data', ref_id=first_reference.ref_id)
         else:
+            # Render a page with an error message if there are no Reference objects
             return render(request, 'view_all_data.html', {'error_message': 'No references available.'})
 
-    try:
-        # Get the reference with the specified ref_id
-        reference = Reference.objects.get(ref_id=ref_id)
-    except Reference.DoesNotExist:
-        # Handle the case where the reference does not exist
-        reference = None
+    # Get the current reference
+    reference = get_object_or_404(Reference, pk=ref_id)
 
-    return render(request, 'view_all_data.html', {'reference': reference})
-
-
-def next_ref_record(request, ref_id):
-    try:
-        # Get the next reference with a ref_id greater than the current one
-        next_reference = Reference.objects.filter(ref_id__gt=ref_id).order_by('ref_id').first()
-
-        if next_reference:
-            # Redirect to the view_all_data page for the next reference
-            return redirect('view_all_data', ref_id=next_reference.ref_id)
+    # Determine the first DataCR for the current Reference if cr_id is not provided
+    if not cr_id:
+        first_datacr = reference.datacr_set.first()
+        if first_datacr:
+            cr_id = first_datacr.id
         else:
-            # If no next reference, redirect to the view_all_data page for the current reference
-            return redirect('view_all_data', ref_id=ref_id)
-    except Reference.DoesNotExist:
-        # Handle the case where the reference does not exist
-        return redirect('view_all_data', ref_id=ref_id)
+            cr_id = None
 
+    # Get the current DataCR based on cr_id
+    if cr_id:
+        datacr = get_object_or_404(DataCR, pk=cr_id, reference_id=ref_id)
+    else:
+        datacr = None
 
-def prev_ref_record(request, ref_id):
-    try:
-        # Get the previous reference with a ref_id less than the current one
-        prev_reference = Reference.objects.filter(ref_id__lt=ref_id).order_by('-ref_id').first()
+    # Calculate next and previous Reference IDs
+    next_ref = Reference.objects.filter(ref_id__gt=ref_id).order_by('ref_id').first()
+    prev_ref = Reference.objects.filter(ref_id__lt=ref_id).order_by('-ref_id').first()
 
-        if prev_reference:
-            # Redirect to the view_all_data page for the previous reference
-            return redirect('view_all_data', ref_id=prev_reference.ref_id)
-        else:
-            # If no previous reference, redirect to the view_all_data page for the current reference
-            return redirect('view_all_data', ref_id=ref_id)
-    except Reference.DoesNotExist:
-        # Handle the case where the reference does not exist
-        return redirect('view_all_data', ref_id=ref_id)
+    # Calculate the first DataCR ID for next and previous References
+    if next_ref:
+        next_ref_first_datacr = next_ref.datacr_set.first()
+    else:
+        next_ref_first_datacr = None
 
+    if prev_ref:
+        prev_ref_first_datacr = prev_ref.datacr_set.first()
+    else:
+        prev_ref_first_datacr = None
 
-def next_datacr_record(request, ref_id, cr_id):
-    try:
-        # Get the next DataCR with a cr_id greater than the current one
-        next_datacr = DataCR.objects.filter(cr_id__gt=cr_id, reference__ref_id=ref_id).order_by('cr_id').first()
+    # Calculate next and previous DataCR IDs within the current Reference
+    next_datacr = reference.datacr_set.filter(cr_id__gt=cr_id).order_by('cr_id').first()
+    prev_datacr = reference.datacr_set.filter(cr_id__lt=cr_id).order_by('-cr_id').first()
 
-        if next_datacr:
-            # Redirect to the view_all_data page for the next DataCR
-            return redirect('view_all_data', ref_id=ref_id, cr_id=next_datacr.cr_id)
-        else:
-            # If no next DataCR, redirect to the view_all_data page for the current reference and DataCR
-            return redirect('view_all_data', ref_id=ref_id, cr_id=cr_id)
-    except DataCR.DoesNotExist:
-        # Handle the case where the DataCR does not exist
-        return redirect('view_all_data', ref_id=ref_id, cr_id=cr_id)
+    context = {
+        'reference': reference,
+        'datacr': datacr,
+        'ref_id': ref_id,
+        'next_ref_id': next_ref.ref_id if next_ref else None,
+        'prev_ref_id': prev_ref.ref_id if prev_ref else None,
+        'next_datacr_id': next_datacr.cr_id if next_datacr else None,
+        'prev_datacr_id': prev_datacr.cr_id if prev_datacr else None,
+        'first_cr_of_next_ref': next_ref_first_datacr.cr_id if next_ref_first_datacr else None,
+        'first_cr_of_prev_ref': prev_ref_first_datacr.cr_id if prev_ref_first_datacr else None,
+    }
 
-
-def prev_datacr_record(request, ref_id, cr_id):
-    try:
-        # Get the previous DataCR with a cr_id less than the current one
-        prev_datacr = DataCR.objects.filter(cr_id__lt=cr_id, reference__ref_id=ref_id).order_by('-cr_id').first()
-
-        if prev_datacr:
-            # Redirect to the view_all_data page for the previous DataCR
-            return redirect('view_all_data', ref_id=ref_id, cr_id=prev_datacr.cr_id)
-        else:
-            # If no previous DataCR, redirect to the view_all_data page for the current reference and DataCR
-            return redirect('view_all_data', ref_id=ref_id, cr_id=cr_id)
-    except DataCR.DoesNotExist:
-        # Handle the case where the DataCR does not exist
-        return redirect('view_all_data', ref_id=ref_id, cr_id=cr_id)
+    return render(request, 'view_all_data.html', context)
 
 
 ############## HELPERS ###############

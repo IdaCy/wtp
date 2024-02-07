@@ -53,10 +53,19 @@
             </table>
         </div>
 
-        <!-- navigation links for moving to the next and previous reference records -->
+        <!-- navigation links for moving to the next and previous reference records
         <div class="center-links">
-            <a href="{% url 'prev_ref_record' reference.ref_id %}">Previous</a>
-            <a href="{% url 'next_ref_record' reference.ref_id %}">Next</a>
+            <a href="{ url 'prev_ref_record' reference.ref_id %}">Previous</a>
+            <a href="{ url 'next_ref_record' reference.ref_id %}">Next</a>
+        </div> -->
+
+        <div class="center-links">
+            {% if prev_ref_id and first_cr_of_prev_ref %}
+                <a href="{% url 'view_all_data' prev_ref_id first_cr_of_prev_ref %}">Previous Reference</a>
+            {% endif %}
+            {% if next_ref_id and first_cr_of_next_ref %}
+                <a href="{% url 'view_all_data' next_ref_id first_cr_of_next_ref %}">Next Reference</a>
+            {% endif %}
         </div>
 
 
@@ -77,15 +86,23 @@
                 </table>
             </div>
 
-            <!-- Navigation links for moving to the next and previous data records -->
+            <!-- Navigation links for moving to the next and previous data records
             <div class="center-links">
-                {% with first_datacr=reference.datacr_set.first %}
-                    <a href="{% url 'prev_datacr_record' reference.ref_id first_datacr.cr_id %}">Previous CR Data</a>
-                {% endwith %}
+                { with first_datacr=reference.datacr_set.first %}
+                    <a href="% url 'prev_datacr_record' reference.ref_id first_datacr.cr_id %}">Previous CR Data</a>
+                { endwith %}
 
-                {% with last_datacr=reference.datacr_set.last %}
-                    <a href="{% url 'next_datacr_record' reference.ref_id last_datacr.cr_id %}">Next CR Data</a>
-                {% endwith %}
+                { with last_datacr=reference.datacr_set.last %}
+                    <a href="{ url 'next_datacr_record' reference.ref_id last_datacr.cr_id %}">Next CR Data</a>
+                { endwith %}
+            </div> -->
+            <div class="center-links">
+                {% if ref_id and prev_datacr_id %}
+                    <a href="{% url 'view_all_data' ref_id prev_datacr_id %}">Previous CR Data</a>
+                {% endif %}
+                {% if ref_id and next_datacr_id %}
+                    <a href="{% url 'view_all_data' ref_id next_datacr_id %}">Next CR Data</a>
+                {% endif %}
             </div>
         {% else %}
             <p>No related DataCR records found for the specified reference ID.</p>

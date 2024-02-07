@@ -31,7 +31,7 @@
                 <tr>
                     <td>{{ reference.author }}</td>
                     <td>{{ reference.article_title }}</td>
-                    <td>{{ reference.pub_title.title }}</td>
+                    <td>{{ reference.pub_title }}</td>
                 </tr>
                 <tr>
                 </tr>
@@ -78,10 +78,76 @@
                     <tr>
                         <th>Habitat</th>
                         <th>Wildlife Group</th>
+                        <th>Element</th>
+                        <th>ICRP RAP</th>
                     </tr>
                     <tr>
                         <td>{{ reference.datacr_set.first.habitat.habitat_specific_type }}</td>
                         <td>{{ reference.datacr_set.first.wildlife_group.wildlife_group_name }}</td>
+                        <td>{{ reference.datacr_set.first.radionuclide.radionuclide_name }}</td>
+                        <td>{{ reference.datacr_set.first.icrp_rap.rap_id }}</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>Lifestage</th>
+                        <th>Studytype</th>
+                        <th>Sampling Date</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>{{ reference.datacr_set.first.lifestage.lifestage_name }}</td>
+                        <td>{{ reference.datacr_set.first.study_type.study_type_name }}</td>
+                        <td>{{ reference.datacr_set.first.measurement_date }}</td>
+                        <td>{{ reference.datacr_set.first.notes }}</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>Media Type</th>
+                        <th>Media Wet/Dry</th>
+                        <th>Media Concentration</th>
+                        <th>Media Units</th>
+                        <th>N for Media</th>
+                        <th>SD for Media</th>
+                    </tr>
+                    <tr>
+                        <td>{{ reference.datacr_set.first.media.media_type }}</td>
+                        <td>{{ reference.datacr_set.first.media_wet_dry }}</td>
+                        <td>{{ reference.datacr_set.first.media_conc }}</td>
+                        <td>{{ reference.datacr_set.first.media_conc_units }}</td>
+                        <td>{{ reference.datacr_set.first.media_n }}</td>
+                        <td>{{ reference.datacr_set.first.media_sd }}</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>Tissue Type</th>
+                        <th>Biota Status</th>
+                        <th>Biota Concentration</th>
+                        <th>Biota Units</th>
+                        <th>N for Biota</th>
+                        <th>SD for Biota</th>
+                    </tr>
+                    <tr>
+                        <td>{{ reference.datacr_set.first.tissue.tissue_name }}</td>
+                        <td>{{ reference.datacr_set.first.biota_wet_dry }}</td>
+                        <td>{{ reference.datacr_set.first.biota_conc }}</td>
+                        <td>{{ reference.datacr_set.first.biota_conc_units }}</td>
+                        <td>{{ reference.datacr_set.first.biota_n }}</td>
+                        <td>{{ reference.datacr_set.first.biota_sd }}</td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                        <th>Concentration Ratio</th>
+                        <th>N of CR</th>
+                        <th>SD of CR</th>
+                    </tr>
+                    <tr>
+                        <td>{{ reference.datacr_set.first.cr }}</td>
+                        <td>{{ reference.datacr_set.crn }}</td>
+                        <td>{{ reference.datacr_set.cr_sd }}</td>
                     </tr>
                 </table>
             </div>

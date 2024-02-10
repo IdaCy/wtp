@@ -6,6 +6,10 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/base_form_data.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 {% endblock %}
 
 {% block content %}
@@ -54,6 +58,21 @@
             </div>
         {% endif %}
 
+
+        {% block javascript %}
+            <script>
+                $(document).ready(function () {
+                    $("#id_article_title").autocomplete({
+                        source: "{% url 'article-search' %}",
+                        minLength: 2, // Minimum length before searching
+                        select: function (event, ui) {
+                            // Optional: Do something when a suggestion is selected
+                            $('#id_article_title').val(ui.item.value); // Set the value for the article title input
+                        }
+                    });
+                });
+            </script>
+        {% endblock %}
 
 
         <!-- Reference Section -->
@@ -219,7 +238,7 @@
                         <select id="id_media_conc_units" name="media_conc_units">
                         </select>
                         <!-- in-between calculations result - but saved, too -->
-                        <input type="hidden" id="id_media_standardised" name="media_standardised" value="">
+                        <input type="hidden" id="id_stand_media_conc" name="stand_media_conc" value="">
                     </div>
                 </div>
             </div>
@@ -273,7 +292,7 @@
                         </select>
 
                         <!-- in-between calculations result - but saved, too -->
-                        <input type="hidden" id="id_biota_standardised" name="biota_standardised" value="">
+                        <input type="hidden" id="id_stand_biota_conc" name="stand_biota_conc" value="">
                     </div>
                 </div>
             </div>

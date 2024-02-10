@@ -20,6 +20,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib import messages
 
+from django.http import JsonResponse
+
+
+def article_title_search(request):
+    if 'term' in request.GET:
+        qs = Reference.objects.filter(article_title__icontains=request.GET.get('term'))
+        titles = list(qs.values_list('article_title', flat=True))
+        return JsonResponse(titles, safe=False)
+    return JsonResponse([], safe=False)
+
 
 @login_required
 def data_view(request):

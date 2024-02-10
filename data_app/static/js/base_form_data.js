@@ -153,15 +153,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         var mediaConcentration = parseFloat(mediaConcField.value);
                         var mediaResult = mediaCorrectionFactor * mediaConcentration;
                         // updating invisible field to save this too
-                        console.log("setting media_standardised with ", mediaResult);
-                        document.getElementById('id_media_standardised').value = mediaResult;
+                        console.log("setting stand_media_conc with ", mediaResult);
+                        document.getElementById('id_stand_media_conc').value = mediaResult;
 
                         // Display the result for biota unit
                         var biotaCorrectionFactor = biotaData.correction_factor || 1.0;
                         var biotaConcentration = parseFloat(biotaConcField.value);
                         var biotaResult = biotaCorrectionFactor * biotaConcentration;
-                        console.log("setting biota_standardised with ", biotaResult);
-                        document.getElementById('id_biota_standardised').value = biotaResult;
+                        console.log("setting stand_biota_conc with ", biotaResult);
+                        document.getElementById('id_stand_biota_conc').value = biotaResult;
 
                         // Calculate and display the Concentration Ratio
                         var crField = document.getElementById('id_cr');

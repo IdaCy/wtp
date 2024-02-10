@@ -9,6 +9,7 @@ from report_app import views as report_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('article-search/', data_views.article_title_search, name='article-search'),
     path('get_correction_factor/', data_views.get_correction_factor, name='get_correction_factor'),
     #path('get_correction_factor/<int:unit_symbol>/<str:media_type>/', data_views.get_correction_factor, name='get_correction_factor'),
     path('view_editable_data_records/', data_views.view_editable_data_records, name='view_editable_data_records'),

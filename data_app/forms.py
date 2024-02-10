@@ -6,6 +6,9 @@ from .models import RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup, Tiss
 
 class ReferenceForm(forms.ModelForm):
     ref_id = forms.IntegerField(required=True)
+    article_title = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'article-title-search', 'autocomplete': 'off'}))
 
     """article_title = forms.ModelChoiceField(
         queryset=Reference.objects.all().order_by('article_title'),

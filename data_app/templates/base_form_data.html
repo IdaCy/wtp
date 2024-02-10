@@ -75,6 +75,16 @@
                         }
                     });
                 });
+                $(document).ready(function () {
+                    // Change the background image based on input
+                    $('#id_article_title').on('input', function () {
+                        if ($(this).val().length > 0) {
+                            $(this).css('background-image', 'none');
+                        } else {
+                            $(this).css('background-image', 'url({% static "images/magnifying-glass.png" %})');
+                        }
+                    });
+                });
             </script>
         {% endblock %}
 
@@ -93,7 +103,6 @@
                 {# reference_form.article_title #}
                 <input class="full-width article-title-search" type="text" id="id_article_title" name="article_title"
                        style="background-image: url({% static 'images/magnifying-glass.png' %}); background-repeat: no-repeat; background-position: 10px center;">
-
             </div>
             <div class="pub">
                 <label for="id_publication_title">Publication Title:</label>

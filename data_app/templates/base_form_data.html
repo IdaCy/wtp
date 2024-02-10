@@ -85,6 +85,27 @@
                         }
                     });
                 });
+
+                /* synchronise the species names latin/common */
+
+                $(document).ready(function () {
+                    // Function to update both dropdowns and the hidden input
+                    function updateSpeciesSelection(selectedID) {
+                        $('#species_name_id').val(selectedID); // Update the hidden input
+                        $('#id_name_latin').val(selectedID); // Update the Latin name dropdown
+                        $('#id_name_common').val(selectedID); // Update the common name dropdown
+                    }
+
+                    // When the Latin name dropdown changes...
+                    $('#id_name_latin').change(function () {
+                        updateSpeciesSelection($(this).val());
+                    });
+
+                    // When the common name dropdown changes...
+                    $('#id_name_common').change(function () {
+                        updateSpeciesSelection($(this).val());
+                    });
+                });
             </script>
         {% endblock %}
 
@@ -183,9 +204,17 @@
                     </div>
                 </div>
                 <div class="right-mid">
+                    <!-- the actual value to be saved for a speciesname instance -->
+                    <input type="hidden" name="species_name" id="species_name_id"
+                           value="{{ datacr_form.species_name.value }}">
+
                     <div class="entry">
                         <label for="id_name_common">Species Common:</label>
-                        {{ datacr_form.species_name | add_class:"limited" }}
+                        <select style="width: 200px;" id="id_name_common">
+                            {% for species in species_list %}
+                                <option value="{{ species.species_id }}">{{ species.name_common }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="entry">
                         <label for="id_measurement_date">Sampling Date:</label>
@@ -197,10 +226,15 @@
                     </div>
                 </div>
                 <div class="right-rim">
-                    <!--<div class="entry">
+                    <div class="entry">
                         <label for="id_name_latin">Species Latin:</label>
-                        {{ datacr_form.species_name | add_class:"limited" }}
-                    </div>-->
+                        <select style="width: 200px;" id="id_name_latin">
+                            {% for species in species_list %}
+                                <option value="{{ species.species_id }}">{{ species.name_latin }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                        {# { datacr_form.species_name | add_class:"limited" }#}
                     <div class="entry">
                         <label for="id_radionuclide">Element/Nuclide:</label>
                         {{ datacr_form.radionuclide | add_class:"limited" }}

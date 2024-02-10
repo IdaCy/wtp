@@ -124,6 +124,9 @@ def handle_reference_datacr(reference_form, datacr_form, user):
 
 @login_required
 def add_datacr(request):
+    # Defining 'species_list' here so it's available regardless of if...else outcome
+    species_list = SpeciesName.objects.all()
+
     if request.method == 'POST':
         print("POST Data:", request.POST)
 
@@ -145,7 +148,13 @@ def add_datacr(request):
         reference_form = ReferenceForm()
         datacr_form = DataCRForm()
 
-    return render(request, 'add_datacr.html', {'reference_form': reference_form, 'datacr_form': datacr_form})
+    # Add 'species_list' to the context
+    context = {
+        'reference_form': reference_form,
+        'datacr_form': datacr_form,
+        'species_list': species_list,
+    }
+    return render(request, 'add_datacr.html', context)
 
 
 @login_required

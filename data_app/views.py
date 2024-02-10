@@ -128,6 +128,7 @@ def add_datacr(request):
 
         if success:
             messages.success(request, "Successfully saved. Thank you for your submission!")
+            return redirect('add_datacr')
         else:
             messages.error(request, "There was a problem with your submission. Please try again or contact us.")
     else:

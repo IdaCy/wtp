@@ -24,6 +24,13 @@ class ReferenceForm(forms.ModelForm):
         distinct_article_title = Reference.objects.order_by('article_title').values_list('article_title',
                                                                                          flat=True).distinct()
 
+    def __init__(self, *args, **kwargs):
+        super(ReferenceForm, self).__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            if name not in ['ref_id']:
+                field.required = False
+
 
 class DataCRForm(forms.ModelForm):
     species_name = forms.ModelChoiceField(
@@ -68,6 +75,8 @@ class DataCRForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['habitat'].required = True
+        self.fields['crn'].required = True
         self.fields['habitat'].queryset = Habitat.objects.all()
         self.fields['study_type'].queryset = StudyType.objects.all()
         self.fields['radionuclide'].queryset = Radionuclide.objects.all()
@@ -83,3 +92,7 @@ class DataCRForm(forms.ModelForm):
         self.fields['lifestage'].choices = [(ls.lifestage_id, ls.lifestage_name) for ls in
                                             Lifestage.objects.all().order_by('lifestage_name').distinct(
                                                 'lifestage_name')]
+
+        for name, field in self.fields.items():
+            if name not in ['cr', 'crn', 'habitat']:
+                field.required = False

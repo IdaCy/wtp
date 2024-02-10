@@ -21,8 +21,40 @@
 
     <!--<form method="post" action="{ block form_action_url %}{ endblock form_action_url %}">-->
     <form method="post" action="{% block form_action %}{% endblock form_action %}">
-    <!--<form method="post" action="{#  #}{ form_action }}">-->
+        <!--<form method="post" action="{#  #}{ form_action }}">-->
         {% csrf_token %}
+
+        <!-- Display form errors here -->
+        {% if datacr_form.errors %}
+            <div class="alert alert-danger" role="alert">
+                Please correct the errors below.
+            </div>
+        {% endif %}
+
+        <!-- Display field-specific error messages -->
+        {% if datacr_form.habitat.errors %}
+            <div class="alert alert-warning" role="alert">
+                {{ datacr_form.habitat.errors.as_text }}
+            </div>
+        {% endif %}
+
+        {% if reference_form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in reference_form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if datacr_form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in datacr_form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+
 
         <!-- Reference Section -->
         <section class="reference">
@@ -126,8 +158,8 @@
                         <input type="date" id="id_measurement_date" name="measurement_date">
                     </div>
                     <div class="entry">
-                        <label for="id_dynamic_info">Dynamic Info:</label>
-                        <input type="text" id="id_dynamic_info" name="dynamic_info" readonly>
+                        <label for="id_biohalflife">Biohalflife:</label>
+                        <input type="text" id="id_biohalflife" name="biohalflife" readonly>
                     </div>
                 </div>
                 <div class="right-rim">
@@ -253,12 +285,24 @@
                     <div class="entry">
                         <label for="id_cr">Concentration Ratio:</label>
                         <input type="text" id="id_cr" name="cr">
+
+                        {% if datacr_form.cr.errors %}
+                            <div class="alert alert-warning" role="alert" style="color: red">
+                                {{ datacr_form.cr.errors.as_text }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="left-mid">
                     <div class="entry">
                         <label for="id_crn">N of CR:</label>
                         <input type="text" id="id_crn" name="crn">
+
+                        {% if datacr_form.crn.errors %}
+                            <div class="alert alert-warning" role="alert" style="color: red">
+                                {{ datacr_form.crn.errors.as_text }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="right-mid">

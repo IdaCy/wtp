@@ -97,6 +97,7 @@ def ref_view(request):
 def handle_reference_datacr(reference_form, datacr_form, user):
     if reference_form.is_valid() and datacr_form.is_valid():
         print("CR Value from Form:", datacr_form.cleaned_data.get('cr'))
+        print("CRN Value from Form:", datacr_form.cleaned_data.get('crn'))
         reference = reference_form.save(commit=False)
         reference.user = user
         reference.save()
@@ -106,6 +107,8 @@ def handle_reference_datacr(reference_form, datacr_form, user):
         datacr.save()
         return True, reference_form, datacr_form
     else:
+        print("Reference form errors:", reference_form.errors)
+        print("DataCR form errors:", datacr_form.errors)
         return False, reference_form, datacr_form
 
 

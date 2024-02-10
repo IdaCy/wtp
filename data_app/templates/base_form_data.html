@@ -210,7 +210,7 @@
 
                     <div class="entry">
                         <label for="id_name_common">Species Common:</label>
-                        <select style="width: 200px;" id="id_name_common">
+                        <select class="limited" id="id_name_common">
                             {% for species in species_list %}
                                 <option value="{{ species.species_id }}">{{ species.name_common }}</option>
                             {% endfor %}
@@ -228,7 +228,7 @@
                 <div class="right-rim">
                     <div class="entry">
                         <label for="id_name_latin">Species Latin:</label>
-                        <select style="width: 200px;" id="id_name_latin">
+                        <select class="limited" id="id_name_latin">
                             {% for species in species_list %}
                                 <option value="{{ species.species_id }}">{{ species.name_latin }}</option>
                             {% endfor %}

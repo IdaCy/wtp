@@ -7,9 +7,13 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/base_form_data.css' %}">
 
+    <!-- libraries for the JQuery for making article_title a search bar -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- getting magnifying glass for heuristic -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
 {% block content %}
@@ -87,7 +91,9 @@
             <div class="pub">
                 <label for="id_article_title">Article Title:</label>
                 {# reference_form.article_title #}
-                <input class="full-width" type="text" id="id_article_title" name="article_title">
+                <input class="full-width article-title-search" type="text" id="id_article_title" name="article_title"
+                       style="background-image: url({% static 'images/magnifying-glass.png' %}); background-repeat: no-repeat; background-position: 10px center;">
+
             </div>
             <div class="pub">
                 <label for="id_publication_title">Publication Title:</label>

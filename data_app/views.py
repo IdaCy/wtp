@@ -283,9 +283,11 @@ def edit_data_record(request, ref_id):
 def view_all_data(request, ref_id=None, cr_id=None):
     # Redirect to a URL with the first Reference's ID if ref_id is not provided
     if ref_id is None:
-        first_reference = Reference.objects.order_by('ref_id').first()
+       #first_reference = Reference.objects.order_by('ref_id').first()
+        first_reference = Reference.objects.filter(approval_status='APPROVED').order_by('ref_id').first()
         if first_reference:
-            first_datacr = first_reference.datacr_set.order_by('cr_id').first()
+           #first_datacr = first_reference.datacr_set.order_by('cr_id').first()
+            first_datacr = first_reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
             if first_datacr:
                 # Redirect to a URL with both ref_id and cr_id for the first Reference and its first DataCR
                 return redirect('view_all_data', ref_id=first_reference.ref_id, cr_id=first_datacr.cr_id)
@@ -301,7 +303,8 @@ def view_all_data(request, ref_id=None, cr_id=None):
 
     # Determine the first DataCR for the current Reference if cr_id is not provided
     if not cr_id:
-        first_datacr = reference.datacr_set.first()
+       #first_datacr = reference.datacr_set.first()
+        first_datacr = reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
         if first_datacr:
             cr_id = first_datacr.id
         else:
@@ -314,23 +317,28 @@ def view_all_data(request, ref_id=None, cr_id=None):
         datacr = None
 
     # Calculate next and previous Reference IDs
-    next_ref = Reference.objects.filter(ref_id__gt=ref_id).order_by('ref_id').first()
-    prev_ref = Reference.objects.filter(ref_id__lt=ref_id).order_by('-ref_id').first()
+   #next_ref = Reference.objects.filter(ref_id__gt=ref_id).order_by('ref_id').first()
+    next_ref = Reference.objects.filter(ref_id__gt=ref_id, approval_status='APPROVED').order_by('ref_id').first()
+    #first_datacr = first_reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
+    prev_ref = Reference.objects.filter(ref_id__lt=ref_id, approval_status='APPROVED').order_by('-ref_id').first()
 
     # Calculate the first DataCR ID for next and previous References
     if next_ref:
         next_ref_first_datacr = next_ref.datacr_set.first()
+       #next_ref_first_datacr = next_ref.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
+       #TAKEN FROM: first_datacr = reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
     else:
         next_ref_first_datacr = None
 
     if prev_ref:
         prev_ref_first_datacr = prev_ref.datacr_set.first()
+       #prev_ref_first_datacr = prev_ref.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
     else:
         prev_ref_first_datacr = None
 
     # Calculate next and previous DataCR IDs within the current Reference
-    next_datacr = reference.datacr_set.filter(cr_id__gt=cr_id).order_by('cr_id').first()
-    prev_datacr = reference.datacr_set.filter(cr_id__lt=cr_id).order_by('-cr_id').first()
+    next_datacr = reference.datacr_set.filter(cr_id__gt=cr_id, approval_status='APPROVED').order_by('cr_id').first()
+    prev_datacr = reference.datacr_set.filter(cr_id__lt=cr_id, approval_status='APPROVED').order_by('-cr_id').first()
 
     context = {
         'reference': reference,

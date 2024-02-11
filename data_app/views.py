@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName
+from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName, ReferenceRejectionReason
 from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element, Radionuclide, Tissue
 from .forms import DataCRForm, ReferenceForm
 
@@ -21,6 +21,30 @@ from django.urls import reverse
 from django.contrib import messages
 
 from django.http import JsonResponse
+
+
+def reject_reference(reference_id, reason):
+    try:
+        reference = Reference.objects.get(pk=reference_id)
+        if reference.approval_status == 'REJECTED':
+            ReferenceRejectionReason.objects.create(reference=reference, reason=reason)
+        else:
+            # possibly: raise an exception or handle the logic for when a non-rejected reference is attempted to be associated with a rejection reason
+            print("Reference is not marked as rejected.")
+    except Reference.DoesNotExist:
+        # Handle the case where the reference does not exist
+        print("Reference does not exist.")
+
+
+def get_rejection_reason(reference_id):
+    try:
+        reference = Reference.objects.get(pk=reference_id)
+        if reference.approval_status == 'REJECTED' and hasattr(reference, 'rejection_reason'):
+            return reference.rejection_reason.reason
+        else:
+            return "This reference is not rejected or does not have a rejection reason."
+    except Reference.DoesNotExist:
+        return "Reference does not exist."
 
 
 def article_title_search(request):

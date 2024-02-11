@@ -253,17 +253,17 @@ class Language(models.Model):
 
 class Reference(models.Model):
     ref_id = models.IntegerField(primary_key=True)
-    author = models.CharField(max_length=500)
+    author = models.CharField(max_length=500, null=True)
     article_title = models.CharField(max_length=500, null=True)
     pub_title = models.ForeignKey(PubTitle, on_delete=models.CASCADE, null=True)
-    year = models.CharField(max_length=30, blank=True)
-    volume = models.CharField(max_length=50, blank=True)
-    part = models.CharField(max_length=50, blank=True)
-    pages = models.CharField(max_length=50, blank=True)
+    year = models.CharField(max_length=30, blank=True, null=True)
+    volume = models.CharField(max_length=50, blank=True, null=True)
+    part = models.CharField(max_length=50, blank=True, null=True)
+    pages = models.CharField(max_length=50, blank=True, null=True)
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=True)
     pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE, null=True)
     translation = models.CharField(max_length=5, blank=True)
-    notes = models.CharField(max_length=500, blank=True)
+    notes = models.CharField(max_length=500, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     approval_choices = [
         ('PENDING', 'Pending'),
@@ -271,10 +271,17 @@ class Reference(models.Model):
         ('REJECTED', 'Rejected'),
     ]
     approval_status = models.CharField(max_length=20, choices=approval_choices, default='PENDING', null=True, blank=True)
-    reason_approval_delete = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return self.article_title
+
+
+class ReferenceRejectionReason(models.Model):
+    reference = models.OneToOneField(Reference, on_delete=models.CASCADE, related_name='rejection_reason')
+    reason = models.TextField()
+
+    def __str__(self):
+        return f"Rejection reason for {self.reference.article_title}"
 
 
 class DataCR(models.Model):

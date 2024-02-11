@@ -149,11 +149,12 @@
                         <th>Concentration Ratio</th>
                         <th>N of CR</th>
                         <th>SD of CR</th>
+                        <th>Approved? CHECK TEST</th>
                     </tr>
                     <tr>
                         <td>{{ reference.datacr_set.first.cr }}</td>
                         <td>{{ reference.datacr_set.crn }}</td>
-                        <td>{{ reference.datacr_set.cr_sd }}</td>
+                        <td>{{ reference.datacr_set.approval_status }}</td>
                     </tr>
                 </table>
             </div>

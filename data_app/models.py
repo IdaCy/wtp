@@ -386,4 +386,4 @@ class DataCR(models.Model):
         ('APPROVED', 'Approved'),
         ('REJECTED', 'Rejected'),
     ]
-    approval_data_status = models.CharField(max_length=20, choices=approval_choices, default='PENDING', null=True, blank=True)
+    approval_status = models.CharField(max_length=20, choices=approval_choices, default='PENDING', null=True, blank=True)

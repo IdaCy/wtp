@@ -77,7 +77,7 @@
 
         <!-- DataCR RECORDS OF ABOVE REFERENCE -->
         <h1>Data Record</h1>
-        {% if reference.datacr_set.all %}
+        {% if datacr %}
             <!-- DataCR record table -->
             <div class="data-record">
                 <table>
@@ -88,10 +88,10 @@
                         <th>ICRP RAP</th>
                     </tr>
                     <tr>
-                        <td>{{ reference.datacr_set.first.habitat.habitat_specific_type }}</td>
-                        <td>{{ reference.datacr_set.first.wildlife_group.wildlife_group_name }}</td>
-                        <td>{{ reference.datacr_set.first.radionuclide.radionuclide_name }}</td>
-                        <td>{{ reference.datacr_set.first.icrp_rap.rap_id }}</td>
+                <td>{{ datacr.habitat.habitat_specific_type }}</td>
+                <td>{{ datacr.wildlife_group.wildlife_group_name }}</td>
+                <td>{{ datacr.radionuclide.radionuclide_name }}</td>
+                <td>{{ datacr.icrp_rap.rap_id }}</td>
                     </tr>
                 </table>
                 <table>
@@ -102,10 +102,10 @@
                         <th>Notes</th>
                     </tr>
                     <tr>
-                        <td>{{ reference.datacr_set.first.lifestage.lifestage_name }}</td>
-                        <td>{{ reference.datacr_set.first.study_type.study_type_name }}</td>
-                        <td>{{ reference.datacr_set.first.measurement_date }}</td>
-                        <td>{{ reference.datacr_set.first.notes }}</td>
+                <td>{{ datacr.lifestage.lifestage_name }}</td>
+                <td>{{ datacr.study_type.study_type_name }}</td>
+                <td>{{ datacr.measurement_date }}</td>
+                <td>{{ datacr.notes }}</td>
                     </tr>
                 </table>
                 <table>
@@ -118,12 +118,12 @@
                         <th>SD for Media</th>
                     </tr>
                     <tr>
-                        <td>{{ reference.datacr_set.first.media.media_type }}</td>
-                        <td>{{ reference.datacr_set.first.media_wet_dry }}</td>
-                        <td>{{ reference.datacr_set.first.media_conc }}</td>
-                        <td>{{ reference.datacr_set.first.media_conc_units }}</td>
-                        <td>{{ reference.datacr_set.first.media_n }}</td>
-                        <td>{{ reference.datacr_set.first.media_sd }}</td>
+                <td>{{ datacr.media.media_type }}</td>
+                <td>{{ datacr.media_wet_dry }}</td>
+                <td>{{ datacr.media_conc }}</td>
+                <td>{{ datacr.media_conc_units }}</td>
+                <td>{{ datacr.media_n }}</td>
+                <td>{{ datacr.media_sd }}</td>
                     </tr>
                 </table>
                 <table>
@@ -136,12 +136,12 @@
                         <th>SD for Biota</th>
                     </tr>
                     <tr>
-                        <td>{{ reference.datacr_set.first.tissue.tissue_name }}</td>
-                        <td>{{ reference.datacr_set.first.biota_wet_dry }}</td>
-                        <td>{{ reference.datacr_set.first.biota_conc }}</td>
-                        <td>{{ reference.datacr_set.first.biota_conc_units }}</td>
-                        <td>{{ reference.datacr_set.first.biota_n }}</td>
-                        <td>{{ reference.datacr_set.first.biota_sd }}</td>
+                        <td>{{ datacr.tissue.tissue_name }}</td>
+                        <td>{{ datacr.biota_wet_dry }}</td>
+                        <td>{{ datacr.biota_conc }}</td>
+                        <td>{{ datacr.biota_conc_units }}</td>
+                        <td>{{ datacr.biota_n }}</td>
+                        <td>{{ datacr.biota_sd }}</td>
                     </tr>
                 </table>
                 <table>
@@ -152,9 +152,10 @@
                         <th>Approved? CHECK TEST</th>
                     </tr>
                     <tr>
-                        <td>{{ reference.datacr_set.first.cr }}</td>
-                        <td>{{ reference.datacr_set.crn }}</td>
-                        <td>{{ reference.datacr_set.approval_status }}</td>
+                        <td>{{ datacr.cr }}</td>
+                        <td>{{ datacr.crn }}</td>
+                        <td>{{ datacr.cr_sd }}</td>
+                        <td>{{ datacr.approval_status }}</td>
                     </tr>
                 </table>
             </div>

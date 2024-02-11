@@ -22,6 +22,9 @@ from django.contrib import messages
 
 from django.http import JsonResponse
 
+from django.db.models import Count, Window, F
+from django.db.models.functions import RowNumber
+
 
 def reject_reference(reference_id, reason):
     try:
@@ -276,6 +279,7 @@ def edit_data_record(request, ref_id):
     })
 
 
+@login_required
 def view_all_data(request, ref_id=None, cr_id=None):
     # Redirect to a URL with the first Reference's ID if ref_id is not provided
     if ref_id is None:
@@ -339,6 +343,28 @@ def view_all_data(request, ref_id=None, cr_id=None):
         'first_cr_of_next_ref': next_ref_first_datacr.cr_id if next_ref_first_datacr else None,
         'first_cr_of_prev_ref': prev_ref_first_datacr.cr_id if prev_ref_first_datacr else None,
     }
+
+    # Get all references ordered by ref_id
+    references_with_row_number = Reference.objects.annotate(
+        row_number=Window(
+            expression=RowNumber(),
+            order_by=F('ref_id').asc()
+        )
+    )
+
+    # Find the current reference's row number and total count
+    current_reference_row_number = None
+    total_references = references_with_row_number.count()
+    if reference:
+        current_reference_info = references_with_row_number.filter(ref_id=reference.ref_id).first()
+        if current_reference_info:
+            current_reference_row_number = current_reference_info.row_number
+
+    # Update context with pagination info
+    context.update({
+        'total_references': total_references,
+        'current_reference_position': current_reference_row_number,
+    })
 
     return render(request, 'view_all_data.html', context)
 

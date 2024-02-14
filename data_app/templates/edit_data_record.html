@@ -164,7 +164,8 @@
                             <label for="id_name_common">Species Common:</label>
                             <select class="limited" id="id_name_common">
                                 {% for species in species_list %}
-                                    <option value="{{ species.species_id }}">{{ species.name_common }}</option>
+                                    <option value="{{ species.species_id }}"
+                                            {% if species.species_id == datacr_form.species_name.value %}selected{% endif %}>{{ species.name_common }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -182,7 +183,8 @@
                             <label for="id_name_latin">Species Latin:</label>
                             <select class="limited" id="id_name_latin">
                                 {% for species in species_list %}
-                                    <option value="{{ species.species_id }}">{{ species.name_latin }}</option>
+                                    <option value="{{ species.species_id }}"
+                                            {% if species.species_id == datacr_form.species_name.value %}selected{% endif %}>{{ species.name_latin }}</option>
                                 {% endfor %}
                             </select>
                         </div>

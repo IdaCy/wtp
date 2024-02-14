@@ -239,6 +239,7 @@ def view_editable_data_records(request):
 
 @login_required
 def edit_data_record(request, ref_id):
+    species_list = SpeciesName.objects.all()
     print("Edit data record POST data:", request.POST)
     reference = get_object_or_404(Reference, pk=ref_id)
     print(reference.ref_id)
@@ -271,6 +272,7 @@ def edit_data_record(request, ref_id):
         datacr_form = DataCRForm(instance=datacr)
 
     return render(request, 'edit_data_record.html', {
+        'species_list': species_list,
         'reference_form': reference_form,
         'datacr_form': datacr_form,
         'ref_id': ref_id,

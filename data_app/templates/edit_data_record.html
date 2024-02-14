@@ -20,6 +20,53 @@
 
     <form method="post" action="{% url 'edit_data_record' ref_id=ref_id %}">
         {% csrf_token %}
+
+
+        {% block javascript %}
+            <script>
+                $(document).ready(function () {
+                    $("#id_article_title").autocomplete({
+                        source: "{% url 'article-search' %}",
+                        minLength: 2, // Minimum length before searching
+                        select: function (event, ui) {
+                            // Optional: Do something when a suggestion is selected
+                            $('#id_article_title').val(ui.item.value); // Set the value for the article title input
+                        }
+                    });
+                });
+                $(document).ready(function () {
+                    // Change the background image based on input
+                    $('#id_article_title').on('input', function () {
+                        if ($(this).val().length > 0) {
+                            $(this).css('background-image', 'none');
+                        } else {
+                            $(this).css('background-image', 'url({% static "images/magnifying-glass.png" %})');
+                        }
+                    });
+                });
+
+                $(document).ready(function () {
+                    // Function to update both dropdowns and the hidden input
+                    function updateSpeciesSelection(selectedID) {
+                        $('#species_name_id').val(selectedID); // Update the hidden input
+                        $('#id_name_latin').val(selectedID); // Update the Latin name dropdown
+                        $('#id_name_common').val(selectedID); // Update the common name dropdown
+                    }
+
+                    // When the Latin name dropdown changes...
+                    $('#id_name_latin').change(function () {
+                        updateSpeciesSelection($(this).val());
+                    });
+
+                    // When the common name dropdown changes...
+                    $('#id_name_common').change(function () {
+                        updateSpeciesSelection($(this).val());
+                    });
+                });
+
+            </script>
+        {% endblock %}
+
         {% with page_title="Edit Data Record" heading="Edit Record" button_value="save_changes" button_label="Update" %}
             <section class="reference">
                 <div class="entry">
@@ -109,9 +156,17 @@
                         </div>
                     </div>
                     <div class="right-mid">
+                        <!-- the actual value to be saved for a speciesname instance -->
+                        <input type="hidden" name="species_name" id="species_name_id"
+                               value="{{ datacr_form.species_name.value }}">
+
                         <div class="entry">
                             <label for="id_name_common">Species Common:</label>
-                            {{ datacr_form.species_name | add_class:"limited" }}
+                            <select class="limited" id="id_name_common">
+                                {% for species in species_list %}
+                                    <option value="{{ species.species_id }}">{{ species.name_common }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="entry">
                             <label for="id_measurement_date">Sampling Date:</label>
@@ -123,10 +178,14 @@
                         </div>
                     </div>
                     <div class="right-rim">
-                        <!--<div class="entry">
-                        <label for="id_name_latin">Species Latin:</label>
-                        {{ datacr_form.species_name | add_class:"limited" }}
-                    </div>-->
+                        <div class="entry">
+                            <label for="id_name_latin">Species Latin:</label>
+                            <select class="limited" id="id_name_latin">
+                                {% for species in species_list %}
+                                    <option value="{{ species.species_id }}">{{ species.name_latin }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <div class="entry">
                             <label for="id_radionuclide">Element/Nuclide:</label>
                             {{ datacr_form.radionuclide | add_class:"limited" }}
@@ -236,9 +295,10 @@
                 </div>
             </section>
 
+
             {% block style %}
                 <script src="{% static 'js/base_form_data.js' %}"></script>
-                <script src="{% static 'js/edit_data_record.js' %}"></script>
+                <script src="{% static 'js/add_datacr.js' %}"></script>
             {% endblock style %}
         {% endwith %}
         <button type="submit">Save Changes</button>

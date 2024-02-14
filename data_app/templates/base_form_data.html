@@ -64,6 +64,8 @@
 
 
         {% block javascript %}
+            {# needs to stay here: Django template tags are not processed in static files #}
+            {# These template tags are only interpreted by Django when they're found in .html template files! #}
             <script>
                 $(document).ready(function () {
                     $("#id_article_title").autocomplete({
@@ -85,8 +87,6 @@
                         }
                     });
                 });
-
-
             </script>
         {% endblock %}
 

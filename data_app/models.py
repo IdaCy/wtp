@@ -285,6 +285,31 @@ class ReferenceRejectionReason(models.Model):
 
 
 class DataCR(models.Model):
+
+    unit_choices = [ # both for media and for biota conc units
+        ('µCi/kg', 'µCi/kg'),
+        ('Bq/g', 'Bq/g'),
+        ('Bq/kg', 'Bq/kg'),
+        ('Bq/l', 'Bq/l'),
+        ('Bq/m2', 'Bq/m2'),
+        ('Bq/m3', 'Bq/m3'),
+        ('mBq/g', 'mBq/g'),
+        ('mBq/kg', 'mBq/kg'),
+        ('mBq/l', 'mBq/l'),
+        ('mg/g', 'mg/g'),
+        ('mg/kg', 'mg/kg'),
+        ('mg/l', 'mg/l'),
+        ('pCi/g', 'pCi/g'),
+        ('pCi/kg', 'pCi/kg'),
+        ('pCi/l', 'pCi/l'),
+        ('ppb', 'ppb'),
+        ('ppm', 'ppm'),
+        ('uCi/l', 'uCi/l'),
+        ('ug/g', 'ug/g'),
+        ('ug/kg', 'ug/kg'),
+        ('ug/l', 'ug/l'),
+    ]
+
     cr_id = models.AutoField(primary_key=True)
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True, blank=True)
     habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE, null=True, blank=True)
@@ -304,24 +329,7 @@ class DataCR(models.Model):
     accepted = models.BooleanField(default=False)
     biohalflife = models.CharField(max_length=30, null=True, blank=True)
     biota_conc = models.CharField(max_length=30, null=True, blank=True)
-    biota_conc_unit_choices = [
-        ('µCi/kg', 'µCi/kg'),
-        ('Bq/kg', 'Bq/kg'),
-        ('Bg/kg fresh', 'Bg/kg fresh'),
-        ('Bg/kg FW', 'Bg/kg FW'),
-        ('Bq/l', 'Bq/l'),
-        ('mg/kg fresh', 'mg/kg fresh'),
-        ('mg/kg', 'mg/kg'),
-        ('mg/kg FW', 'mg/kg FW'),
-        ('Bq/m3', 'Bq/m3'),
-        ('mBq/l', 'mBq/l'),
-        ('mg/l', 'mg/l'),
-        ('p/Ci/l', 'p/Ci/l'),
-        ('ppb', 'ppb'),
-        ('ppm', 'ppm'),
-        ('uCi/l', 'uCi/l'),
-    ]
-    biota_conc_units = models.CharField(max_length=20, choices=biota_conc_unit_choices, null=True, blank=True)
+    biota_conc_units = models.CharField(max_length=20, choices=unit_choices, null=True, blank=True)
     biota_n = models.IntegerField(null=True, blank=True)
     biota_sd = models.CharField(max_length=30, null=True)
     biota_wet_dry_choices = [
@@ -336,23 +344,7 @@ class DataCR(models.Model):
     data_extract = models.IntegerField(null=True, blank=True)
     media_conc = models.CharField(max_length=30, null=True, blank=True)
     media_n = models.CharField(max_length=30, null=True, blank=True)
-    media_conc_unit_choices = [
-        ('µCi/kg', 'µCi/kg'),
-        ('Bq/g', 'Bq/g'),
-        ('Bq/kg', 'Bq/kg'),
-        ('Bq/m2', 'Bq/m2'),
-        ('mBq/g', 'mBq/g'),
-        ('mBq/kg', 'mBq/kg'),
-        ('mg/g', 'mg/g'),
-        ('mg/kg', 'mg/kg'),
-        ('pCi/g', 'pCi/g'),
-        ('pCi/kg', 'pCi/kg'),
-        ('ppb', 'ppb'),
-        ('ppm', 'ppm'),
-        ('ug/g', 'ug/g'),
-        ('ug/kg', 'ug/kg'),
-    ]
-    media_conc_units = models.CharField(max_length=20, choices=media_conc_unit_choices, null=True, blank=True)
+    media_conc_units = models.CharField(max_length=20, choices=unit_choices, null=True, blank=True)
     media_sd = models.CharField(max_length=30, null=True, blank=True)
     media_wet_dry_choices = [
         ('Water', 'Water'),

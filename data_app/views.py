@@ -131,11 +131,17 @@ def view_summary_results(request):
                 except statistics.StatisticsError:
                     arith_std_dev = None
 
+                # Geometric Standard Deviation
+                log_deviation_sum = sum((math.log(value) - math.log(geo_mean))**2 for value in cr_values)
+                geo_std_dev = math.exp(math.sqrt(log_deviation_sum / len(cr_values)))
+
                 item['geo_mean_cr'] = geo_mean
                 item['arith_std_dev'] = arith_std_dev
+                item['geo_std_dev'] = geo_std_dev
             else:
                 item['geo_mean_cr'] = None
                 item['arith_std_dev'] = None
+                item['geo_std_dev'] = None
 
         # Calculate geometric mean for each element and update the context list
         '''updated_datacr_list = []

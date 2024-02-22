@@ -20,7 +20,9 @@
         <tr>
             <th>Element</th>
             <th>Arithmetic Mean CR</th>
+            <th>Arith Standard Deviation</th>
             <th>Geometric Mean CR</th>
+            <th>Geo Standard Deviation</th>
             <th>N</th>
             <th>Reference ID</th>
         </tr>
@@ -30,7 +32,9 @@
         <tr>
             <td>{{ item.radionuclide__element__element_symbol }}</td>
             <td>{{ item.arith_mean_cr }}</td>
+            <td>{{ item.arith_std_dev }}</td>
             <td>{{ item.geo_mean_cr }}</td>
+            <td>{{ item.geo_std_dev }}</td>
             <td>{{ item.sum_crn }}</td>
             <td>{{ item.reference_ids }}</td>
         </tr>

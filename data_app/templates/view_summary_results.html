@@ -23,6 +23,8 @@
             <th>Arith Standard Deviation</th>
             <th>Geometric Mean CR</th>
             <th>Geo Standard Deviation</th>
+            <th>Min</th>
+            <th>Max</th>
             <th>N</th>
             <th>Reference ID</th>
         </tr>
@@ -36,6 +38,8 @@
             <td>{{ item.geo_mean_cr }}</td>
             <td>{{ item.geo_std_dev }}</td>
             <td>{{ item.sum_crn }}</td>
+            <td>{{ item.min_cr }}</td>
+            <td>{{ item.max_cr }}</td>
             <td>{{ item.reference_ids }}</td>
         </tr>
         {% empty %}

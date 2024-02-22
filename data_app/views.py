@@ -5,13 +5,11 @@ from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, Wildlife
 from .forms import DataCRForm, ReferenceForm
 
 from django.http import JsonResponse
-from django.db.models import Sum, F
 from math import exp, log
 
 from django.http import JsonResponse
 from django.views import View
 
-from django.db.models import Avg, F
 from django.db.models.functions import Concat
 from django.contrib.postgres.aggregates import StringAgg
 from django.db.models.functions import Cast
@@ -23,7 +21,7 @@ from django.contrib import messages
 
 from django.http import JsonResponse
 
-from django.db.models import Count, Window, F
+from django.db.models import Avg, Sum, Min, Max, Count, Window, F
 import statistics
 import math
 from django.db.models.functions import RowNumber
@@ -86,12 +84,20 @@ def view_summary_results(request):
         ).annotate(
             arith_mean_cr=Avg('cr'),
             sum_crn=Sum('crn'),
+            min_cr=Min('cr'),  # Calculate minimum CR value
+            max_cr=Max('cr'),  # Calculate maximum CR value
             # needing to cast reference__ref_id to a text field before aggregation
             reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
         ).order_by('radionuclide__element__element_symbol')
 
         # Calculate standard deviation for each element symbol
+        formatted_datacr_list = []
         for item in datacr_list:
+            item['arith_mean_cr'] = "{:.2e}".format(item['arith_mean_cr']) if item['arith_mean_cr'] else None
+            item['sum_crn'] = "{:.2e}".format(item['sum_crn']) if item['sum_crn'] else None
+            item['min_cr'] = "{:.2e}".format(item['min_cr']) if item['min_cr'] else None
+            item['max_cr'] = "{:.2e}".format(item['max_cr']) if item['max_cr'] else None
+
             cr_values = list(DataCR.objects.filter(
                 radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
                 habitat__habitat_specific_type=habitat_query
@@ -115,9 +121,9 @@ def view_summary_results(request):
                 log_deviation_sum = sum((math.log(value) - math.log(geo_mean))**2 for value in cr_values)
                 geo_std_dev = math.exp(math.sqrt(log_deviation_sum / len(cr_values)))
 
-                item['geo_mean_cr'] = geo_mean
-                item['arith_std_dev'] = arith_std_dev
-                item['geo_std_dev'] = geo_std_dev
+                item['geo_mean_cr'] = "{:.2e}".format(geo_mean) if geo_mean is not None else None
+                item['arith_std_dev'] = "{:.2e}".format(arith_std_dev) if arith_std_dev is not None else None
+                item['geo_std_dev'] = "{:.2e}".format(geo_std_dev) if geo_std_dev is not None else None
             else:
                 item['geo_mean_cr'] = None
                 item['arith_std_dev'] = None

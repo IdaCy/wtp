@@ -1,24 +1,3 @@
-/* synchronise the species names latin/common */
-
-$(document).ready(function () {
-    // Function to update both dropdowns and the hidden input
-    function updateSpeciesSelection(selectedID) {
-        $('#species_name_id').val(selectedID); // Update the hidden input
-        $('#id_name_latin').val(selectedID); // Update the Latin name dropdown
-        $('#id_name_common').val(selectedID); // Update the common name dropdown
-    }
-
-    // When the Latin name dropdown changes...
-    $('#id_name_latin').change(function () {
-        updateSpeciesSelection($(this).val());
-    });
-
-    // When the common name dropdown changes...
-    $('#id_name_common').change(function () {
-        updateSpeciesSelection($(this).val());
-    });
-});
-
 document.addEventListener('DOMContentLoaded', function () {
     console.log("DOM content loaded");
 

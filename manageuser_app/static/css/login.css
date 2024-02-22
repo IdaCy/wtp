@@ -163,3 +163,34 @@ footer {
     font-size: 16px;
     margin: 0 5px;
 }
+
+/* link to register */
+
+/* Style for login form and messages */
+.login-form {
+    /* Existing styles */
+}
+
+.messages {
+    /* Existing styles */
+}
+
+
+/* register link */
+
+/*.register p {
+    margin-top: 20px;
+    font-size: 16px;
+    text-align: center;
+}*/
+
+.register a {
+    color: #88c99c;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.register a:hover, .register a:focus {
+    color: #5f9850;
+    text-decoration: none;
+}

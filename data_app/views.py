@@ -32,10 +32,10 @@ def reject_reference(reference_id, reason):
         if reference.approval_status == 'REJECTED':
             ReferenceRejectionReason.objects.create(reference=reference, reason=reason)
         else:
-            # possibly: raise an exception or handle the logic for when a non-rejected reference is attempted to be associated with a rejection reason
+            # possibly: raising an exception or handle the logic for when a non-rejected reference is attempted to be associated with a rejection reason
             print("Reference is not marked as rejected.")
     except Reference.DoesNotExist:
-        # Handle the case where the reference does not exist
+        # !!Handling the case where the reference does not exist
         print("Reference does not exist.")
 
 
@@ -82,6 +82,7 @@ def view_summary_results(request):
             'radionuclide__element__element_symbol'
         ).annotate(
             mean_cr=Avg('cr'),
+            sum_mean_cr=Sum('cr'),
             # needing to cast reference__ref_id to a text field before aggregation
             reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
         ).order_by('radionuclide__element__element_symbol')
@@ -175,7 +176,7 @@ def add_datacr(request):
         reference_form = ReferenceForm()
         datacr_form = DataCRForm()
 
-    # Add 'species_list' to the context
+    # needing 'species_list' in the context
     context = {
         'reference_form': reference_form,
         'datacr_form': datacr_form,

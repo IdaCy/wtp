@@ -87,6 +87,27 @@
                         }
                     });
                 });
+
+                /* synchronise the species names latin/common */
+
+                $(document).ready(function () {
+                    // Function to update both dropdowns and the hidden input
+                    function updateSpeciesSelection(selectedID) {
+                        $('#species_name_id').val(selectedID); // Update the hidden input
+                        $('#id_name_latin').val(selectedID); // Update the Latin name dropdown
+                        $('#id_name_common').val(selectedID); // Update the common name dropdown
+                    }
+
+                    // When the Latin name dropdown changes...
+                    $('#id_name_latin').change(function () {
+                        updateSpeciesSelection($(this).val());
+                    });
+
+                    // When the common name dropdown changes...
+                    $('#id_name_common').change(function () {
+                        updateSpeciesSelection($(this).val());
+                    });
+                });
             </script>
         {% endblock %}
 
@@ -215,7 +236,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                        {# { datacr_form.species_name | add_class:"limited" }#}
+                    {# { datacr_form.species_name | add_class:"limited" }#}
                     <div class="entry">
                         <label for="id_radionuclide">Element/Nuclide:</label>
                         {{ datacr_form.radionuclide | add_class:"limited" }}
@@ -310,15 +331,20 @@
                     <div class="entry">
                         <label for="id_biota_conc_units">Biota Units:</label>
                         <select id="id_biota_conc_units" name="biota_conc_units">
-                            <option value="Bq/l">Bq/l</option>
-                            <option value="Bq/m3">Bq/m3</option>
-                            <option value="mBq/l">mBq/l</option>
-                            <option value="mg/l">mg/l</option>
-                            <option value="p/Ci/l">p/Ci/l</option>
+                            <option value="µCi/kg">Bq/l</option>
+                            <option value="Bq/g">Bq/l</option>
+                            <option value="Bq/kg">Bq/l</option>
+                            <option value="Bq/m2">Bq/l</option>
+                            <option value="mBq/g">Bq/l</option>
+                            <option value="mBq/kg">Bq/l</option>
+                            <option value="mg/g">mg/l</option>
+                            <option value="mg/kg">mg/l</option>
+                            <option value="pCi/g">Bq/l</option>
+                            <option value="pCi/kg">Bq/l</option>
                             <option value="ppb">ppb</option>
                             <option value="ppm">ppm</option>
-                            <option value="uCi/l">uCi/l</option>
-                            <option value="ug/l">ug/l</option>
+                            <option value="ug/g">ug/l</option>
+                            <option value="ug/kg">ug/l</option>
                         </select>
 
                         <!-- in-between calculations result - but saved, too -->

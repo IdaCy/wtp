@@ -72,24 +72,6 @@ def download_summaries(request):
     return render(request, 'download_summaries.html')
 
 
-def geometric_mean(values):
-    if not values:
-        return None
-    log_sum = sum(log(value) for value in values if value > 0)
-    return exp(log_sum / len(values))
-
-
-def get_geometric_mean_cr(habitat_query):
-    values = DataCR.objects.filter(
-        habitat__habitat_specific_type=habitat_query
-    ).values_list('cr', flat=True)
-
-    # Filter out non-positive values as log(0) and log of negative numbers is undefined
-    positive_values = [value for value in values if value > 0]
-
-    return geometric_mean(positive_values)
-
-
 @login_required
 def view_summary_results(request):
     habitat_query = request.GET.get('habitat')
@@ -103,8 +85,6 @@ def view_summary_results(request):
             'radionuclide__element__element_symbol'
         ).annotate(
             arith_mean_cr=Avg('cr'),
-            #geo_mean_cr=None,  # Placeholder for geometric mean
-            #arith_sd=Avg('cr_sd'),
             sum_crn=Sum('crn'),
             # needing to cast reference__ref_id to a text field before aggregation
             reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
@@ -142,22 +122,6 @@ def view_summary_results(request):
                 item['geo_mean_cr'] = None
                 item['arith_std_dev'] = None
                 item['geo_std_dev'] = None
-
-        # Calculate geometric mean for each element and update the context list
-        '''updated_datacr_list = []
-        for item in datacr_list:
-            element_symbol = item['radionuclide__element__element_symbol']
-            values = DataCR.objects.filter(
-                habitat__habitat_specific_type=habitat_query,
-                radionuclide__element__element_symbol=element_symbol
-            ).values_list('cr', flat=True)
-
-            positive_values = [value for value in values if value > 0]
-            geo_mean = geometric_mean(positive_values)
-
-            # Update the dictionary with the geometric mean
-            item.update(geo_mean_cr=geo_mean)
-            updated_datacr_list.append(item)'''
 
         context['datacr_list'] = datacr_list
 

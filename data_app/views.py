@@ -94,9 +94,11 @@ def view_summary_results(request):
         formatted_datacr_list = []
         for item in datacr_list:
             item['arith_mean_cr'] = "{:.2e}".format(item['arith_mean_cr']) if item['arith_mean_cr'] else None
-            item['sum_crn'] = "{:.2e}".format(item['sum_crn']) if item['sum_crn'] else None
             item['min_cr'] = "{:.2e}".format(item['min_cr']) if item['min_cr'] else None
             item['max_cr'] = "{:.2e}".format(item['max_cr']) if item['max_cr'] else None
+            #item['min_cr'] = "{:.2e}".format(item['min_cr']) if item['min_cr'] else None
+            #item['max_cr'] = "{:.2e}".format(item['max_cr']) if item['max_cr'] else None
+            #item['sum_crn'] = "{:.2e}".format(item['sum_crn']) if item['sum_crn'] else None
 
             cr_values = list(DataCR.objects.filter(
                 radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
@@ -111,7 +113,7 @@ def view_summary_results(request):
                 log_sum = sum(math.log(value) for value in cr_values)
                 geo_mean = math.exp(log_sum / len(cr_values))
 
-                # Calculate arithmetic standard deviation if needed
+                # Calculate arithmetic standard deviation - if needed
                 try:
                     arith_std_dev = statistics.stdev(cr_values)
                 except statistics.StatisticsError:

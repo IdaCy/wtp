@@ -37,9 +37,9 @@
             <td>{{ item.arith_std_dev }}</td>
             <td>{{ item.geo_mean_cr }}</td>
             <td>{{ item.geo_std_dev }}</td>
-            <td>{{ item.sum_crn }}</td>
             <td>{{ item.min_cr }}</td>
             <td>{{ item.max_cr }}</td>
+            <td>{{ item.sum_crn }}</td>
             <td>{{ item.reference_ids }}</td>
         </tr>
         {% empty %}
@@ -56,4 +56,5 @@ function submitForm() {
     form.submit();
 }
 </script>
+    <link rel="stylesheet" href="/static/css/view_summary_results.css">
 {% endblock %}

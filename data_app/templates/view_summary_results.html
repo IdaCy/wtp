@@ -19,7 +19,9 @@
     <thead>
         <tr>
             <th>Element</th>
-            <th>Mean CR</th>
+            <th>Arithmetic Mean CR</th>
+            <th>Geometric Mean CR</th>
+            <th>N</th>
             <th>Reference ID</th>
         </tr>
     </thead>
@@ -27,7 +29,9 @@
         {% for item in datacr_list %}
         <tr>
             <td>{{ item.radionuclide__element__element_symbol }}</td>
-            <td>{{ item.mean_cr }}</td>
+            <td>{{ item.arith_mean_cr }}</td>
+            <td>{{ item.geo_mean_cr }}</td>
+            <td>{{ item.sum_crn }}</td>
             <td>{{ item.reference_ids }}</td>
         </tr>
         {% empty %}

@@ -106,10 +106,6 @@ def view_summary_results(request):
     # Fetch all elements irrespective of whether other data exists for them
     elements = DataCR.objects.values('radionuclide__element__element_symbol').distinct().order_by('radionuclide__element__element_symbol')
 
-
-
-
-
     if habitat_query:
         datacr_list = DataCR.objects.filter(**filters).values(
             'radionuclide__element__element_symbol'

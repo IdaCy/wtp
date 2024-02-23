@@ -28,18 +28,17 @@
 
         <!-- second dropdown -->
         <select id="wildlife_group" name="selection_id"
-                style="{% if selection_type != 'wildlife' %}display:none;{% endif %}">
+                style="{% if selection_type == 'wildlife' %}display:block;{% else %}display:none;{% endif %}">
             {% for group in wildlife_groups %}
-                <option value="{{ group.id }}" {% if selection_id == group.id and selection_type == 'wildlife' %}
-                        selected {% endif %}>
+                <option value="{{ group.wildlife_group_id }}" {% if selection_id == group.wildlife_group_id|stringformat:"s" %} selected {% endif %}>
                     {{ group.wildlife_group_name }}
                 </option>
             {% endfor %}
         </select>
-        <select id="rap_group" name="selection_id" style="{% if selection_type != 'rap' %}display:none;{% endif %}">
+        <select id="rap_group" name="selection_id"
+                style="{% if selection_type == 'rap' %}display:block;{% else %}display:none;{% endif %}">
             {% for group in raps %}
-                <option value="{{ group.id }}" {% if selection_id == group.id and selection_type == 'rap' %}
-                        selected {% endif %}>
+                <option value="{{ group.rap_id }}" {% if selection_id == group.rap_id|stringformat:"s" %} selected {% endif %}>
                     {{ group.rap_name }}
                 </option>
             {% endfor %}
@@ -85,27 +84,69 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Set correct dropdown visibility and selected value based on page load state
+            function setDropdownStateOnLoad() {
+                var selectionType = '{{ selection_type }}';
+                var selectionId = '{{ selection_id }}';
 
-            function submitForm() {
-                var selectionType = document.querySelector('input[name="selection_type"]:checked').value;
-                // Dynamically set the name attribute based on the selected type
+                var wildlifeGroupSelect = document.getElementById('wildlife_group');
+                var rapGroupSelect = document.getElementById('rap_group');
+
                 if (selectionType === 'wildlife') {
-                    document.getElementById('wildlife_group').setAttribute('name', 'selection_id');
-                    document.getElementById('rap_group').removeAttribute('name');
+                    wildlifeGroupSelect.style.display = 'block';
+                    rapGroupSelect.style.display = 'none';
+                    wildlifeGroupSelect.value = selectionId; // Preset selected value if any
                 } else if (selectionType === 'rap') {
-                    document.getElementById('rap_group').setAttribute('name', 'selection_id');
-                    document.getElementById('wildlife_group').removeAttribute('name');
+                    wildlifeGroupSelect.style.display = 'none';
+                    rapGroupSelect.style.display = 'block';
+                    rapGroupSelect.value = selectionId; // Preset selected value if any
                 }
+            }
+
+            setDropdownStateOnLoad();
+
+
+            // Function to dynamically set the name attribute and submit the form
+            function handleSubmit() {
+                console.log("handleSubmit() function called");
+                // Determine which selection type is active
+                var selectionType = document.querySelector('input[name="selection_type"]:checked').value;
+                console.log("Selection type:", selectionType);
+
+                // Get both dropdown elements
+                var wildlifeGroupSelect = document.getElementById('wildlife_group');
+                var rapGroupSelect = document.getElementById('rap_group');
+
+                // Initially remove the name attribute from both dropdowns
+                console.log("Removing name attribute from both dropdowns");
+                wildlifeGroupSelect.removeAttribute('name');
+                rapGroupSelect.removeAttribute('name');
+
+                // Based on the selection type, set the name attribute to 'selection_id' for the corresponding dropdown
+                if (selectionType === 'wildlife') {
+                    console.log("Selection type is wildlife, setting name attribute for wildlife_group dropdown");
+                    wildlifeGroupSelect.setAttribute('name', 'selection_id');
+                } else if (selectionType === 'rap') {
+                    console.log("Selection type is rap, setting name attribute for rap_group dropdown");
+                    rapGroupSelect.setAttribute('name', 'selection_id');
+                }
+
+                // Submit the form
+                console.log("Submitting the form");
                 document.getElementById('habitat_form').submit();
             }
 
-            // Attach the submitForm function to all relevant form controls
-            document.getElementById('habitat').addEventListener('change', submitForm);
+            // Attach the handleSubmit function as the event handler for changes in the form controls
+            document.getElementById('habitat').addEventListener('change', handleSubmit);
+            console.log("Event listener attached for habitat dropdown change");
             document.querySelectorAll('input[name="selection_type"]').forEach(input => {
-                input.addEventListener('change', submitForm);
+                input.addEventListener('change', handleSubmit);
+                console.log("Event listener attached for selection type change");
             });
-            document.getElementById('wildlife_group').addEventListener('change', submitForm);
-            document.getElementById('rap_group').addEventListener('change', submitForm);
+            document.getElementById('wildlife_group').addEventListener('change', handleSubmit);
+            console.log("Event listener attached for wildlife_group dropdown change");
+            document.getElementById('rap_group').addEventListener('change', handleSubmit);
+            console.log("Event listener attached for rap_group dropdown change");
         });
     </script>
     <link rel="stylesheet" href="/static/css/view_summary_results.css">

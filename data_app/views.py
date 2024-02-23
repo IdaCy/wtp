@@ -99,9 +99,9 @@ def view_summary_results(request):
         filters['habitat__habitat_specific_type'] = habitat_query
     if selection_type and selection_id.isdigit():
         if selection_type == 'wildlife':
-            filters['wildlife_group__id'] = int(selection_id)
+            filters['wildlife_group__wildlife_group_id'] = int(selection_id)
         elif selection_type == 'rap':
-            filters['rap__id'] = int(selection_id)
+            filters['rap__rap_id'] = int(selection_id)
 
     if filters:
         context['datacr_list'] = DataCR.objects.filter(**filters).annotate(
@@ -115,9 +115,9 @@ def view_summary_results(request):
     # Check if selection_id is not empty and is a digit (thus convertible to int)
     if selection_type and selection_id.isdigit():
         if selection_type == 'wildlife':
-            filters['wildlife_group__id'] = int(selection_id)
+            filters['wildlife_group__wildlife_group_id'] = int(selection_id)
         elif selection_type == 'rap':
-            filters['rap__id'] = int(selection_id)
+            filters['rap__rap_id'] = int(selection_id)
 
     if habitat_query:
         datacr_list = DataCR.objects.filter(**filters).values(

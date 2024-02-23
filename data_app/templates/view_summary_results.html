@@ -4,41 +4,47 @@
     <h1>Summary of Records</h1>
 
     <!-- Habitat selection form -->
-    <form id="habitat_form">
+    <form id="habitat_form" method="GET">
         <label for="habitat">Select Habitat:</label>
-        <select id="habitat" name="habitat" onchange="submitForm()">
+        <select id="habitat" name="habitat">
             <option value="">Please select</option>
             {% for habitat_name in habitats %}
-            <option value="{{ habitat_name }}" {% if request.GET.habitat == habitat_name %}selected{% endif %}>
-                {{ habitat_name }}
-            </option>
+                <option value="{{ habitat_name }}" {% if request.GET.habitat == habitat_name %}selected{% endif %}>
+                    {{ habitat_name }}
+                </option>
             {% endfor %}
         </select>
 
         <br>
 
+        <!-- radio buttons -->
         <input type="radio" id="wildlife" name="selection_type" value="wildlife"
                {% if selection_type == "wildlife" %}checked{% endif %}>
         <label for="wildlife">Wildlife Group</label>
-        <select id="wildlife_group" name="selection_id"
-                style="{% if selection_type != 'wildlife' %}display:none;{% endif %}">
-            {% for group in wildlife_groups %}
-                <option value="{{ group.id }}"
-                        {% if selection_id == group.id %}selected{% endif %}>{{ group.wildlife_group_name }}</option>
-            {% endfor %}
-        </select>
 
         <input type="radio" id="rap" name="selection_type" value="rap"
                {% if selection_type == "rap" %}checked{% endif %}>
         <label for="rap">ICRP RAP</label>
+
+        <!-- second dropdown -->
+        <select id="wildlife_group" name="selection_id"
+                style="{% if selection_type != 'wildlife' %}display:none;{% endif %}">
+            {% for group in wildlife_groups %}
+                <option value="{{ group.id }}" {% if selection_id == group.id and selection_type == 'wildlife' %}
+                        selected {% endif %}>
+                    {{ group.wildlife_group_name }}
+                </option>
+            {% endfor %}
+        </select>
         <select id="rap_group" name="selection_id" style="{% if selection_type != 'rap' %}display:none;{% endif %}">
-            {% for rap in raps %}
-                <option value="{{ rap.id }}"
-                        {% if selection_id == rap.id %}selected{% endif %}>{{ rap.rap_name }}</option>
+            {% for group in raps %}
+                <option value="{{ group.id }}" {% if selection_id == group.id and selection_type == 'rap' %}
+                        selected {% endif %}>
+                    {{ group.rap_name }}
+                </option>
             {% endfor %}
         </select>
 
-        <button type="submit">Filter</button>
     </form>
 
     <!-- Data table -->
@@ -78,21 +84,29 @@
     </table>
 
     <script>
-        function submitForm() {
-            var habitat = document.getElementById('habitat').value;
-            var form = document.getElementById('habitat_form');
-            form.action = '/view_summary_results/?habitat=' + habitat;
-            form.submit();
-        }
+        document.addEventListener("DOMContentLoaded", function () {
 
-        document.getElementById('wildlife').onchange = function () {
-            document.getElementById('wildlife_group').style.display = 'block';
-            document.getElementById('rap_group').style.display = 'none';
-        };
-        document.getElementById('rap').onchange = function () {
-            document.getElementById('wildlife_group').style.display = 'none';
-            document.getElementById('rap_group').style.display = 'block';
-        };
+            function submitForm() {
+                var selectionType = document.querySelector('input[name="selection_type"]:checked').value;
+                // Dynamically set the name attribute based on the selected type
+                if (selectionType === 'wildlife') {
+                    document.getElementById('wildlife_group').setAttribute('name', 'selection_id');
+                    document.getElementById('rap_group').removeAttribute('name');
+                } else if (selectionType === 'rap') {
+                    document.getElementById('rap_group').setAttribute('name', 'selection_id');
+                    document.getElementById('wildlife_group').removeAttribute('name');
+                }
+                document.getElementById('habitat_form').submit();
+            }
+
+            // Attach the submitForm function to all relevant form controls
+            document.getElementById('habitat').addEventListener('change', submitForm);
+            document.querySelectorAll('input[name="selection_type"]').forEach(input => {
+                input.addEventListener('change', submitForm);
+            });
+            document.getElementById('wildlife_group').addEventListener('change', submitForm);
+            document.getElementById('rap_group').addEventListener('change', submitForm);
+        });
     </script>
     <link rel="stylesheet" href="/static/css/view_summary_results.css">
 {% endblock %}

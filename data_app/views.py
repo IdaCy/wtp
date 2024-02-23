@@ -72,11 +72,12 @@ def download_summaries(request):
 
 @login_required
 def view_summary_results(request):
-    habitat_query = request.GET.get('habitat')
-    selection_type = request.GET.get('selection_type')
-    selection_id = request.GET.get('selection_id')
+    habitat_query = request.GET.get('habitat', '')
+    selection_type = request.GET.get('selection_type', '')
+    selection_id = request.GET.get('selection_id', '')
 
-    # Use distinct and order_by to ensure unique and sorted values
+    # Using distinct and order_by to ensure unique and sorted values
+    habitats = Habitat.objects.order_by('habitat_specific_type').values_list('habitat_specific_type', flat=True).distinct()
     wildlife_groups = WildlifeGroup.objects.order_by('wildlife_group_name').distinct('wildlife_group_name')
     raps = RAP.objects.order_by('rap_name').distinct('rap_name')
 
@@ -93,8 +94,23 @@ def view_summary_results(request):
         'habitats': habitats,
     }
 
-    # Filter based on habitat and additional selection (Wildlife Group or RAP)
-    filters = {'habitat__habitat_specific_type': habitat_query}
+    filters = {}
+    if habitat_query:
+        filters['habitat__habitat_specific_type'] = habitat_query
+    if selection_type and selection_id.isdigit():
+        if selection_type == 'wildlife':
+            filters['wildlife_group__id'] = int(selection_id)
+        elif selection_type == 'rap':
+            filters['rap__id'] = int(selection_id)
+
+    if filters:
+        context['datacr_list'] = DataCR.objects.filter(**filters).annotate(
+            arith_mean_cr=Avg('cr'),
+            sum_crn=Sum('crn'),
+            min_cr=Min('cr'),
+            max_cr=Max('cr'),
+            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
+        ).order_by('radionuclide__element__element_symbol')
 
     # Check if selection_id is not empty and is a digit (thus convertible to int)
     if selection_type and selection_id.isdigit():

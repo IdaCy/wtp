@@ -101,7 +101,7 @@ def view_summary_results(request):
         if selection_type == 'wildlife':
             filters['wildlife_group__wildlife_group_id'] = int(selection_id)
         elif selection_type == 'rap':
-            filters['rap__rap_id'] = int(selection_id)
+            filters['icrp_rap__rap_id'] = int(selection_id)
 
     if filters:
         context['datacr_list'] = DataCR.objects.filter(**filters).annotate(
@@ -117,7 +117,7 @@ def view_summary_results(request):
         if selection_type == 'wildlife':
             filters['wildlife_group__wildlife_group_id'] = int(selection_id)
         elif selection_type == 'rap':
-            filters['rap__rap_id'] = int(selection_id)
+            filters['icrp_rap__rap_id'] = int(selection_id)
 
     if habitat_query:
         datacr_list = DataCR.objects.filter(**filters).values(

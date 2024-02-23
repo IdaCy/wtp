@@ -106,27 +106,60 @@ def view_summary_results(request):
     # Fetch all elements irrespective of whether other data exists for them
     elements = DataCR.objects.values('radionuclide__element__element_symbol').distinct().order_by('radionuclide__element__element_symbol')
 
-    datacr_list = []
-    for element in elements:
-        element_symbol = element['radionuclide__element__element_symbol']
-        aggregated_data = DataCR.objects.filter(
-            radionuclide__element__element_symbol=element_symbol, **filters
-        ).aggregate(
+
+
+
+
+    if habitat_query:
+        datacr_list = DataCR.objects.filter(**filters).values(
+            'radionuclide__element__element_symbol'
+        ).values(
+            'radionuclide__element__element_symbol'
+        ).annotate(
             arith_mean_cr=Avg('cr'),
             sum_crn=Sum('crn'),
             min_cr=Min('cr'),
             max_cr=Max('cr'),
-            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
-        )
+            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True) # needing to cast reference__ref_id to a text field before aggregation
+        ).order_by('radionuclide__element__element_symbol')
 
-        # Making sure the element symbol is included in the aggregated data for display
-        aggregated_data['element_symbol'] = element_symbol
+        # Calculate standard deviation for each element symbol
+        #formatted_datacr_list = []
+        for item in datacr_list:
+            item['arith_mean_cr'] = "{:.2e}".format(item['arith_mean_cr']) if item['arith_mean_cr'] else None
+            item['min_cr'] = "{:.2e}".format(item['min_cr']) if item['min_cr'] else None
+            item['max_cr'] = "{:.2e}".format(item['max_cr']) if item['max_cr'] else None
 
-        # Ensuring even if no data is found, the element still gets displayed
-        datacr_list.append(aggregated_data)
+            cr_values = list(DataCR.objects.filter(
+                radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
+                habitat__habitat_specific_type=habitat_query
+            ).values_list('cr', flat=True))
 
+            # Filter out None and non-positive values for geometric mean
+            cr_values = [value for value in cr_values if value and value > 0]
 
+            if cr_values:
+                # Calculate geometric mean
+                log_sum = sum(math.log(value) for value in cr_values)
+                geo_mean = math.exp(log_sum / len(cr_values))
 
+                # Calculate arithmetic standard deviation - if needed
+                try:
+                    arith_std_dev = statistics.stdev(cr_values)
+                except statistics.StatisticsError:
+                    arith_std_dev = None
+
+                # Geometric Standard Deviation
+                log_deviation_sum = sum((math.log(value) - math.log(geo_mean))**2 for value in cr_values)
+                geo_std_dev = math.exp(math.sqrt(log_deviation_sum / len(cr_values)))
+
+                item['geo_mean_cr'] = "{:.2e}".format(geo_mean) if geo_mean is not None else None
+                item['arith_std_dev'] = "{:.2e}".format(arith_std_dev) if arith_std_dev is not None else None
+                item['geo_std_dev'] = "{:.2e}".format(geo_std_dev) if geo_std_dev is not None else None
+            else:
+                item['geo_mean_cr'] = None
+                item['arith_std_dev'] = None
+                item['geo_std_dev'] = None
 
         context['datacr_list'] = datacr_list
 

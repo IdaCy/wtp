@@ -103,14 +103,6 @@ def view_summary_results(request):
         elif selection_type == 'rap':
             filters['icrp_rap__rap_id'] = int(selection_id)
 
-    if filters:
-        context['datacr_list'] = DataCR.objects.filter(**filters).annotate(
-            arith_mean_cr=Avg('cr'),
-            sum_crn=Sum('crn'),
-            min_cr=Min('cr'),
-            max_cr=Max('cr'),
-            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
-        ).order_by('radionuclide__element__element_symbol')
 
     # Check if selection_id is not empty and is a digit (thus convertible to int)
     if selection_type and selection_id.isdigit():

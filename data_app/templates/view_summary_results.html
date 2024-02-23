@@ -8,12 +8,11 @@
         <label for="habitat">Select Habitat:</label>
         <select id="habitat" name="habitat" onchange="submitForm()">
             <option value="">Please select</option>
-            <option value="Estuarine (water)" {% if request.GET.habitat == "Estuarine (water)" %}selected{% endif %}>Estuarine (water)
-            <option value="Freshwater" {% if request.GET.habitat == "Freshwater" %}selected{% endif %}>Freshwater
+            {% for habitat_name in habitats %}
+            <option value="{{ habitat_name }}" {% if request.GET.habitat == habitat_name %}selected{% endif %}>
+                {{ habitat_name }}
             </option>
-            <option value="Marine" {% if request.GET.habitat == "Marine" %}selected{% endif %}>Marine</option>
-            <option value="Terrestrial" {% if request.GET.habitat == "Terrestrial" %}selected{% endif %}>Terrestrial
-            </option>
+            {% endfor %}
         </select>
 
         <br>

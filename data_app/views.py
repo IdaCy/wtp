@@ -80,6 +80,9 @@ def view_summary_results(request):
     wildlife_groups = WildlifeGroup.objects.order_by('wildlife_group_name').distinct('wildlife_group_name')
     raps = RAP.objects.order_by('rap_name').distinct('rap_name')
 
+    # Query for unique habitat names
+    habitats = Habitat.objects.order_by('habitat_specific_type').values_list('habitat_specific_type', flat=True).distinct()
+
     context = {
         'datacr_list': [],
         'wildlife_groups': wildlife_groups,
@@ -87,6 +90,7 @@ def view_summary_results(request):
         'habitat_query': habitat_query,
         'selection_type': selection_type,
         'selection_id': selection_id,
+        'habitats': habitats,
     }
 
     # Filter based on habitat and additional selection (Wildlife Group or RAP)
@@ -99,7 +103,7 @@ def view_summary_results(request):
         elif selection_type == 'rap':
             filters['rap__id'] = int(selection_id)
 
-    if habitat_query in ['Freshwater', 'Marine', 'Terrestrial']:
+    if habitat_query:
         datacr_list = DataCR.objects.filter(**filters).values(
             'radionuclide__element__element_symbol'
         ).values(

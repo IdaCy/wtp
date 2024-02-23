@@ -103,7 +103,6 @@ def view_summary_results(request):
         elif selection_type == 'rap':
             filters['icrp_rap__rap_id'] = int(selection_id)
 
-
     # Check if selection_id is not empty and is a digit (thus convertible to int)
     if selection_type and selection_id.isdigit():
         if selection_type == 'wildlife':
@@ -119,21 +118,17 @@ def view_summary_results(request):
         ).annotate(
             arith_mean_cr=Avg('cr'),
             sum_crn=Sum('crn'),
-            min_cr=Min('cr'),  # Calculate minimum CR value
-            max_cr=Max('cr'),  # Calculate maximum CR value
-            # needing to cast reference__ref_id to a text field before aggregation
-            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
+            min_cr=Min('cr'),
+            max_cr=Max('cr'),
+            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True) # needing to cast reference__ref_id to a text field before aggregation
         ).order_by('radionuclide__element__element_symbol')
 
         # Calculate standard deviation for each element symbol
-        formatted_datacr_list = []
+        #formatted_datacr_list = []
         for item in datacr_list:
             item['arith_mean_cr'] = "{:.2e}".format(item['arith_mean_cr']) if item['arith_mean_cr'] else None
             item['min_cr'] = "{:.2e}".format(item['min_cr']) if item['min_cr'] else None
             item['max_cr'] = "{:.2e}".format(item['max_cr']) if item['max_cr'] else None
-            #item['min_cr'] = "{:.2e}".format(item['min_cr']) if item['min_cr'] else None
-            #item['max_cr'] = "{:.2e}".format(item['max_cr']) if item['max_cr'] else None
-            #item['sum_crn'] = "{:.2e}".format(item['sum_crn']) if item['sum_crn'] else None
 
             cr_values = list(DataCR.objects.filter(
                 radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],

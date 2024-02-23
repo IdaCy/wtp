@@ -82,7 +82,7 @@ def view_summary_results(request):
     raps = RAP.objects.order_by('rap_name').distinct('rap_name')
 
     # Query for unique habitat names
-    habitats = Habitat.objects.order_by('habitat_specific_type').values_list('habitat_specific_type', flat=True).distinct()
+    #habitats = Habitat.objects.order_by('habitat_specific_type').values_list('habitat_specific_type', flat=True).distinct()
 
     context = {
         'datacr_list': [],
@@ -94,72 +94,39 @@ def view_summary_results(request):
         'habitats': habitats,
     }
 
-    filters = {}
-    if habitat_query:
-        filters['habitat__habitat_specific_type'] = habitat_query
+    # Construct filters for the query based on user selection
+    filters = {'habitat__habitat_specific_type': habitat_query} if habitat_query else {}
     if selection_type and selection_id.isdigit():
+        selection_id = int(selection_id)
         if selection_type == 'wildlife':
-            filters['wildlife_group__wildlife_group_id'] = int(selection_id)
+            filters['wildlife_group__wildlife_group_id'] = selection_id
         elif selection_type == 'rap':
-            filters['icrp_rap__rap_id'] = int(selection_id)
+            filters['icrp_rap__rap_id'] = selection_id
 
-    # Check if selection_id is not empty and is a digit (thus convertible to int)
-    if selection_type and selection_id.isdigit():
-        if selection_type == 'wildlife':
-            filters['wildlife_group__wildlife_group_id'] = int(selection_id)
-        elif selection_type == 'rap':
-            filters['icrp_rap__rap_id'] = int(selection_id)
+    # Fetch all elements irrespective of whether other data exists for them
+    elements = DataCR.objects.values('radionuclide__element__element_symbol').distinct().order_by('radionuclide__element__element_symbol')
 
-    if habitat_query:
-        datacr_list = DataCR.objects.filter(**filters).values(
-            'radionuclide__element__element_symbol'
-        ).values(
-            'radionuclide__element__element_symbol'
-        ).annotate(
+    datacr_list = []
+    for element in elements:
+        element_symbol = element['radionuclide__element__element_symbol']
+        aggregated_data = DataCR.objects.filter(
+            radionuclide__element__element_symbol=element_symbol, **filters
+        ).aggregate(
             arith_mean_cr=Avg('cr'),
             sum_crn=Sum('crn'),
             min_cr=Min('cr'),
             max_cr=Max('cr'),
-            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True) # needing to cast reference__ref_id to a text field before aggregation
-        ).order_by('radionuclide__element__element_symbol')
+            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
+        )
 
-        # Calculate standard deviation for each element symbol
-        #formatted_datacr_list = []
-        for item in datacr_list:
-            item['arith_mean_cr'] = "{:.2e}".format(item['arith_mean_cr']) if item['arith_mean_cr'] else None
-            item['min_cr'] = "{:.2e}".format(item['min_cr']) if item['min_cr'] else None
-            item['max_cr'] = "{:.2e}".format(item['max_cr']) if item['max_cr'] else None
+        # Making sure the element symbol is included in the aggregated data for display
+        aggregated_data['element_symbol'] = element_symbol
 
-            cr_values = list(DataCR.objects.filter(
-                radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
-                habitat__habitat_specific_type=habitat_query
-            ).values_list('cr', flat=True))
+        # Ensuring even if no data is found, the element still gets displayed
+        datacr_list.append(aggregated_data)
 
-            # Filter out None and non-positive values for geometric mean
-            cr_values = [value for value in cr_values if value and value > 0]
 
-            if cr_values:
-                # Calculate geometric mean
-                log_sum = sum(math.log(value) for value in cr_values)
-                geo_mean = math.exp(log_sum / len(cr_values))
 
-                # Calculate arithmetic standard deviation - if needed
-                try:
-                    arith_std_dev = statistics.stdev(cr_values)
-                except statistics.StatisticsError:
-                    arith_std_dev = None
-
-                # Geometric Standard Deviation
-                log_deviation_sum = sum((math.log(value) - math.log(geo_mean))**2 for value in cr_values)
-                geo_std_dev = math.exp(math.sqrt(log_deviation_sum / len(cr_values)))
-
-                item['geo_mean_cr'] = "{:.2e}".format(geo_mean) if geo_mean is not None else None
-                item['arith_std_dev'] = "{:.2e}".format(arith_std_dev) if arith_std_dev is not None else None
-                item['geo_std_dev'] = "{:.2e}".format(geo_std_dev) if geo_std_dev is not None else None
-            else:
-                item['geo_mean_cr'] = None
-                item['arith_std_dev'] = None
-                item['geo_std_dev'] = None
 
         context['datacr_list'] = datacr_list
 

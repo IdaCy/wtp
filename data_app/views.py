@@ -73,12 +73,35 @@ def download_summaries(request):
 @login_required
 def view_summary_results(request):
     habitat_query = request.GET.get('habitat')
+    selection_type = request.GET.get('selection_type')
+    selection_id = request.GET.get('selection_id')
 
-    context = {'datacr_list': []}
+    # Use distinct and order_by to ensure unique and sorted values
+    wildlife_groups = WildlifeGroup.objects.order_by('wildlife_group_name').distinct('wildlife_group_name')
+    raps = RAP.objects.order_by('rap_name').distinct('rap_name')
+
+    context = {
+        'datacr_list': [],
+        'wildlife_groups': wildlife_groups,
+        'raps': raps,
+        'habitat_query': habitat_query,
+        'selection_type': selection_type,
+        'selection_id': selection_id,
+    }
+
+    # Filter based on habitat and additional selection (Wildlife Group or RAP)
+    filters = {'habitat__habitat_specific_type': habitat_query}
+
+    # Check if selection_id is not empty and is a digit (thus convertible to int)
+    if selection_type and selection_id.isdigit():
+        if selection_type == 'wildlife':
+            filters['wildlife_group__id'] = int(selection_id)
+        elif selection_type == 'rap':
+            filters['rap__id'] = int(selection_id)
 
     if habitat_query in ['Freshwater', 'Marine', 'Terrestrial']:
-        datacr_list = DataCR.objects.filter(
-            habitat__habitat_specific_type=habitat_query
+        datacr_list = DataCR.objects.filter(**filters).values(
+            'radionuclide__element__element_symbol'
         ).values(
             'radionuclide__element__element_symbol'
         ).annotate(

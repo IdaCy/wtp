@@ -190,7 +190,7 @@ def view_summary_results(request):
                     dose=F('crn') * F('cr')
                 ).aggregate(total_dose=Sum('dose'))['total_dose']
 
-                item['D'] = "{:.2e}".format(crn_cr_product) if crn_cr_product is not None else None
+                #item['D'] = "{:.2e}".format(crn_cr_product) if crn_cr_product is not None else None
 
                 # Assuming: for E, it's an error calculation based on variance or standard deviation
                 # Testing: placeholder calculation
@@ -202,7 +202,10 @@ def view_summary_results(request):
                     crn_cr_square=F('crn') * F('cr') * F('cr')
                 ).aggregate(total_crn_cr_square=Sum('crn_cr_square'))['total_crn_cr_square']
 
-                item['E'] = "{:.2e}".format(crn_cr_square_sum) if crn_cr_square_sum is not None else None
+                # Assign the calculated values directly without formatting
+                item['D'] = crn_cr_product
+                item['E'] = crn_cr_square_sum
+                #item['E'] = "{:.2e}".format(crn_cr_square_sum) if crn_cr_square_sum is not None else None
 
             #cr_values = DataCR.objects.filter(**filters).values_list('cr', flat=True)
             #cr_values = [value for value in cr_values if value is not None]
@@ -236,9 +239,10 @@ def view_summary_results(request):
                     element_data['K'] = len(element_cr_values)
 
                     # Formatting for display
-                    #element_data['M'] = "{:.2e}".format(element_data['M']) if element_data['M'] is not None else None
-                    #element_data['S'] = "{:.2e}".format(element_data['S']) if element_data['S'] is not None else None
-                    #element_data['V'] = "{:.2e}".format(element_data['V']) if element_data['V'] is not None else None
+                    element_data['M'] = "{:.8f}".format(element_data['M']) if element_data['M'] is not None else None
+                    element_data['S'] = "{:.8f}".format(element_data['S']) if element_data['S'] is not None else None
+                    element_data['V'] = "{:.8f}".format(element_data['V']) if element_data['V'] is not None else None
+                    ###element_data['K'] = "{:.2e}".format(element_data['K']) if element_data['V'] is not None else None
 
                 # Append the element data to the list
                 datacr_list3.append(element_data)

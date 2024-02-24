@@ -95,13 +95,17 @@ def view_summary_results(request):
     }
 
     # Construct filters for the query based on user selection
+    #filters = {}
     filters = {'habitat__habitat_specific_type': habitat_query} if habitat_query else {}
     if selection_type and selection_id.isdigit():
+        filter_key = 'wildlife_group__wildlife_group_id' if selection_type == 'wildlife' else 'icrp_rap__rap_id'
+        filters[filter_key] = int(selection_id)
+    """if selection_type and selection_id.isdigit():
         selection_id = int(selection_id)
         if selection_type == 'wildlife':
             filters['wildlife_group__wildlife_group_id'] = selection_id
         elif selection_type == 'rap':
-            filters['icrp_rap__rap_id'] = selection_id
+            filters['icrp_rap__rap_id'] = selection_id"""
 
     # Fetch all elements irrespective of whether other data exists for them
     elements = DataCR.objects.values('radionuclide__element__element_symbol').distinct().order_by('radionuclide__element__element_symbol')
@@ -116,8 +120,26 @@ def view_summary_results(request):
             sum_crn=Sum('crn'),
             min_cr=Min('cr'),
             max_cr=Max('cr'),
+            geo_mean_cr=Sum('crn'),
+            arith_std_dev=Sum('crn'),
+            geo_std_dev=Sum('crn'),
             reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True) # needing to cast reference__ref_id to a text field before aggregation
         ).order_by('radionuclide__element__element_symbol')
+
+        extrafilters = {}
+        if selection_type and selection_id.isdigit():
+            filter_key = 'wildlife_group__id' if selection_type == 'wildlife' else 'icrp_rap__rap_id'
+            extrafilters[filter_key] = int(selection_id)
+
+        """for item in datacr_list:
+
+            cr_values = list(DataCR.objects.filter(**filters).values(
+                radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
+                habitat__habitat_specific_type=habitat_query
+            ).values_list('cr', flat=True))
+
+            if cr_values:
+                item['cr'] = cr_values[0]"""
 
         # Calculate standard deviation for each element symbol
         #formatted_datacr_list = []

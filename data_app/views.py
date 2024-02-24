@@ -117,7 +117,7 @@ def view_summary_results(request):
             reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True) # needing to cast reference__ref_id to a text field before aggregation
         ).order_by('radionuclide__element__element_symbol')
 
-        # Calculate standard deviation for each element symbol
+        # Calculate standard deviation etc for each element symbol
         for item in datacr_list:
             item['arith_mean_cr'] = "{:.2e}".format(item['arith_mean_cr']) if item['arith_mean_cr'] else None
             item['min_cr'] = "{:.2e}".format(item['min_cr']) if item['min_cr'] else None
@@ -161,9 +161,9 @@ def view_summary_results(request):
             ).values(
                 'radionuclide__element__element_symbol'
             ).annotate(
-                CR=Avg('cr'),
+                CR=Sum('cr'),
                 CRN=Sum('crn'),
-                CRSD=StdDev('cr'),
+                CRSD=Avg('cr_sd'),
                 D=Sum('cr'),
                 E=Sum('cr'),
             ).order_by('radionuclide__element__element_symbol')
@@ -178,6 +178,70 @@ def view_summary_results(request):
                 V=Sum('cr'),
                 K=Sum('cr')
             ).order_by('radionuclide__element__element_symbol')
+
+            for item in datacr_list2:
+                # Assuming D = CRN * CR
+                # Assuming: need to calculate D for each record - iterating over individual records with CR & CRN values
+                # Testing: using aggregate functions as placeholders
+                crn_cr_product = DataCR.objects.filter(
+                    radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
+                    habitat__habitat_specific_type=habitat_query
+                ).annotate(
+                    dose=F('crn') * F('cr')
+                ).aggregate(total_dose=Sum('dose'))['total_dose']
+
+                item['D'] = "{:.2e}".format(crn_cr_product) if crn_cr_product is not None else None
+
+                # Assuming: for E, it's an error calculation based on variance or standard deviation
+                # Testing: placeholder calculation
+                # Assuming: E could be a sum of (CRN * CR^2) - this is an assumption tho!!
+                crn_cr_square_sum = DataCR.objects.filter(
+                    radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
+                    habitat__habitat_specific_type=habitat_query
+                ).annotate(
+                    crn_cr_square=F('crn') * F('cr') * F('cr')
+                ).aggregate(total_crn_cr_square=Sum('crn_cr_square'))['total_crn_cr_square']
+
+                item['E'] = "{:.2e}".format(crn_cr_square_sum) if crn_cr_square_sum is not None else None
+
+            #cr_values = DataCR.objects.filter(**filters).values_list('cr', flat=True)
+            #cr_values = [value for value in cr_values if value is not None]
+
+            datacr_list3 = []
+            elements = DataCR.objects.filter(**filters).values_list('radionuclide__element__element_symbol',
+                                                                    flat=True).distinct()
+            for element in elements:
+                element_cr_values = DataCR.objects.filter(
+                    radionuclide__element__element_symbol=element,
+                    **filters
+                ).values_list('cr', flat=True)
+
+                # Filter out None and non-positive values for geometric mean
+                element_cr_values = [value for value in element_cr_values if value and value > 0]
+
+                # Initialize the dictionary to store calculations for the element
+                element_data = {
+                    'radionuclide__element__element_symbol': element,
+                    'M': None,
+                    'S': None,
+                    'V': None,
+                    'K': None
+                }
+
+                if element_cr_values:
+                    # Calculate mean, sum, variance, and count for the element
+                    element_data['M'] = statistics.mean(element_cr_values) if element_cr_values else None
+                    element_data['S'] = sum(element_cr_values) if element_cr_values else None
+                    element_data['V'] = statistics.variance(element_cr_values) if len(element_cr_values) > 1 else None
+                    element_data['K'] = len(element_cr_values)
+
+                    # Formatting for display
+                    #element_data['M'] = "{:.2e}".format(element_data['M']) if element_data['M'] is not None else None
+                    #element_data['S'] = "{:.2e}".format(element_data['S']) if element_data['S'] is not None else None
+                    #element_data['V'] = "{:.2e}".format(element_data['V']) if element_data['V'] is not None else None
+
+                # Append the element data to the list
+                datacr_list3.append(element_data)
 
             context['datacr_list2'] = datacr_list2
             context['datacr_list3'] = datacr_list3

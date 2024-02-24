@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName, ReferenceRejectionReason
 from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element, Radionuclide, Tissue
+from .models import MaterialStatus, ParCRCalc, MaterialCRCalc
 from .forms import DataCRForm, ReferenceForm
 
 from django.http import JsonResponse
@@ -25,6 +26,130 @@ from django.db.models import Avg, Sum, Min, Max, Count, Window, F, StdDev
 import statistics
 import math
 from django.db.models.functions import RowNumber
+
+
+@login_required
+def tables_panel(request):
+    term = request.GET.get('term', '')
+    context = {
+        'selected_term': term,
+    }
+
+    # Depending on the term, fetch the appropriate data from the database
+    if term == 'Elements':
+        context['data'] = Element.objects.all()
+    elif term == 'Habitats':
+        context['data'] = Habitat.objects.all()
+    elif term == 'WildlifeGroups':
+        context['data'] = WildlifeGroup.objects.all()
+    elif term == 'RAPs':
+        context['data'] = RAP.objects.all()
+    elif term == 'Lifestages':
+        context['data'] = Lifestage.objects.all()
+    elif term == 'Media':
+        context['data'] = Media.objects.all()
+    elif term == 'PublicationTypes':
+        context['data'] = PubType.objects.all()
+    elif term == 'PublicationTitles':
+        context['data'] = PubTitle.objects.all()
+    elif term == 'SpeciesNames':
+        context['data'] = SpeciesName.objects.all()
+    elif term == 'StudyTypes':
+        context['data'] = StudyType.objects.all()
+    elif term == 'Tissues':
+        context['data'] = Tissue.objects.all()
+    elif term == 'MaterialStatus':
+        context['data'] = MaterialStatus.objects.all()
+    elif term == 'ActivityConcentrationUnits':
+        context['data'] = ActivityConcUnit.objects.all()
+    elif term == 'ParameterCRCalculations':
+        context['data'] = ParCRCalc.objects.all()
+    elif term == 'MaterialCRCalculations':
+        context['data'] = MaterialCRCalc.objects.all()
+    elif term == 'Radionuclide':
+        context['data'] = Radionuclide.objects.all()
+    elif term == 'Languages':
+        context['data'] = Language.objects.all()
+
+    return render(request, 'tables_panel.html', context)
+
+
+@login_required
+def get_table_data(request):
+    term = request.GET.get('term')
+    data = {'headers': [], 'rows': []}
+
+    # Implement logic to set headers and rows based on the term
+    if term == 'Elements':
+        data['headers'] = ['Element ID', 'Element Symbol']
+        elements = Element.objects.filter(approved=True).values_list('element_id', 'element_symbol')
+        data['rows'] = list(elements)
+    elif term == 'Habitats':
+        data['headers'] = ['Habitat ID', 'Habitat Specific Type', 'Habitat Main Type', 'User ID']
+        habitats = Habitat.objects.filter(approved=True).values_list('habitat_id', 'habitat_specific_type', 'habitat_main_type_id', 'user')
+        data['rows'] = list(habitats)
+    elif term == 'WildlifeGroups':
+        data['headers'] = ['Wildlife Group ID', 'Wildlife Group Name', 'Habitat', 'Data Extract', 'User ID', 'de_tophab_topwild', 'de_tophab_indwild', 'de_indhab_topwild', 'de_indhab_indwild']
+        wildlife_groups = WildlifeGroup.objects.filter(approved=True).values_list('wildlife_group_id', 'wildlife_group_name', 'habitat', 'data_extract', 'user', 'de_tophab_topwild', 'de_tophab_indwild', 'de_indhab_topwild', 'de_indhab_indwild')
+        data['rows'] = list(wildlife_groups)
+    elif term == 'RAPs':
+        data['headers'] = ['RAP ID', 'RAP Name', 'Habitat', 'Wildlife Group', 'Summary']
+        raps = RAP.objects.filter(approved=True).values_list('rap_id', 'rap_name', 'habitat', 'wildlife_group', 'summary')
+        data['rows'] = list(raps)
+    elif term == 'Lifestages':
+        data['headers'] = ['Lifestage ID', 'Lifestage Name']
+        lifestages = Lifestage.objects.filter(approved=True).values_list('lifestage_id', 'lifestage_name')
+        data['rows'] = list(lifestages)
+    elif term == 'Media':
+        data['headers'] = ['Media ID', 'Media Type', 'User', 'Habitat']
+        media = Media.objects.filter(approved=True).values_list('media_id', 'media_type', 'user', 'habitat')
+        data['rows'] = list(media)
+    elif term == 'PublicationTypes':
+        data['headers'] = ['Publication Type ID', 'Publication Type Name', 'User ID']
+        pub_types = PubType.objects.filter(approved=True).values_list('pub_type_id', 'pub_type_name', 'user')
+        data['rows'] = list(pub_types)
+    elif term == 'PublicationTitles':
+        data['headers'] = ['Publication Title ID', 'Publication Title Name', 'Publication Type', 'User ID']
+        pub_titles = PubTitle.objects.filter(approved=True).values_list('pub_title_id', 'pub_title_name', 'pub_type', 'user')
+        data['rows'] = list(pub_titles)
+    elif term == 'SpeciesNames':
+        data['headers'] = ['Species ID', 'Latin Name', 'Common Name', 'User ID']
+        species_names = SpeciesName.objects.filter(approved=True).values_list('species_id', 'name_latin', 'name_common', 'user')
+        data['rows'] = list(species_names)
+    elif term == 'StudyTypes':
+        data['headers'] = ['Study Type ID', 'Study Type Name']
+        study_types = StudyType.objects.all().values_list('study_type_id', 'study_type_name')
+        data['rows'] = list(study_types)
+    elif term == 'Tissues':
+        data['headers'] = ['Tissue ID', 'Tissue Name', 'Correction Factor Tissue', 'User ID']
+        tissues = Tissue.objects.filter(approved=True).values_list('tissue_id', 'tissue_name', 'correction_factor_tissue', 'user')
+        data['rows'] = list(tissues)
+    elif term == 'MaterialStatus':
+        data['headers'] = ['Material Status ID', 'Material Status Name', 'Correction Ratio', 'Media']
+        material_status = MaterialStatus.objects.all().values_list('material_status_id', 'material_status_name', 'correction_ratio', 'media')
+        data['rows'] = list(material_status)
+    elif term == 'ActivityConcentrationUnits':
+        data['headers'] = ['Activity Conc. Unit ID', 'Symbol', 'Correction Factor', 'Media']
+        activity_units = ActivityConcUnit.objects.filter(approved=True).values_list('act_conc_unit_id', 'act_conc_unit_symbol', 'correction_factor_act_conc', 'media')
+        data['rows'] = list(activity_units)
+    elif term == 'ParameterCRCalculations':
+        data['headers'] = ['CR ID', 'Wildlife Group', 'Tissue', 'Dry to Wet Ratio', 'Ash to Wet Ratio', 'Is Fresh/Marine/Terrestrial']
+        par_calcs = ParCRCalc.objects.all().values_list('cr_id', 'wildlife_group_id', 'tissue_id', 'dry_to_wet_ratio', 'ash_to_wet_ratio', 'is_fre_mar_ter')
+        data['rows'] = list(par_calcs)
+    elif term == 'MaterialCRCalculations':
+        data['headers'] = ['CR ID', 'Element', 'Organism', 'Liver to Body Ratio', 'Bone to Body Ratio', 'Muscle to Body Ratio', 'Is Fresh/Marine/Terrestrial']
+        material_calcs = MaterialCRCalc.objects.all().values_list('cr_id', 'element_id', 'organism', 'liver_to_body_ratio', 'bone_to_body_ratio', 'muscle_to_body_ratio', 'is_fre_mar_ter')
+        data['rows'] = list(material_calcs)
+    elif term == 'Radionuclides':
+        data['headers'] = ['Radionuclide ID', 'Radionuclide Name', 'Element', 'User ID']
+        radionuclides = Radionuclide.objects.filter(approved=True).values_list('radionuclide_id', 'radionuclide_name', 'element_id', 'user')
+        data['rows'] = list(radionuclides)
+    elif term == 'Languages':
+        data['headers'] = ['Language ID', 'Language', 'User ID']
+        languages = Language.objects.filter(approved=True).values_list('language_id', 'language', 'user')
+        data['rows'] = list(languages)
+
+    return JsonResponse(data)
 
 
 def reject_reference(reference_id, reason):

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Select a Term to View Details</h1>
+
+    <!-- Dropdown for selecting terms -->
+    <select id="termSelector">
+        <option value="">Select a Term</option>
+        <option value="Elements">Elements</option>
+        <option value="Habitats">Habitats</option>
+        <option value="WildlifeGroups">Wildlife Groups</option>
+        <option value="RAPs">RAPs</option>
+        <option value="Lifestages">Lifestages</option>
+        <option value="Media">Media</option>
+        <option value="PublicationTypes">Publication Types</option>
+        <option value="PublicationTitles">Publication Titles</option>
+        <option value="SpeciesNames">Species Names</option>
+        <option value="StudyTypes">Study Types</option>
+        <option value="Tissues">Tissues</option>
+        <option value="MaterialStatus">Material Status</option>
+        <option value="ActivityConcentrationUnits">Activity Concentration Units</option>
+        <option value="ParameterCRCalculations">Parameter CR Calculations</option>
+        <option value="MaterialCRCalculations">Material CR Calculations</option>
+        <option value="Radionuclidess">Radionuclides</option>
+        <option value="Languages">Languages</option>
+    </select>
+
+    <!-- Placeholder for dynamic table -->
+    <div id="tableContainer">
+        <table id="dynamicTable" style="display: none;">
+            <thead>
+            <tr id="tableHeaders">
+                <!-- Table headers will be inserted here -->
+            </tr>
+            </thead>
+            <tbody id="tableBody">
+            <!-- Table rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // JavaScript for handling term selection and table update
+        document.getElementById('termSelector').addEventListener('change', function () {
+            var selectedTerm = this.value;
+            if (selectedTerm) {
+                fetch(`/get-table-data/?term=${selectedTerm}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateTable(data);
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            } else {
+                document.getElementById('dynamicTable').style.display = 'none';
+            }
+        });
+
+        function updateTable(data) {
+            var table = document.getElementById('dynamicTable');
+            var headers = document.getElementById('tableHeaders');
+            var body = document.getElementById('tableBody');
+
+            // Clear existing headers and rows
+            headers.innerHTML = '';
+            body.innerHTML = '';
+
+            // Assuming 'data' contains 'headers' and 'rows' keys
+            data.headers.forEach(header => {
+                var th = document.createElement('th');
+                th.textContent = header;
+                headers.appendChild(th);
+            });
+
+            data.rows.forEach(row => {
+                var tr = document.createElement('tr');
+                row.forEach(cell => {
+                    var td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                body.appendChild(tr);
+            });
+
+            // Show the table
+            table.style.display = '';
+        }
+    </script>
+
+    <style>
+        /* CSS for spacing between columns */
+        #dynamicTable {
+            border-collapse: separate;
+            border-spacing: 10px; /* Adjust spacing as needed */
+        }
+
+        /*#dynamicTable th,
+        #dynamicTable td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }*/
+    </style>
+
+{% endblock %}

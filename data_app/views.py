@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName, ReferenceRejectionReason
 from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element, Radionuclide, Tissue
 from .models import MaterialStatus, ParCRCalc, MaterialCRCalc
 from .forms import DataCRForm, ReferenceForm
+
+from django import template
 
 from django.http import JsonResponse
 from math import exp, log
@@ -573,6 +576,15 @@ def edit_data_record(request, ref_id):
     })
 
 
+register = template.Library()
+
+
+@register.simple_tag
+def to(value, end):
+    """Generates a range of numbers for iteration in templates."""
+    return range(value, end + 1)
+
+
 @login_required
 def view_all_data(request, ref_id=None, cr_id=None):
     # Redirect to a URL with the first Reference's ID if ref_id is not provided
@@ -592,6 +604,21 @@ def view_all_data(request, ref_id=None, cr_id=None):
             # Render a page with an error message if there are no Reference objects
             return render(request, 'view_all_data.html', {'error_message': 'No references available.'})
 
+    # Assuming `reference_list` contains all the references you want to include
+    reference_list = Reference.objects.filter(approval_status='APPROVED').order_by('ref_id')
+    paginator = Paginator(reference_list, 1)  # Show 1 reference per page for navigation
+
+    # Find out the current page number
+    current_page_number = paginator.page_range[ref_id - 1]  # Assuming ref_id corresponds directly to page numbers
+
+    # Decide how many page numbers to show on each side of the current page
+    num_pages_to_show = 2
+    start_index = max(1, current_page_number - num_pages_to_show)
+    end_index = min(paginator.num_pages, current_page_number + num_pages_to_show)
+
+    # Generate the range of page numbers to display
+    page_range = range(start_index, end_index + 1)
+
     # Get the current reference
     reference = get_object_or_404(Reference, pk=ref_id)
 
@@ -600,7 +627,7 @@ def view_all_data(request, ref_id=None, cr_id=None):
        #first_datacr = reference.datacr_set.first()
         first_datacr = reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
         if first_datacr:
-            cr_id = first_datacr.id
+            cr_id = first_datacr.cr_id
         else:
             cr_id = None
 
@@ -644,6 +671,9 @@ def view_all_data(request, ref_id=None, cr_id=None):
         'prev_datacr_id': prev_datacr.cr_id if prev_datacr else None,
         'first_cr_of_next_ref': next_ref_first_datacr.cr_id if next_ref_first_datacr else None,
         'first_cr_of_prev_ref': prev_ref_first_datacr.cr_id if prev_ref_first_datacr else None,
+        'page_range': page_range,
+        'current_page_number': current_page_number,
+        'paginator': paginator,
     }
 
     # Get all references ordered by ref_id

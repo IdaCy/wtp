@@ -43,14 +43,12 @@
                     <th>Part</th>
                     <th>Reference Language</th>
                     <th>Translation Available</th>
-                    <th>Approved? CHECK TEST</th>
                 </tr>
                 <tr>
                     <td>{{ reference.pages }}</td>
                     <td>{{ reference.part }}</td>
                     <td>{{ reference.language.language }}</td>
                     <td>{{ reference.translation }}</td>
-                    <td>{{ reference.approval_status }}</td>
                 </tr>
             </table>
         </div>
@@ -62,16 +60,16 @@
         </div> -->
 
         <div class="center-links">
-            {% if prev_ref_id and first_cr_of_prev_ref %}
-                <a href="{% url 'view_all_data' prev_ref_id first_cr_of_prev_ref %}">Previous Reference</a>
-            {% endif %}
-            {% if next_ref_id and first_cr_of_next_ref %}
-                <a href="{% url 'view_all_data' next_ref_id first_cr_of_next_ref %}">Next Reference</a>
-            {% endif %}
-
-            {% if total_references and current_reference_position %}
-                <p>Reference {{ current_reference_position }} of {{ total_references }}</p>
-            {% endif %}
+            <div class="pagination">
+                <a href="{% url 'view_all_data' 1 %}" {% if current_page_number == 1 %}class="disabled"{% endif %}>&laquo;
+                    First</a>
+                {% for num in page_range %}
+                    <a href="{% url 'view_all_data' num %}"
+                       {% if num == current_page_number %}class="active"{% endif %}>{{ num }}</a>
+                {% endfor %}
+                <a href="{% url 'view_all_data' paginator.num_pages %}"
+                   {% if current_page_number == paginator.num_pages %}class="disabled"{% endif %}>Last &raquo;</a>
+            </div>
         </div>
 
 
@@ -88,10 +86,10 @@
                         <th>ICRP RAP</th>
                     </tr>
                     <tr>
-                <td>{{ datacr.habitat.habitat_specific_type }}</td>
-                <td>{{ datacr.wildlife_group.wildlife_group_name }}</td>
-                <td>{{ datacr.radionuclide.radionuclide_name }}</td>
-                <td>{{ datacr.icrp_rap.rap_id }}</td>
+                        <td>{{ datacr.habitat.habitat_specific_type }}</td>
+                        <td>{{ datacr.wildlife_group.wildlife_group_name }}</td>
+                        <td>{{ datacr.radionuclide.radionuclide_name }}</td>
+                        <td>{{ datacr.icrp_rap.rap_id }}</td>
                     </tr>
                 </table>
                 <table>
@@ -102,10 +100,10 @@
                         <th>Notes</th>
                     </tr>
                     <tr>
-                <td>{{ datacr.lifestage.lifestage_name }}</td>
-                <td>{{ datacr.study_type.study_type_name }}</td>
-                <td>{{ datacr.measurement_date }}</td>
-                <td>{{ datacr.notes }}</td>
+                        <td>{{ datacr.lifestage.lifestage_name }}</td>
+                        <td>{{ datacr.study_type.study_type_name }}</td>
+                        <td>{{ datacr.measurement_date }}</td>
+                        <td>{{ datacr.notes }}</td>
                     </tr>
                 </table>
                 <table>
@@ -118,12 +116,12 @@
                         <th>SD for Media</th>
                     </tr>
                     <tr>
-                <td>{{ datacr.media.media_type }}</td>
-                <td>{{ datacr.media_wet_dry }}</td>
-                <td>{{ datacr.media_conc }}</td>
-                <td>{{ datacr.media_conc_units }}</td>
-                <td>{{ datacr.media_n }}</td>
-                <td>{{ datacr.media_sd }}</td>
+                        <td>{{ datacr.media.media_type }}</td>
+                        <td>{{ datacr.media_wet_dry }}</td>
+                        <td>{{ datacr.media_conc }}</td>
+                        <td>{{ datacr.media_conc_units }}</td>
+                        <td>{{ datacr.media_n }}</td>
+                        <td>{{ datacr.media_sd }}</td>
                     </tr>
                 </table>
                 <table>
@@ -149,13 +147,11 @@
                         <th>Concentration Ratio</th>
                         <th>N of CR</th>
                         <th>SD of CR</th>
-                        <th>Approved? CHECK TEST</th>
                     </tr>
                     <tr>
                         <td>{{ datacr.cr }}</td>
                         <td>{{ datacr.crn }}</td>
                         <td>{{ datacr.cr_sd }}</td>
-                        <td>{{ datacr.approval_status }}</td>
                     </tr>
                 </table>
             </div>

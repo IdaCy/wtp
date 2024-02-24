@@ -579,12 +579,6 @@ def edit_data_record(request, ref_id):
 register = template.Library()
 
 
-@register.simple_tag
-def to(value, end):
-    """Generates a range of numbers for iteration in templates."""
-    return range(value, end + 1)
-
-
 @login_required
 def view_all_data(request, ref_id=None, cr_id=None):
     # Redirect to a URL with the first Reference's ID if ref_id is not provided
@@ -604,7 +598,7 @@ def view_all_data(request, ref_id=None, cr_id=None):
             # Render a page with an error message if there are no Reference objects
             return render(request, 'view_all_data.html', {'error_message': 'No references available.'})
 
-    # Assuming `reference_list` contains all the references you want to include
+    # `reference_list` contains all the references to include
     reference_list = Reference.objects.filter(approval_status='APPROVED').order_by('ref_id')
     paginator = Paginator(reference_list, 1)  # Show 1 reference per page for navigation
 

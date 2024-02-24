@@ -30,7 +30,8 @@
         <select id="wildlife_group" name="selection_id"
                 style="{% if selection_type == 'wildlife' %}display:block;{% else %}display:none;{% endif %}">
             {% for group in wildlife_groups %}
-                <option value="{{ group.wildlife_group_id }}" {% if selection_id == group.wildlife_group_id|stringformat:"s" %} selected {% endif %}>
+                <option value="{{ group.wildlife_group_id }}"
+                        {% if selection_id == group.wildlife_group_id|stringformat:"s" %} selected {% endif %}>
                     {{ group.wildlife_group_name }}
                 </option>
             {% endfor %}
@@ -38,11 +39,17 @@
         <select id="rap_group" name="selection_id"
                 style="{% if selection_type == 'rap' %}display:block;{% else %}display:none;{% endif %}">
             {% for group in raps %}
-                <option value="{{ group.rap_id }}" {% if selection_id == group.rap_id|stringformat:"s" %} selected {% endif %}>
+                <option value="{{ group.rap_id }}" {% if selection_id == group.rap_id|stringformat:"s" %}
+                        selected {% endif %}>
                     {{ group.rap_name }}
                 </option>
             {% endfor %}
         </select>
+
+        <br>
+        <input type="checkbox" id="table23" name="table23_show" value="table23"
+               {% if show_all %}checked{% endif %}>
+        <label for="table23">Show All</label>
 
     </form>
 
@@ -52,9 +59,9 @@
         <tr>
             <th>Element</th>
             <th>Arithmetic Mean CR</th>
-            <th>Arith Standard Deviation</th>
+            <th>Arithmetic Standard Deviation</th>
             <th>Geometric Mean CR</th>
-            <th>Geo Standard Deviation</th>
+            <th>Geometric Standard Deviation</th>
             <th>Min</th>
             <th>Max</th>
             <th>N</th>
@@ -82,12 +89,79 @@
         </tbody>
     </table>
 
+    {% if show_all %}
+        <table>
+            <thead>
+            <tr>
+                <th>Element</th>
+                <th>CR</th>
+                <th>CRN</th>
+                <th>CRSD</th>
+                <th>D</th>
+                <th>E</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in datacr_list2 %}
+                <tr>
+                    <td>{{ item.radionuclide__element__element_symbol }}</td>
+                    <td>{{ item.CR }}</td>
+                    <td>{{ item.CRN }}</td>
+                    <td>{{ item.CRSD }}</td>
+                    <td>{{ item.D }}</td>
+                    <td>{{ item.E }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No data found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Element</th>
+                <th>M</th>
+                <th>S</th>
+                <th>V</th>
+                <th>K</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in datacr_list3 %}
+                <tr>
+                    <td>{{ item.radionuclide__element__element_symbol }}</td>
+                    <td>{{ item.M }}</td>
+                    <td>{{ item.S }}</td>
+                    <td>{{ item.V }}</td>
+                    <td>{{ item.K }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No data found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Set correct dropdown visibility and selected value based on page load state
-            function setDropdownStateOnLoad() {
-                var selectionType = '{{ selection_type }}';
-                var selectionId = '{{ selection_id }}';
+            /*function setDropdownStateOnLoad() {
+                var selectionType = '
+
+
+
+            {{ selection_type }}';
+                var selectionId = '
+
+
+
+            {{ selection_id }}';
 
                 var wildlifeGroupSelect = document.getElementById('wildlife_group');
                 var rapGroupSelect = document.getElementById('rap_group');
@@ -103,7 +177,7 @@
                 }
             }
 
-            setDropdownStateOnLoad();
+            setDropdownStateOnLoad();*/
 
 
             // Function to dynamically set the name attribute and submit the form
@@ -116,6 +190,10 @@
                 // Get both dropdown elements
                 var wildlifeGroupSelect = document.getElementById('wildlife_group');
                 var rapGroupSelect = document.getElementById('rap_group');
+
+                var showAllChecked = document.getElementById('table23');
+                //var showAllChecked = document.querySelector('input[name="table23"]:checked').value;
+                console.log("table23 selected:", showAllChecked);
 
                 // Initially remove the name attribute from both dropdowns
                 console.log("Removing name attribute from both dropdowns");
@@ -147,6 +225,8 @@
             console.log("Event listener attached for wildlife_group dropdown change");
             document.getElementById('rap_group').addEventListener('change', handleSubmit);
             console.log("Event listener attached for rap_group dropdown change");
+            document.getElementById('table23').addEventListener('change', handleSubmit);
+            console.log("Event listener attached for showAllChecked change");
         });
     </script>
     <link rel="stylesheet" href="/static/css/view_summary_results.css">

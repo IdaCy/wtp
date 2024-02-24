@@ -21,7 +21,7 @@ from django.contrib import messages
 
 from django.http import JsonResponse
 
-from django.db.models import Avg, Sum, Min, Max, Count, Window, F
+from django.db.models import Avg, Sum, Min, Max, Count, Window, F, StdDev
 import statistics
 import math
 from django.db.models.functions import RowNumber
@@ -76,6 +76,9 @@ def view_summary_results(request):
     selection_type = request.GET.get('selection_type', '')
     selection_id = request.GET.get('selection_id', '')
 
+    # Check if the "Show All" checkbox is checked
+    show_all = request.GET.get('table23_show', '') == 'table23'
+
     # Using distinct and order_by to ensure unique and sorted values
     habitats = Habitat.objects.order_by('habitat_specific_type').values_list('habitat_specific_type', flat=True).distinct()
     wildlife_groups = WildlifeGroup.objects.order_by('wildlife_group_name').distinct('wildlife_group_name')
@@ -89,6 +92,7 @@ def view_summary_results(request):
         'selection_type': selection_type,
         'selection_id': selection_id,
         'habitats': habitats,
+        'show_all': show_all,
     }
 
     # Construct filters for the query based on user selection
@@ -150,7 +154,38 @@ def view_summary_results(request):
                 item['arith_std_dev'] = None
                 item['geo_std_dev'] = None
 
+        # Only prepare datacr_list2 and datacr_list3 if show_all is True
+        if show_all:
+            datacr_list2 = DataCR.objects.filter(**filters).values(
+                'radionuclide__element__element_symbol'
+            ).values(
+                'radionuclide__element__element_symbol'
+            ).annotate(
+                CR=Avg('cr'),
+                CRN=Sum('crn'),
+                CRSD=StdDev('cr'),
+                D=Sum('cr'),
+                E=Sum('cr'),
+            ).order_by('radionuclide__element__element_symbol')
+
+            datacr_list3 = DataCR.objects.filter(**filters).values(
+                'radionuclide__element__element_symbol'
+            ).values(
+                'radionuclide__element__element_symbol'
+            ).annotate(
+                M=Sum('cr'),
+                S=Sum('cr'),
+                V=Sum('cr'),
+                K=Sum('cr')
+            ).order_by('radionuclide__element__element_symbol')
+
+            context['datacr_list2'] = datacr_list2
+            context['datacr_list3'] = datacr_list3
+
         context['datacr_list'] = datacr_list
+        #context['datacr_list2'] = datacr_list2
+        #context['datacr_list3'] = datacr_list3
+        context['show_all'] = show_all
 
     return render(request, 'view_summary_results.html', context)
 

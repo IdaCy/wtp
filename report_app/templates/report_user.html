@@ -4,9 +4,9 @@
     <h1>Report: Users Who Entered Data</h1>
 
     <form id="details_form" method="GET">
-        <input type="checkbox" id="accepted" name="accepted_show" value="accepted"
-               {% if accepted_show %}checked{% endif %}>
-        <label for="accepted">Show accepted data</label>
+        <input type="checkbox" id="approval" name="approval_show" value="approval"
+               {% if approval_show %}checked{% endif %}>
+        <label for="approval">Show approval data</label>
         <br>
 
         <!-- radio buttons -->
@@ -56,6 +56,7 @@
         <thead>
         <tr>
             <th>TEST: ref_id</th>
+            <th>TEST: approval</th>
             <th>First Name</th>
             {% if details_query == "nameorg" or details_query == "nameorgcontact" %}
                 <th>Org</th>
@@ -69,6 +70,7 @@
         {% for item in datacr_list %}
             <tr>
                 <td>{{ item.reference_ids }}</td>
+                <td>{{ item.approval }}</td>
                 <td>{{ item.firstname }}</td>
                 {% if details_query == "nameorg" or details_query == "nameorgcontact" %}
                     <td>{{ item.company }}</td>
@@ -91,7 +93,7 @@
                 var selectionType = document.querySelector('input[name="selection_type"]:checked').value;
                 console.log("Selection type:", selectionType);
 
-                var accepted = document.getElementById('accepted');
+                var approval = document.getElementById('approval');
                 var wildlifeGroupSelect = document.getElementById('wildlife_group');
                 var rapGroupSelect = document.getElementById('rap_group');
 
@@ -106,13 +108,13 @@
                 document.getElementById('details_form').submit();
             }
 
-            document.getElementById('accepted').addEventListener('change', handleSubmit);
+            document.getElementById('approval').addEventListener('change', handleSubmit);
             document.querySelectorAll('input[name="selection_type"]').forEach(input => {
                 input.addEventListener('change', handleSubmit);
             });
             document.getElementById('wildlife_group').addEventListener('change', handleSubmit);
             document.getElementById('rap_group').addEventListener('change', handleSubmit);
-            document.getElementById('accepted').addEventListener('change', handleSubmit);
+            document.getElementById('approval').addEventListener('change', handleSubmit);
             document.getElementById('parameter').addEventListener('change', handleSubmit);
         });
     </script>

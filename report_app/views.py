@@ -15,7 +15,8 @@ def all_reports(request):
 def report_user(request):
     details_query = request.GET.get('parameter', '')
     print(details_query)
-    accepted = request.GET.get('accepted_show', '') == 'accepted'
+    approval = request.GET.get('approval_show', '') == 'approval'
+    print(approval)
     selection_type = request.GET.get('selection_type', '')
     selection_id = request.GET.get('selection_id', '')
 
@@ -27,7 +28,7 @@ def report_user(request):
     context = {
         'datacr_list': [],
         'details_query': details_query,
-        'accepted': accepted,
+        'approval': approval,
         'users': users,
         'wildlife_groups': wildlife_groups,
         'raps': raps,
@@ -36,13 +37,17 @@ def report_user(request):
     }
 
     filters = {}
-    #filters = {'approval_status': accepted} if details_query else {}
+    #filters = {'approval_status': approval} if details_query else {}
     if selection_type and selection_id.isdigit():
         filter_key = 'wildlife_group__wildlife_group_id' if selection_type == 'wildlife' else 'icrp_rap__rap_id'
         filters[filter_key] = int(selection_id)
 
     if details_query:
+        approval_status = "APPROVED" if approval else "REJECTED"
+        print(approval_status)
         datacr_list = DataCR.objects.all().filter(
+            approval_status=approval_status,
+            reference__user__email__isnull=False,
             **filters
         ).values(
             'reference__user__email',
@@ -52,7 +57,8 @@ def report_user(request):
             firstname=StringAgg(Cast('reference__user__first_name', output_field=TextField()), delimiter=', ', distinct=True),
             lastname=StringAgg(Cast('reference__user__last_name', output_field=TextField()), delimiter=', ', distinct=True),
             company=StringAgg(Cast('reference__user__company', output_field=TextField()), delimiter=', ', distinct=True),
-            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
+            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True),
+            approval=StringAgg(Cast('approval_status', output_field=TextField()), delimiter=', ', distinct=True),
         ).distinct().order_by('reference__user__email')
 
         context['datacr_list'] = datacr_list
@@ -65,10 +71,10 @@ def report_user(request):
         filters[filter_key] = int(selection_id)
 
     filters = {'wildlife_group__wildlife_group_id': selection_type} if selection_type == 'wildlife' else 'icrp_rap__rap_id'
-    if accepted:
-        filter_key = 'approval_status' if accepted == 'False' else 'True'
-        filters[filter_key] = accepted
-    filters = {'approval_status': accepted} if accepted else {}
+    if approval:
+        filter_key = 'approval_status' if approval == 'False' else 'True'
+        filters[filter_key] = approval
+    filters = {'approval_status': approval} if approval else {}
     if selection_type and selection_id.isdigit():
         filter_key = 'wildlife_group__wildlife_group_id' if selection_type == 'wildlife' else 'icrp_rap__rap_id'
         filters[filter_key] = int(selection_id)"""

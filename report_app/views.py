@@ -37,7 +37,6 @@ def report_user(request):
     }
 
     filters = {}
-    #filters = {'approval_status': approval} if details_query else {}
     if selection_type and selection_id.isdigit():
         filter_key = 'wildlife_group__wildlife_group_id' if selection_type == 'wildlife' else 'icrp_rap__rap_id'
         filters[filter_key] = int(selection_id)
@@ -46,7 +45,7 @@ def report_user(request):
         approval_status = "APPROVED" if approval else "REJECTED"
         print(approval_status)
         datacr_list = DataCR.objects.all().filter(
-            approval_status=approval_status,
+            reference__approval_status=approval_status,
             reference__user__email__isnull=False,
             **filters
         ).values(
@@ -57,47 +56,10 @@ def report_user(request):
             firstname=StringAgg(Cast('reference__user__first_name', output_field=TextField()), delimiter=', ', distinct=True),
             lastname=StringAgg(Cast('reference__user__last_name', output_field=TextField()), delimiter=', ', distinct=True),
             company=StringAgg(Cast('reference__user__company', output_field=TextField()), delimiter=', ', distinct=True),
-            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True),
-            approval=StringAgg(Cast('approval_status', output_field=TextField()), delimiter=', ', distinct=True),
+            #reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True),
+            #approval=StringAgg(Cast('reference__approval_status', output_field=TextField()), delimiter=', ', distinct=True),
         ).distinct().order_by('reference__user__email')
 
         context['datacr_list'] = datacr_list
-
-        # datacr_list = DataCR.objects.filter(**filters).select_related('reference__user').distinct(
-        #    'reference__user__first_name').order_by('reference__user__first_name').values('reference__user__first_name')
-
-    """if selection_type and selection_id.isdigit():
-        filter_key = 'wildlife_group__wildlife_group_id' if selection_type == 'wildlife' else 'icrp_rap__rap_id'
-        filters[filter_key] = int(selection_id)
-
-    filters = {'wildlife_group__wildlife_group_id': selection_type} if selection_type == 'wildlife' else 'icrp_rap__rap_id'
-    if approval:
-        filter_key = 'approval_status' if approval == 'False' else 'True'
-        filters[filter_key] = approval
-    filters = {'approval_status': approval} if approval else {}
-    if selection_type and selection_id.isdigit():
-        filter_key = 'wildlife_group__wildlife_group_id' if selection_type == 'wildlife' else 'icrp_rap__rap_id'
-        filters[filter_key] = int(selection_id)"""
-
-    """"if details_query:
-        datacr_list = DataCR.objects.filter(**filters).values(
-            'reference__user__first_name',
-        ).values(
-            'reference__user__first_name',
-        ).annotate(
-            first_name='reference__user__first_name',
-            lastname='reference__user__lastname',
-        ).order_by('radionuclide__element__element_symbol')
-
-    datacr_list = DataCR.objects.filter(**filters).select_related('reference__user').distinct(
-        'reference__user__first_name').order_by('reference__user__first_name').values('reference__user__first_name')
-
-    context['datacr_list'] = datacr_list
-
-    if details_query:
-        datacr_list = DataCR.objects.filter(**filters).select_related('reference__user').distinct(
-            'reference__user__first_name').order_by('reference__user__first_name').values('reference__user__first_name')
-
-        context['datacr_list'] = datacr_list   """
 
     return render(request, 'report_user.html', context)

@@ -5,7 +5,7 @@
 
     <form id="details_form" method="GET">
         <input type="checkbox" id="approval" name="approval_show" value="approval"
-               {% if approval_show %}checked{% endif %}>
+               {% if approval %}checked{% endif %}>
         <label for="approval">Show approval data</label>
         <br>
 
@@ -55,8 +55,6 @@
     <table>
         <thead>
         <tr>
-            <th>TEST: ref_id</th>
-            <th>TEST: approval</th>
             <th>First Name</th>
             {% if details_query == "nameorg" or details_query == "nameorgcontact" %}
                 <th>Org</th>
@@ -69,8 +67,6 @@
         <tbody>
         {% for item in datacr_list %}
             <tr>
-                <td>{{ item.reference_ids }}</td>
-                <td>{{ item.approval }}</td>
                 <td>{{ item.firstname }}</td>
                 {% if details_query == "nameorg" or details_query == "nameorgcontact" %}
                     <td>{{ item.company }}</td>
@@ -118,5 +114,5 @@
             document.getElementById('parameter').addEventListener('change', handleSubmit);
         });
     </script>
-    <link rel="stylesheet" href="/static/css/all_reports.css">
+    <link rel="stylesheet" href="/static/css/report_table.css">
 {% endblock %}

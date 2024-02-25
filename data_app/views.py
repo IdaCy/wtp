@@ -238,7 +238,6 @@ def view_summary_results(request):
             arith_mean_cr=Avg('cr'),
             sum_crn=Sum('crn'),
             min_cr=Min('cr'),
-            max_cr=Max('cr'),
             geo_mean_cr=Sum('crn'),
             arith_std_dev=Sum('crn'),
             geo_std_dev=Sum('crn'),

@@ -1,4 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.aggregates import StringAgg
+from django.db.models.functions import Cast
+from django.db.models.fields import TextField
 from django.shortcuts import render
 from data_app.models import DataCR, WildlifeGroup, Habitat, RAP, User
 
@@ -32,17 +35,24 @@ def report_user(request):
         'selection_type': selection_type,
     }
 
-    filters = {'approval_status': accepted} if details_query else {}
+    filters = {}
+    #filters = {'approval_status': accepted} if details_query else {}
     if selection_type and selection_id.isdigit():
         filter_key = 'wildlife_group__wildlife_group_id' if selection_type == 'wildlife' else 'icrp_rap__rap_id'
         filters[filter_key] = int(selection_id)
 
     if details_query:
-        datacr_list = DataCR.objects.all().values(
+        datacr_list = DataCR.objects.all().filter(
+            **filters
+        ).values(
             'reference__user__email',
-            'reference__user__first_name',
-            'reference__user__last_name',
-            'reference__user__company'
+        ).annotate(
+            email=StringAgg(Cast('reference__user__email', output_field=TextField()), delimiter=', ', distinct=True),
+            salutation=StringAgg(Cast('reference__user__salutation', output_field=TextField()), delimiter=', ', distinct=True),
+            firstname=StringAgg(Cast('reference__user__first_name', output_field=TextField()), delimiter=', ', distinct=True),
+            lastname=StringAgg(Cast('reference__user__last_name', output_field=TextField()), delimiter=', ', distinct=True),
+            company=StringAgg(Cast('reference__user__company', output_field=TextField()), delimiter=', ', distinct=True),
+            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
         ).distinct().order_by('reference__user__email')
 
         context['datacr_list'] = datacr_list

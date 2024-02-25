@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Report: Users Who Entered Data</h1>
+
+    <form id="details_form" method="GET">
+        <input type="checkbox" id="accepted" name="accepted_show" value="accepted"
+               {% if accepted_show %}checked{% endif %}>
+        <label for="accepted">Show accepted data</label>
+        <br>
+
+        <!-- radio buttons -->
+        <input type="radio" id="wildlife" name="selection_type" value="wildlife"
+               {% if selection_type == "wildlife" %}checked{% endif %}>
+        <label for="wildlife">Wildlife Group</label>
+
+        <input type="radio" id="rap" name="selection_type" value="rap"
+               {% if selection_type == "rap" %}checked{% endif %}>
+        <label for="rap">ICRP RAP</label>
+
+        <!-- apppearing dropdown -->
+        <select id="wildlife_group" name="selection_id"
+                style="{% if selection_type == 'wildlife' %}display:block;{% else %}display:none;{% endif %}">
+            {% for group in wildlife_groups %}
+                <option value="{{ group.wildlife_group_id }}"
+                        {% if selection_id == group.wildlife_group_id|stringformat:"s" %} selected {% endif %}>
+                    {{ group.wildlife_group_name }}
+                </option>
+            {% endfor %}
+        </select>
+        <select id="rap_group" name="selection_id"
+                style="{% if selection_type == 'rap' %}display:block;{% else %}display:none;{% endif %}">
+            {% for group in raps %}
+                <option value="{{ group.rap_id }}" {% if selection_id == group.rap_id|stringformat:"s" %}
+                        selected {% endif %}>
+                    {{ group.rap_name }}
+                </option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <!-- always-there appearing dropdown -->
+        <label for="parameter">Choose Parameter:</label>
+        <select id="parameter" name="parameter">
+            <option value="">Please select</option>
+            <option value="name">Name only</option>
+            <option value="nameorg">Name & Organisation</option>
+            <option value="nameorgcontact">Name, Organisation, Contact Details</option>
+        </select>
+    </form>
+
+    <!-- Data table -->
+    <table>
+        <thead>
+        <tr>
+            <th>First Name</th>
+            {% if details_query == "nameorg" or details_query == "nameorgcontact" %}
+                <th>Org</th>
+            {% endif %}
+            {% if details_query == "nameorgcontact" %}
+                <th>Email</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in datacr_list %}
+            <tr>
+                <td>{{ item.reference__user__first_name }}</td>
+                {% if details_query == "nameorg" or details_query == "nameorgcontact" %}
+                    <td>{{ item.reference__user__company }}</td>
+                {% endif %}
+                {% if details_query == "nameorgcontact" %}
+                    <td>{{ item.reference__user__email }}</td>
+                {% endif %}
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No data found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function handleSubmit() {
+                var selectionType = document.querySelector('input[name="selection_type"]:checked').value;
+                console.log("Selection type:", selectionType);
+
+                var accepted = document.getElementById('accepted');
+                var wildlifeGroupSelect = document.getElementById('wildlife_group');
+                var rapGroupSelect = document.getElementById('rap_group');
+
+                wildlifeGroupSelect.removeAttribute('name');
+                rapGroupSelect.removeAttribute('name');
+
+                if (selectionType === 'wildlife') {
+                    wildlifeGroupSelect.setAttribute('name', 'selection_id');
+                } else if (selectionType === 'rap') {
+                    rapGroupSelect.setAttribute('name', 'selection_id');
+                }
+                document.getElementById('details_form').submit();
+            }
+
+            document.getElementById('accepted').addEventListener('change', handleSubmit);
+            document.querySelectorAll('input[name="selection_type"]').forEach(input => {
+                input.addEventListener('change', handleSubmit);
+            });
+            document.getElementById('wildlife_group').addEventListener('change', handleSubmit);
+            document.getElementById('rap_group').addEventListener('change', handleSubmit);
+            document.getElementById('accepted').addEventListener('change', handleSubmit);
+        });
+    </script>
+    <link rel="stylesheet" href="/static/css/all_reports.css">
+{% endblock %}

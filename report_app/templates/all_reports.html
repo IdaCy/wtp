@@ -1,65 +1,58 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="reports-container">
-    <h1>View Reports</h1>
-    <div class="reports-grid">
-        <!-- Users with Accepted Data -->
-        <a href="{% url 'reference' %}" class="report-card">
-            <div class="card-content">
-                <h2>Users with Accepted Data</h2>
-                <p>View the list of users whose data contributions have been accepted.</p>
-            </div>
-        </a>
+    <div class="reports-container">
+        <h1>View Reports</h1>
+        <div class="reports-grid">
+            <!-- Users with Rejected Data -->
+            <a href="{% url 'tables_panel' %}" class="report-card">
+                <div class="card-content">
+                    <h2>Lookup Tables</h2>
+                    <p>Activity Concentration Units, Elements, Habitats, Species, Study Types, Publications, and
+                        more.</p>
+                </div>
+            </a>
 
-        <!-- Users with Rejected Data -->
-        <a href="{% url 'reference' %}" class="report-card">
-            <div class="card-content">
-                <h2>Users with Rejected Data</h2>
-                <p>Review the list of users whose data contributions were rejected.</p>
-            </div>
-        </a>
+            <!-- Users with Accepted Data -->
+            <a href="{% url 'report_user' %}" class="report-card">
+                <div class="card-content">
+                    <h2>Users Who Submitted Data</h2>
+                    <p>View the list of users with accepted/not accepted data contributions.</p>
+                </div>
+            </a>
 
-        <!-- Users Registered Who Have Entered Data -->
-        <a href="{% url 'reference' %}" class="report-card">
-            <div class="card-content">
-                <h2>Users Who Submitted Data</h2>
-                <p>Explore the profiles of users who have submitted data entries.</p>
-            </div>
-        </a>
+            <!-- View Authors List -->
+            <a href="{% url 'reference' %}" class="report-card">
+                <div class="card-content">
+                    <h2>Authors List</h2>
+                    <p>Access the comprehensive list of authors referenced.</p>
+                </div>
+            </a>
 
-        <!-- View Authors List -->
-        <a href="{% url 'reference' %}" class="report-card">
-            <div class="card-content">
-                <h2>View Authors List</h2>
-                <p>Access the comprehensive list of authors who have contributed.</p>
-            </div>
-        </a>
+            <!-- View Summary by Each Habitat -->
+            <a href="{% url 'reference' %}" class="report-card">
+                <div class="card-content">
+                    <h2>Summary by Each Habitat</h2>
+                    <p>Get detailed summaries categorized by each habitat type.</p>
+                </div>
+            </a>
 
-        <!-- View All References -->
-        <a href="{% url 'reference' %}" class="report-card">
-            <div class="card-content">
-                <h2>View All References</h2>
-                <p>Explore the complete list of references in the database.</p>
-            </div>
-        </a>
+            <!-- View All References -->
+            <a href="{% url 'reference' %}" class="report-card">
+                <div class="card-content">
+                    <h2>All References</h2>
+                    <p>Explore the complete list of references in the database.</p>
+                </div>
+            </a>
 
-        <!-- Assign DCID to Reference IDs -->
-        <a href="{% url 'reference' %}" class="report-card">
-            <div class="card-content">
-                <h2>Assign DCID to Reference IDs</h2>
-                <p>Manage the assignment of DCIDs to existing reference IDs.</p>
-            </div>
-        </a>
-
-        <!-- View Summary by Each Habitat -->
-        <a href="{% url 'reference' %}" class="report-card">
-            <div class="card-content">
-                <h2>View Summary by Each Habitat</h2>
-                <p>Get detailed summaries categorized by each habitat type.</p>
-            </div>
-        </a>
+            <!-- Assign DCID to Reference IDs -->
+            <a href="{% url 'view_summary_results' %}" class="report-card">
+                <div class="card-content">
+                    <h2>Summary Results</h2>
+                    <p>View Summary Results of All Data.</p>
+                </div>
+            </a>
+        </div>
     </div>
-</div>
     <link rel="stylesheet" href="/static/css/all_reports.css">
 {% endblock %}

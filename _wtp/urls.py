@@ -42,4 +42,5 @@ urlpatterns = [
     path('legal_disclaimer/', legal_views.legal_disclaimer, name='legal_disclaimer'),
     path('contact/', legal_views.contact, name='contact'),
     path('all_reports/', report_views.all_reports, name='all_reports'),
+    path('report_user/', report_views.report_user, name='report_user'),
 ]

@@ -14,16 +14,16 @@ class User(AbstractUser):
     ]
 
     salutation = models.CharField(max_length=20, choices=SALUTATION_CHOICES, blank=True, null=True)
-    firstname = models.CharField(max_length=30, blank=True, null=True)
-    lastname = models.CharField(max_length=30, blank=True, null=True)
+    first_name = models.CharField(max_length=30, blank=True, null=True)
+    last_name = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(unique=True)
     jobtitle = models.CharField(max_length=200, blank=True, null=True)
     company = models.CharField(max_length=200, blank=True, null=True)
     admin_priv = models.SmallIntegerField(default=0, null=True)
 
     def __str__(self):
-        # Handle the case where firstname or lastname might be None
-        full_name = f"{self.firstname or ''} {self.lastname or ''}".strip()
+        # Handle the case where first_name or last_name might be None
+        full_name = f"{self.first_name or ''} {self.last_name or ''}".strip()
         return full_name if full_name else self.username
 
 

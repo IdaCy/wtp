@@ -12,6 +12,12 @@ def all_reports(request):
 
 
 @login_required
+def reference(request):
+    refobj = Reference.objects.filter(approval_status="APPROVED")
+    return render(request, 'reference.html', {'reference': refobj})
+
+
+@login_required
 def report_user(request):
     details_query = request.GET.get('parameter', '')
     print(details_query)

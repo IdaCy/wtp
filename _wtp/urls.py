@@ -27,7 +27,7 @@ urlpatterns = [
     path('data/', data_views.data_view, name='data'),
     path('download_summaries/', data_views.download_summaries, name='download_summaries'),
     path('view_summary_results/', data_views.view_summary_results, name='view_summary_results'),
-    path('reference/', data_views.ref_view, name='reference'),
+    #path('reference/', data_views.ref_view, name='reference'),
     path('add_datacr/', data_views.add_datacr, name='add_datacr'),
     path('view_all_data/', data_views.view_all_data, name='view_all_data'),
     path('view_all_data/<int:ref_id>/', data_views.view_all_data, name='view_all_data'),
@@ -44,4 +44,5 @@ urlpatterns = [
     path('all_reports/', report_views.all_reports, name='all_reports'),
     path('report_user/', report_views.report_user, name='report_user'),
     path('report_authors/', report_views.report_authors, name='report_authors'),
+    path('reference/', report_views.reference, name='reference'),
 ]

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Report: Users Who Entered Data</h1>
+    <h1>Report: Authors</h1>
 
     <form id="details_form" method="GET">
         <input type="radio" id="authors" name="selection_type" value="authors"
@@ -10,9 +10,8 @@
 
         <input type="radio" id="users" name="selection_type" value="users"
                {% if selection_id == "users" %}checked{% endif %}>
-        <label for="users">Users</label>
+        <label for="users">Users who entered data</label>
     </form>
-
 
     <!-- Data table -->
     <table>
@@ -24,7 +23,7 @@
         <tbody>
         {% for item in ref_list %}
             <tr>
-                {% if selection_id == 'authors' %} <td>{{ item.author }}</td> {% endif %}
+                {% if selection_id == 'authors' %} {% if item.author %} <td>{{ item.author }}</td> {%  endif %}  {% endif %}
                 {% if selection_id == 'users' %} <td>{% if item.salutation %} {{ item.salutation }} {%  endif %} {{ item.firstname }} {{ item.lastname }}</td> {% endif %}
             </tr>
         {% empty %}
@@ -59,5 +58,5 @@
             document.getElementById('users').addEventListener('change', handleSubmit);
         });
     </script>
-    <link rel="stylesheet" href="/static/css/all_reports.css">
+    <link rel="stylesheet" href="/static/css/report_table.css">
 {% endblock %}

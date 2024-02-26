@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Data View Page{% endblock %}
+
+{% block content %}
+
+    <style>
+    td {
+        font-size: 0.5em;
+    }
+    </style>
+
+    <h1>The References</h1>
+    <table class="data-table">
+        <thead>
+            <tr>
+            <th>Reference ID</th>
+            <th>Author</th>
+            <th>Article Title</th>
+            <th>Publication Title</th>
+            <th>Year</th>
+            <th>Volume</th>
+            <th>Part</th>
+            <th>Pages</th>
+            <th>Language</th>
+            <th>Publication Type</th>
+            <th>Translation</th>
+            <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in reference %}
+                <tr>
+                <td>{{ item.ref_id }}</td>
+                <td>{{ item.author }}</td>
+                <td>{{ item.article_title }}</td>
+                <td>{{ item.pub_title }}</td>
+                <td>{{ item.year }}</td>
+                <td>{{ item.volume }}</td>
+                <td>{{ item.part }}</td>
+                <td>{{ item.pages }}</td>
+                <td>{{ item.language }}</td>
+                <td>{{ item.pub_type }}</td>
+                <td>{{ item.translation }}</td>
+                <td>{{ item.notes }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <link rel="stylesheet" href="/static/css/data.css">
+    {% block extra_css %}{% endblock %}
+{% endblock %}

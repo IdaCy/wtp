@@ -238,6 +238,7 @@ def view_summary_results(request):
             arith_mean_cr=Avg('cr'),
             sum_crn=Sum('crn'),
             min_cr=Min('cr'),
+            max_cr=Max('cr'),
             geo_mean_cr=Sum('crn'),
             arith_std_dev=Sum('crn'),
             geo_std_dev=Sum('crn'),
@@ -417,12 +418,6 @@ def view_xxx(request):
 
     # For non-AJAX requests, just render the template with no data
     return render(request, 'view_summary_results.html', {'data': []})
-
-
-@login_required
-def ref_view(request):
-    refobj = Reference.objects.all()
-    return render(request, 'reference.html', {'reference': refobj})
 
 
 def handle_reference_datacr(reference_form, datacr_form, user):

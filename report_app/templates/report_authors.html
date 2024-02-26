@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Report: Users Who Entered Data</h1>
+
+    <form id="details_form" method="GET">
+        <input type="radio" id="authors" name="selection_type" value="authors"
+               {% if selection_id == "authors" %}checked{% endif %}>
+        <label for="authors">Authors</label>
+
+        <input type="radio" id="users" name="selection_type" value="users"
+               {% if selection_id == "users" %}checked{% endif %}>
+        <label for="users">Users</label>
+    </form>
+
+
+    <!-- Data table -->
+    <table>
+        <thead>
+        <tr>
+            <th>First Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in ref_list %}
+            <tr>
+                {% if selection_id == 'authors' %} <td>{{ item.author }}</td> {% endif %}
+                {% if selection_id == 'users' %} <td>{% if item.salutation %} {{ item.salutation }} {%  endif %} {{ item.firstname }} {{ item.lastname }}</td> {% endif %}
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No data found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function handleSubmit() {
+                var selectionType = document.querySelector('input[name="selection_type"]:checked').value;
+                console.log("Selection type:", selectionType);
+
+                var authorSelect = document.getElementById('authors');
+                var userSelect = document.getElementById('users');
+
+                authorSelect.removeAttribute('name');
+                userSelect.removeAttribute('name');
+
+                if (selectionType === 'authors') {
+                    authorSelect.setAttribute('name', 'selection_id');
+                } else if (selectionType === 'users') {
+                    userSelect.setAttribute('name', 'selection_id');
+                }
+                document.getElementById('details_form').submit();
+            }
+
+            document.getElementById('authors').addEventListener('change', handleSubmit);
+            document.getElementById('users').addEventListener('change', handleSubmit);
+        });
+    </script>
+    <link rel="stylesheet" href="/static/css/all_reports.css">
+{% endblock %}

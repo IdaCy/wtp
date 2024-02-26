@@ -67,7 +67,7 @@
         <tbody>
         {% for item in datacr_list %}
             <tr>
-                <td>{{ item.firstname }}</td>
+                <td>{% if item.salutation %} {{ item.salutation }} {%  endif %} {{ item.firstname }} {{ item.lastname }}</td>
                 {% if details_query == "nameorg" or details_query == "nameorgcontact" %}
                     <td>{{ item.company }}</td>
                 {% endif %}

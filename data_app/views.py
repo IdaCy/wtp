@@ -420,22 +420,28 @@ def view_xxx(request):
     return render(request, 'view_summary_results.html', {'data': []})
 
 
-def handle_reference_datacr(reference_form, datacr_form, user):
-    if reference_form.is_valid() and datacr_form.is_valid():
-        print("CR Value from Form:", datacr_form.cleaned_data.get('cr'))
-        print("CRN Value from Form:", datacr_form.cleaned_data.get('crn'))
-        reference = reference_form.save(commit=False)
-        reference.user = user
-        reference.save()
+def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, existing_reference=None):
+    if submit_ref:
+        # For "Add All" action
+        if reference_form.is_valid() and datacr_form.is_valid():
+            reference = reference_form.save(commit=False)
+            reference.user = user
+            reference.save()
 
-        datacr = datacr_form.save(commit=False)
-        datacr.reference = reference
-        datacr.save()
-        return True, reference_form, datacr_form
+            datacr = datacr_form.save(commit=False)
+            datacr.reference = reference
+            datacr.save()
+            return True, reference_form, datacr_form
+        else:
+            return False, reference_form, datacr_form
     else:
-        print("Reference form errors:", reference_form.errors)
-        print("DataCR form errors:", datacr_form.errors)
-        return False, reference_form, datacr_form
+        if datacr_form.is_valid():
+            datacr = datacr_form.save(commit=False)
+            datacr.reference = existing_reference
+            datacr.save()
+            return True, None, datacr_form  # No need to return a reference form here
+        else:
+            return False, None, datacr_form
 
 
 @login_required
@@ -445,15 +451,43 @@ def add_datacr(request):
 
     if request.method == 'POST':
         print("POST Data:", request.POST)
+        action = request.POST.get('action')
+        success = False
 
         reference_form = ReferenceForm(request.POST)
         datacr_form = DataCRForm(request.POST)
 
-        success, reference_form, datacr_form = handle_reference_datacr(
-            reference_form=reference_form,
-            datacr_form=datacr_form,
-            user=request.user
-        )
+        if action == 'add_all':
+            success, reference_form, datacr_form = handle_reference_datacr(
+                reference_form=reference_form,
+                datacr_form=datacr_form,
+                user=request.user
+            )
+        elif action == 'add_mid':
+            print('attempting elif add_mid')
+            ref_id = request.POST.get('ref_id')
+            existing_reference = Reference.objects.filter(ref_id=ref_id).first()
+            print(existing_reference)
+            if existing_reference:
+                success, _, datacr_form = handle_reference_datacr(
+                    reference_form=None,  # Not used in this case
+                    datacr_form=datacr_form,
+                    user=request.user,
+                    submit_ref=False,
+                    existing_reference=existing_reference
+                )
+                print(success)
+                # Re-instantiate the reference form with initial data to keep fields filled
+                reference_form_fields = set(ReferenceForm().fields.keys())
+                initial_data = {key: value for key, value in request.POST.items() if key in reference_form_fields}
+                reference_form = ReferenceForm(initial=initial_data)
+            else:
+                success, reference_form, datacr_form = handle_reference_datacr(
+                    reference_form=reference_form,
+                    datacr_form=datacr_form,
+                    user=request.user
+                )
+                print(success)
 
         if success:
             messages.success(request, "Successfully saved. Thank you for your submission!")

@@ -476,9 +476,10 @@ def add_datacr(request):
             )
             if success:
                 # Reset the reference form to clear fields after successful "Add All"
-                reference_form = ReferenceForm()
+                #reference_form = ReferenceForm()
                 context.update({
-                    'reference_form': ReferenceForm()
+                    'reference_form': ReferenceForm(),
+                    'datacr_form': DataCRForm
                 })
         elif action == 'add_mid':
             print('attempting elif add_mid')

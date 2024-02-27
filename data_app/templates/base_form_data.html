@@ -117,15 +117,20 @@
             <!--<h2>Reference</h2>-->
             <div class="entry">
                 <!--<label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>-->
-                <label for="id_ref_id">Reference ID: <input type="text" id="ref_id"
-                                                            name="ref_id" readonly></label>
+                <label for="id_ref_id">Reference ID:</label>
+                <!--<input type="text" id="ref_id" name="ref_id" readonly>-->
+                <input type="text" id="ref_id" name="ref_id"
+                       value="{{ reference_form.ref_id.value|default_if_none:'' }}" readonly>
             </div>
 
             <div class="pub">
                 <label for="id_article_title">Article Title:</label>
                 {# reference_form.article_title #}
                 <input class="full-width article-title-search" type="text" id="id_article_title" name="article_title"
-                       style="background-image: url({% static 'images/magnifying-glass.png' %}); background-repeat: no-repeat; background-position: 10px center;">
+                       style="background-image: url({% static 'images/magnifying-glass.png' %}); background-repeat: no-repeat; background-position: 10px center;"
+                       value="{{ reference_form.article_title.value|default_if_none:'' }}">>
+                <!--<input type="text" id="id_author" name="author"
+                       value="{{ reference_form.author.value|default_if_none:'' }}">-->
             </div>
             <div class="pub">
                 <label for="id_publication_title">Publication Title:</label>
@@ -136,17 +141,21 @@
                 <div class="left">
                     <div class="entry">
                         <label for="id_author">Author:</label>
-                        <input type="text" id="id_author" name="author" value="{{ reference_form.author.value|default_if_none:'' }}">
+                        <input type="text" id="id_author" name="author"
+                               value="{{ reference_form.author.value|default_if_none:'' }}">
                         <!--<input type="text" id="id_author" name="author">-->
                     </div>
                     <div class="entry">
                         <label for="id_volume">Volume:</label>
-                        <input type="text" id="id_volume" name="volume" value="{{ reference_form.volume.value|default_if_none:'' }}">
+                        <input type="text" id="id_volume" name="volume"
+                               value="{{ reference_form.volume.value|default_if_none:'' }}">
                         <!--<input type="text" id="id_volume" name="volume">-->
                     </div>
                     <div class="entry">
                         <label for="id_pages">Page Numbers:</label>
-                        <input type="text" id="id_pages" name="pages">
+                        <input type="text" id="id_pages" name="pages"
+                               value="{{ reference_form.pages.value|default_if_none:'' }}">
+                        <!--<input type="text" id="id_pages" name="pages">-->
                     </div>
                     <div class="entry">
                         <label for="id_reference_language">Reference Language:</label>
@@ -161,15 +170,21 @@
                     </div>
                     <div class="entry">
                         <label for="id_year">Year:</label>
-                        <input type="text" id="id_year" name="year">
+                        <input type="text" id="id_year" name="year"
+                               value="{{ reference_form.year.value|default_if_none:'' }}">
+                        <!--<input type="text" id="id_year" name="year">-->
                     </div>
                     <div class="entry">
                         <label for="id_part">Part:</label>
-                        <input type="text" id="id_part" name="part">
+                        <input type="text" id="id_part" name="part"
+                               value="{{ reference_form.part.value|default_if_none:'' }}">
+                        <!--<input type="text" id="id_part" name="part">-->
                     </div>
                     <div class="translation">
                         <label for="id_translation">Translation into English Available:</label>
-                        <input type="checkbox" id="id_translation" name="translation">
+                        <input type="checkbox" id="id_translation" name="translation"
+                               value="{{ reference_form.translation.value }}">
+                        <!--<input type="checkbox" id="id_translation" name="translation">-->
                     </div>
                 </div>
             </div>

@@ -36,11 +36,12 @@ class ReferenceForm(forms.ModelForm):
 
 
 class DataCRForm(forms.ModelForm):
-    """species_name = forms.ModelChoiceField(
+    species_list = forms.ModelChoiceField(
         queryset=SpeciesName.objects.all(),
         label='Species',
+        empty_label="Please Select",
         required=False
-    )"""
+    )
 
     lifestage = forms.ModelChoiceField(
         queryset=Lifestage.objects.all().order_by('lifestage_name').distinct('lifestage_name'),

@@ -441,7 +441,7 @@ def handle_reference_datacr(reference_form, datacr_form, user):
 @login_required
 def add_datacr(request):
     # Defining 'species_list' here so it's available regardless of if...else outcome
-    species_list = SpeciesName.objects.all()
+    species_list = SpeciesName.objects.filter(approved=True).order_by('name_latin')
 
     if request.method == 'POST':
         print("POST Data:", request.POST)

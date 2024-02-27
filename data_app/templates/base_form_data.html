@@ -136,11 +136,13 @@
                 <div class="left">
                     <div class="entry">
                         <label for="id_author">Author:</label>
-                        <input type="text" id="id_author" name="author">
+                        <input type="text" id="id_author" name="author" value="{{ reference_form.author.value|default_if_none:'' }}">
+                        <!--<input type="text" id="id_author" name="author">-->
                     </div>
                     <div class="entry">
                         <label for="id_volume">Volume:</label>
-                        <input type="text" id="id_volume" name="volume">
+                        <input type="text" id="id_volume" name="volume" value="{{ reference_form.volume.value|default_if_none:'' }}">
+                        <!--<input type="text" id="id_volume" name="volume">-->
                     </div>
                     <div class="entry">
                         <label for="id_pages">Page Numbers:</label>

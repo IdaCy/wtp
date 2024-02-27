@@ -457,18 +457,36 @@ def add_datacr(request):
         reference_form = ReferenceForm(request.POST)
         datacr_form = DataCRForm(request.POST)
 
+        # Capture reference form values to re-populate after submission
+        ref_id = request.POST.get('ref_id', '')
+        volume = request.POST.get('volume', '')
+        article_title = request.POST.get('article_title', '')
+
+        context = {
+            'reference_form': reference_form,
+            'datacr_form': datacr_form,
+            'species_list': species_list,
+        }
+
         if action == 'add_all':
             success, reference_form, datacr_form = handle_reference_datacr(
                 reference_form=reference_form,
                 datacr_form=datacr_form,
                 user=request.user
             )
+            if success:
+                # Reset the reference form to clear fields after successful "Add All"
+                reference_form = ReferenceForm()
+                context.update({
+                    'reference_form': ReferenceForm()
+                })
         elif action == 'add_mid':
             print('attempting elif add_mid')
             ref_id = request.POST.get('ref_id')
             existing_reference = Reference.objects.filter(ref_id=ref_id).first()
             print(existing_reference)
             if existing_reference:
+                print("Attempting Add Mid WITHOUT ref")
                 success, _, datacr_form = handle_reference_datacr(
                     reference_form=None,  # Not used in this case
                     datacr_form=datacr_form,
@@ -477,11 +495,8 @@ def add_datacr(request):
                     existing_reference=existing_reference
                 )
                 print(success)
-                # Re-instantiate the reference form with initial data to keep fields filled
-                reference_form_fields = set(ReferenceForm().fields.keys())
-                initial_data = {key: value for key, value in request.POST.items() if key in reference_form_fields}
-                reference_form = ReferenceForm(initial=initial_data)
             else:
+                print("Attempting Add Mid WITH ref")
                 success, reference_form, datacr_form = handle_reference_datacr(
                     reference_form=reference_form,
                     datacr_form=datacr_form,
@@ -489,11 +504,26 @@ def add_datacr(request):
                 )
                 print(success)
 
+            if success:
+                """reference_form = ReferenceForm(initial={
+                    'ref_id': ref_id,
+                    'volume': volume,
+                    'article_title': article_title,
+                })"""
+                initial_data = {'ref_id': ref_id, 'volume': volume, 'article_title': article_title, }
+                print("Initial Data for Reference Form:", initial_data)
+
+            # Re-instantiate the reference form with initial data to keep fields filled in all cases
+            #reference_form_fields = set(ReferenceForm().fields.keys())
+            #initial_data = {key: value for key, value in request.POST.items() if key in reference_form_fields}
+            #reference_form = ReferenceForm(initial=initial_data)
+
         if success:
             messages.success(request, "Successfully saved. Thank you for your submission!")
-            return redirect('add_datacr')
+            return render(request, 'add_datacr.html', context)
         else:
             messages.error(request, "There was a problem with your submission. Please try again or contact us.")
+
     else:
         reference_form = ReferenceForm()
         datacr_form = DataCRForm()

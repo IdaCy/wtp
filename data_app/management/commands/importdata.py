@@ -7,6 +7,7 @@ import os
 from math import isnan  # Import isnan from math
 from decimal import Decimal
 
+
 class Command(BaseCommand):
     help = 'Imports data from Excel files into the database'
 

@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from django.core.management.base import BaseCommand, CommandError
 
+
 class Command(BaseCommand):
     help = 'Imports data from Excel files into the database'
 
@@ -22,34 +23,28 @@ class Command(BaseCommand):
             self.stdout.write(f'Importing data for {User.__name__}...')
             data = pd.read_excel(file_name)
 
-            instances = []
+            #instances = []
             for index, row in data.iterrows():
-                row_data = row.to_dict()
-                salutation = row_data.get('salutation')
-                firstname = row_data.get('firstname')
-                lastname = row_data.get('lastname')
-                email = row_data.get('email')
-                jobtitle = row_data.get('jobtitle')
-                company = row_data.get('company')
-                admin_priv = row_data.get('admin_priv')
+                email = row['email']
+                password = row['password']  # Assuming there's a 'password' column in the Excel file
 
-                # Use the create_user method to create a user instance
-                user = User.objects.create_user(
+                user, created = User.objects.get_or_create(
                     username=email,
                     email=email,
-                    password=None,
+                    defaults={
+                        'first_name': row.get('firstname', ''),
+                        'last_name': row.get('lastname', ''),
+                        'jobtitle': row.get('jobtitle', ''),
+                        'company': row.get('company', ''),
+                        'admin_priv': row.get('admin_priv', 0),
+                        'salutation': row.get('salutation', ''),
+                    }
                 )
 
-                # Set additional fields
-                user.salutation = salutation
-                user.first_name = firstname
-                user.last_name = lastname
-                user.jobtitle = jobtitle
-                user.company = company
-                user.admin_priv = admin_priv
-
-                user.save()  # Save the user instance
-                instances.append(user)
+                if created:
+                    user.set_password(password)
+                    user.save()
+                #instances.append(user)
 
             self.stdout.write(self.style.SUCCESS(f'Successfully imported data for {User.__name__}'))
         else:

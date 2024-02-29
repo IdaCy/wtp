@@ -31,7 +31,6 @@
                         source: "{% url 'article-search' %}",
                         minLength: 2, // Minimum length before searching
                         select: function (event, ui) {
-                            // Optional: Do something when a suggestion is selected
                             $('#id_article_title').val(ui.item.value); // Set the value for the article title input
                         }
                     });

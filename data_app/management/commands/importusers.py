@@ -32,8 +32,8 @@ class Command(BaseCommand):
                     username=email,
                     email=email,
                     defaults={
-                        'first_name': row.get('firstname', ''),
-                        'last_name': row.get('lastname', ''),
+                        'first_name': row.get('first_name', ''),
+                        'last_name': row.get('last_name', ''),
                         'jobtitle': row.get('jobtitle', ''),
                         'company': row.get('company', ''),
                         'admin_priv': row.get('admin_priv', 0),

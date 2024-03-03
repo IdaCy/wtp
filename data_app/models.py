@@ -21,10 +21,14 @@ class User(AbstractUser):
     company = models.CharField(max_length=200, blank=True, null=True)
     admin_priv = models.SmallIntegerField(default=0, null=True)
 
+    # Use email as the username field
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
     def __str__(self):
         # Handle the case where first_name or last_name might be None
         full_name = f"{self.first_name or ''} {self.last_name or ''}".strip()
-        return full_name if full_name else self.username
+        return full_name if full_name else self.email
 
 
 class Element(models.Model):

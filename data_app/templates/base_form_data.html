@@ -82,7 +82,7 @@
                         if ($(this).val().length > 0) {
                             $(this).css('background-image', 'none');
                         } else {
-                            $(this).css('background-image', 'url({% static "images/magnifying-glass.png" %})');
+                            $(this).css('background-image', 'url("../static/images/magnifying-glass.png")');
                         }
                     });
                 });
@@ -126,7 +126,7 @@
                 <label for="id_article_title">Article Title:</label>
                 {# reference_form.article_title #}
                 <input class="full-width article-title-search" type="text" id="id_article_title" name="article_title"
-                       style="background-image: url({% static 'images/magnifying-glass.png' %}); background-repeat: no-repeat; background-position: 10px center;"
+                       style="background-image: url('../static/images/magnifying-glass.png'); background-repeat: no-repeat; background-position: 10px center;"
                        value="{{ reference_form.article_title.value|default_if_none:'' }}">>
                 <!--<input type="text" id="id_author" name="author"
                        value="{{ reference_form.author.value|default_if_none:'' }}">-->

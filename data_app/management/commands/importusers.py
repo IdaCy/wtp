@@ -3,7 +3,6 @@ import pandas as pd
 import os
 from django.core.management.base import BaseCommand, CommandError
 
-
 class Command(BaseCommand):
     help = 'Imports data from Excel files into the database'
 
@@ -23,10 +22,9 @@ class Command(BaseCommand):
             self.stdout.write(f'Importing data for {User.__name__}...')
             data = pd.read_excel(file_name)
 
-            #instances = []
             for index, row in data.iterrows():
                 email = row['email']
-                password = row['password']  # Assuming there's a 'password' column in the Excel file
+                password = str(row['password'])  # Convert the password to a string
 
                 user, created = User.objects.get_or_create(
                     username=email,
@@ -35,7 +33,7 @@ class Command(BaseCommand):
                         'first_name': row.get('first_name', ''),
                         'last_name': row.get('last_name', ''),
                         'jobtitle': row.get('jobtitle', ''),
-                        'company': row.get('company', ''),
+                        'organisation': row.get('organisation', ''),
                         'admin_priv': row.get('admin_priv', 0),
                         'salutation': row.get('salutation', ''),
                     }
@@ -44,7 +42,6 @@ class Command(BaseCommand):
                 if created:
                     user.set_password(password)
                     user.save()
-                #instances.append(user)
 
             self.stdout.write(self.style.SUCCESS(f'Successfully imported data for {User.__name__}'))
         else:

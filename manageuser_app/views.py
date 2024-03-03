@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from django.shortcuts import render, redirect
 from data_app.models import User
 
@@ -12,16 +12,12 @@ def register_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            # Extract data from the form
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')  # Use password1 to get the password
-            # Create a new User instance
-            user = User.objects.create(username=username, password=password)
+            user = form.save()
 
-            # Additional fields from your custom User model
+            # Additional fields from custom User model
             user.salutation = request.POST.get('salutation')
-            user.firstname = request.POST.get('firstname')
-            user.lastname = request.POST.get('lastname')
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
             user.email = request.POST.get('email')
             user.jobtitle = request.POST.get('jobtitle')
             user.company = request.POST.get('company')
@@ -29,7 +25,7 @@ def register_view(request):
 
             user.save()
 
-            messages.success(request, f'Account created for {username}!')
+            messages.success(request, f'Account created for {user.first_name} {user.last_name}!')
             return redirect('login')
         else:
             for error in form.errors:
@@ -41,25 +37,23 @@ def register_view(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
+            user = form.get_user()
             if user is not None:
                 login(request, user)
-                print("Successful login for user:", username)  # for debugging
-                messages.success(request, f'Welcome back, {username}!')
+                print("Successful login for user:", user.email)  # Adjusted to use user.email
+                messages.success(request, f'Welcome back, {user.get_full_name()}!')
                 return redirect('dashboard')
             else:
-                print("Invalid username or password")  # for debugging
-                messages.error(request, 'Invalid username or password.')
+                print("Invalid email or password")  # for debugging
+                messages.error(request, 'Invalid email or password.')
         else:
             print("Form is not valid:", form.errors)  # for debugging
             for error in form.errors:
                 messages.error(request, form.errors[error])
     else:
-        form = AuthenticationForm()
+        form = CustomAuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
 

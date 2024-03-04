@@ -1,0 +1,196 @@
+@font-face {
+    font-family: 'Climate Crisis';
+    src: url('/static/fonts/ClimateCrisis.ttf') format('truetype'); /* Replace with the actual path to your font file */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: black;
+}
+
+section {
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+}
+
+.landing {
+    background-color: #003300;
+    color: #fff;
+    /*padding: 100px 0;*/
+    justify-content: center;
+}
+
+.landing-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.landing-content h1 {
+    width: 55%;
+    text-align: left;
+    line-height: 1.5;
+}
+
+.login-form {
+    width: 45%;
+    background-color: transparent;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.info {
+    height: 45vh;
+    background-image: url('/static/images/fox-ears.jpg');
+    background-size: cover;
+    background-color: rgba(255, 255, 255, 0.7);
+    background-position: center bottom;
+    /*padding: 100px 0;*/
+}
+
+.info .info-content {
+    margin: 150px 20%;
+    padding: 5px 20px;
+
+    background-color: rgba(255, 255, 255, 0.42);
+    /*z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+    font-size: 15px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.supported-by {
+    background-color: #f9f9f9;
+}
+
+.supported-by-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.supported-by div.head {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    width: 30%;
+    margin-left: 90px;
+}
+.supported-by div.head h2 {
+    font-family: 'Climate Crisis', sans-serif;
+    color: #003300;
+    font-size: 50px;
+    line-height: 1;
+    text-transform: uppercase;
+    margin: 0 20px;
+}
+.supported-by ul {
+    width: 70%;
+    line-height: 3;
+    margin-left: 90px;
+    padding-left: 90px;
+}
+
+.contributions {
+    background-color: #e9e9e9;
+}
+
+.contributions-content {
+    padding: 0 15%;
+    line-height: 1.5;
+}
+
+h1 {
+    font-size: 60px;
+    margin-left: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+ul li {
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+footer {
+    height: 20vh;
+    /*padding: 20px;*/
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-links {
+    text-align: center;
+}
+
+.footer-link a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 16px;
+}
+
+.footer-bullet {
+    color: #fff;
+    font-size: 16px;
+    margin: 0 5px;
+}
+
+/* link to register */
+
+/* Style for login form and messages */
+.login-form {
+    /* Existing styles */
+}
+
+.messages {
+    /* Existing styles */
+}
+
+
+/* register link */
+
+/*.register p {
+    margin-top: 20px;
+    font-size: 16px;
+    text-align: center;
+}*/
+
+.register a {
+    color: #88c99c;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.register a:hover, .register a:focus {
+    color: #5f9850;
+    text-decoration: none;
+}

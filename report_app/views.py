@@ -64,7 +64,7 @@ def report_user(request):
                                 distinct=True),
             lastname=StringAgg(Cast('reference__user__last_name', output_field=TextField()), delimiter=', ',
                                distinct=True),
-            company=StringAgg(Cast('reference__user__company', output_field=TextField()), delimiter=', ',
+            organisation=StringAgg(Cast('reference__user__organisation', output_field=TextField()), delimiter=', ',
                               distinct=True),
             # reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True),
             # approval=StringAgg(Cast('reference__approval_status', output_field=TextField()), delimiter=', ', distinct=True),

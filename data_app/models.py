@@ -18,7 +18,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(unique=True)
     jobtitle = models.CharField(max_length=200, blank=True, null=True)
-    company = models.CharField(max_length=200, blank=True, null=True)
+    organisation = models.CharField(max_length=200, blank=True, null=True)
     admin_priv = models.SmallIntegerField(default=0, null=True)
 
     # Use email as the username field

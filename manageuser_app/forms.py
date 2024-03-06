@@ -12,7 +12,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("email", "salutation", "first_name", "last_name", "jobtitle", "company")
+        fields = ("email", "salutation", "first_name", "last_name", "jobtitle", "organisation")
 
     def clean_email(self):
         email = self.cleaned_data["email"]

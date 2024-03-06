@@ -20,7 +20,7 @@ def register_view(request):
             user.last_name = request.POST.get('last_name')
             user.email = request.POST.get('email')
             user.jobtitle = request.POST.get('jobtitle')
-            user.company = request.POST.get('company')
+            user.company = request.POST.get('organisation')
             user.admin_priv = request.POST.get('admin_priv')
 
             user.save()

@@ -90,12 +90,30 @@
                 /* synchronise the species names latin/common */
 
                 $(document).ready(function () {
-                    // Function to update both dropdowns and the hidden input
                     function updateSpeciesSelection(selectedID) {
+                        // Check if a selection has been made or if it's the 'no selection' option
+                        let valueToSet = selectedID && selectedID !== "--" ? selectedID : "";
+
+                        // Update the hidden input. If no valid selection is made, set it to an empty string.
+                        $('#species_name_id').val(valueToSet);
+
+                        // Update the Latin and common name dropdowns only if a valid selection is made.
+                        if (selectedID && selectedID !== "--") {
+                            $('#id_name_latin').val(selectedID);
+                            $('#id_name_common').val(selectedID);
+                        } else {
+                            // Optionally, reset the dropdowns to their default 'no selection' state if needed
+                            $('#id_name_latin').val('');
+                            $('#id_name_common').val('');
+                        }
+                    }
+
+                    // Function to update both dropdowns and the hidden input
+                    /*function updateSpeciesSelection(selectedID) {
                         $('#species_name_id').val(selectedID); // Update the hidden input
                         $('#id_name_latin').val(selectedID); // Update the Latin name dropdown
                         $('#id_name_common').val(selectedID); // Update the common name dropdown
-                    }
+                    }*/
 
                     // When the Latin name dropdown changes...
                     $('#id_name_latin').change(function () {

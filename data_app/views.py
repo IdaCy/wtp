@@ -431,7 +431,7 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
             datacr = datacr_form.save(commit=False)
             print(datacr_form.cleaned_data.get('species_name'))
             if 'species_name' in datacr_form.cleaned_data and datacr_form.cleaned_data['species_name'] is not None:
-                species_id = datacr_form.cleaned_data['species_name'].id
+                species_id = datacr_form.cleaned_data['species_name'].species_id
                 if species_id == 24:
                     datacr.species_name = None
             datacr.reference = reference
@@ -443,7 +443,7 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
         if datacr_form.is_valid():
             datacr = datacr_form.save(commit=False)
             if 'species_name' in datacr_form.cleaned_data and datacr_form.cleaned_data['species_name'] is not None:
-                species_id = datacr_form.cleaned_data['species_name'].id
+                species_id = datacr_form.cleaned_data['species_name'].species_id
                 if species_id == 24:
                     datacr.species_name = None
             datacr.reference = existing_reference

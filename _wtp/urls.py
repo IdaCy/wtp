@@ -6,6 +6,9 @@ from data_app import views as data_views
 from manageuser_app import views as manageuser_views
 from legal_app import views as legal_views
 from report_app import views as report_views
+from django.urls import path, include
+from django.urls import path, re_path
+from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,10 +23,12 @@ urlpatterns = [
     # path('get_correction_factor/', GetCorrectionFactorView.as_view(), name='get_correction_factor'),
     path('dashboard/', dashboard_views.board_view, name='dashboard'),
     path('register/', manageuser_views.register_view, name='register'),
-    path('login/', manageuser_views.login_view, name='login'),
+    #re_path(r'^accounts/login/$', lambda request: redirect('login', permanent=True)),
     path('logout/', manageuser_views.logout_view, name='logout'),
     path('privacy/', manageuser_views.privacy_view, name='privacy'),
     path('legal/', manageuser_views.legal_view, name='legal'),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('login/', manageuser_views.login_view, name='login'),
     path('data/', data_views.data_view, name='data'),
     path('download_summaries/', data_views.download_summaries, name='download_summaries'),
     path('view_summary_results/', data_views.view_summary_results, name='view_summary_results'),

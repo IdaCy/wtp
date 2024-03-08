@@ -424,22 +424,23 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
     if submit_ref:
         # For "Add All" action
         if reference_form.is_valid() and datacr_form.is_valid():
+            print(datacr_form.errors)
             reference = reference_form.save(commit=False)
             reference.user = user
             reference.save()
 
             datacr = datacr_form.save(commit=False)
-            print("species name selected?")
+            """print("species name selected?")
             print(datacr_form.cleaned_data.get('species_name'))
 
-            """if 'species_name' in datacr_form.cleaned_data and datacr_form.cleaned_data['species_name'] is not None:
+            if 'species_name' in datacr_form.cleaned_data and datacr_form.cleaned_data['species_name'] is not None:
                 species_id = datacr_form.cleaned_data['species_name'].species_id
                 if species_id == 24:
                     datacr.species_name = None"""
 
-            species_name = datacr_form.cleaned_data.get('species_name')
-            if species_name == "" or species_name is None:
-                datacr.species_name = None
+            """species_name = datacr_form.cleaned_data.get('species_name')
+            if species_name == "" or species_name == "None" or species_name is None:
+                datacr.species_name = None"""
 
             datacr.reference = reference
             datacr.save()
@@ -449,9 +450,9 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
     else:
         if datacr_form.is_valid():
             datacr = datacr_form.save(commit=False)
-            species_name = datacr_form.cleaned_data.get('species_name')
-            if species_name == "" or species_name is None:
-                datacr.species_name = None
+            """species_name = datacr_form.cleaned_data.get('species_name')
+            if species_name == "" or species_name == "None" or species_name is None:
+                datacr.species_name = None"""
             datacr.reference = existing_reference
             datacr.save()
             return True, None, datacr_form  # No need to return a reference form here
@@ -471,6 +472,12 @@ def add_datacr(request):
 
         reference_form = ReferenceForm(request.POST)
         datacr_form = DataCRForm(request.POST)
+        print(datacr_form.errors)
+        """print("request.POST.get('species_name', ''): ")
+        print(request.POST.get('species_name', ''))
+        species_name = request.POST.get('species_name', '')
+        if species_name == "None":
+            datacr_form.species_name = None"""
 
         # Capture reference form values to re-populate after submission
         ref_id = request.POST.get('ref_id', '')

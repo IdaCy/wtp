@@ -87,18 +87,46 @@
                     });
                 });
 
-                /* synchronise the species names latin/common */
-
                 $(document).ready(function () {
                     function updateSpeciesSelection(selectedID) {
+                        // Update logic as before
+                        $('#species_name_id').val(selectedID);
+                        $('#id_name_common').val(selectedID);
+                        // Include any additional logic needed for synchronization
+                    }
+
+                    // Initialize the species selection based on the current dropdown values
+                    // Assuming that at page load, both dropdowns are synchronized and either both have a value or are empty
+                    var initialSelectedID = $('#id_name_latin').val() || $('#id_name_common').val();
+                    updateSpeciesSelection(initialSelectedID);
+
+                    // Event handlers for dropdown changes
+                    $('#id_name_latin').change(function () {
+                        updateSpeciesSelection($(this).val());
+                    });
+
+                    $('#id_name_common').change(function () {
+                        updateSpeciesSelection($(this).val());
+                    });
+                });
+
+                /* synchronise the species names latin/common */
+
+                /*$(document).ready(function () {
+                    function updateSpeciesSelection(selectedID) {
                         // Check if a selection has been made or if it's the 'no selection' option
-                        let valueToSet = selectedID && selectedID !== "--" ? selectedID : "";
+                        //let valueToSet = selectedID && selectedID !== "--" ? selectedID : "";
+                        //$('#species_name_id').val(valueToSet);
+                        //$('#species_name_id').val('None');
+                        //let valueToSet = selectedID && selectedID !== "--" ? selectedID : "";
 
                         // Update the hidden input. If no valid selection is made, set it to an empty string.
-                        $('#species_name_id').val(valueToSet);
+                        $('#species_name_id').val(selectedID);
+                        $('#id_name_common').val(selectedID);
+                        //$('#species_name_id').val(valueToSet);
 
                         // Update the Latin and common name dropdowns only if a valid selection is made.
-                        if (selectedID && selectedID !== "--") {
+                        /*if (selectedID && selectedID !== "--") {
                             $('#id_name_latin').val(selectedID);
                             $('#id_name_common').val(selectedID);
                         } else {
@@ -113,7 +141,7 @@
                         $('#species_name_id').val(selectedID); // Update the hidden input
                         $('#id_name_latin').val(selectedID); // Update the Latin name dropdown
                         $('#id_name_common').val(selectedID); // Update the common name dropdown
-                    }*/
+                    }
 
                     // When the Latin name dropdown changes...
                     $('#id_name_latin').change(function () {
@@ -124,7 +152,7 @@
                     $('#id_name_common').change(function () {
                         updateSpeciesSelection($(this).val());
                     });
-                });
+                });*/
             </script>
         {% endblock %}
 
@@ -246,11 +274,18 @@
 
                     <div class="entry">
                         <label for="id_name_latin">Species Latin:</label>
-                        <select class="limited" id="id_name_latin">
+                        <select class="limited" id="id_name_latin" name="name_latin">
+                            <!--<option value="">No Selection</option>-->
                             {% for species in species_list %}
                                 <option value="{{ species.species_id }}">{{ species.name_latin }}</option>
                             {% endfor %}
                         </select>
+
+                        {% if datacr_form.species_name.errors %}
+                            <div class="alert alert-warning" role="alert" style="color: red">
+                                {{ datacr_form.species_name.errors.as_text }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="entry">
                         <label for="id_measurement_date">Sampling Date:</label>
@@ -264,7 +299,8 @@
                 <div class="right-rim">
                     <div class="entry">
                         <label for="id_name_common">Species Common:</label>
-                        <select class="limited" id="id_name_common">
+                        <select class="limited" id="id_name_common" name="common">
+                            <!--<option value="">No Selection</option>-->
                             {% for species in species_list %}
                                 <option value="{{ species.species_id }}">{{ species.name_common }}</option>
                             {% endfor %}

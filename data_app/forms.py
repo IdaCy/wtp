@@ -36,12 +36,12 @@ class ReferenceForm(forms.ModelForm):
 
 
 class DataCRForm(forms.ModelForm):
-    species_name = forms.ModelChoiceField(
+    """species_name = forms.ModelChoiceField(
         queryset=SpeciesName.objects.all(),
         label='Species',
         empty_label="Please Select",
         required=False
-    )
+    )"""
 
     lifestage = forms.ModelChoiceField(
         queryset=Lifestage.objects.all().order_by('lifestage_name').distinct('lifestage_name'),
@@ -81,7 +81,7 @@ class DataCRForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['habitat'].required = True
         self.fields['crn'].required = True
-        self.fields['species_name'].required = False
+        #self.fields['species_name'].required = False
         self.fields['habitat'].queryset = Habitat.objects.all()
         self.fields['study_type'].queryset = StudyType.objects.all()
         self.fields['radionuclide'].queryset = Radionuclide.objects.all()
@@ -101,3 +101,11 @@ class DataCRForm(forms.ModelForm):
         for name, field in self.fields.items():
             if name not in ['cr', 'crn', 'habitat']:
                 field.required = False
+
+    """def clean_species_name(self):
+        data = self.cleaned_data['species_name']
+        # Explicitly allow None or empty string as valid values
+        if data == "" or str(data).lower() == "none":
+            return None
+        return data"""
+

@@ -182,7 +182,7 @@ def get_rejection_reason(reference_id):
 def article_title_search(request):
     if 'term' in request.GET:
         qs = Reference.objects.filter(article_title__icontains=request.GET.get('term'))
-        titles = list(qs.values_list('article_title', flat=True))
+        titles = list(qs.values_list('article_title', flat=True).distinct())
         return JsonResponse(titles, safe=False)
     return JsonResponse([], safe=False)
 
@@ -429,6 +429,11 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
             reference.save()
 
             datacr = datacr_form.save(commit=False)
+            print(datacr_form.cleaned_data.get('species_name'))
+            if 'species_name' in datacr_form.cleaned_data and datacr_form.cleaned_data['species_name'] is not None:
+                species_id = datacr_form.cleaned_data['species_name'].id
+                if species_id == 24:
+                    datacr.species_name = None
             datacr.reference = reference
             datacr.save()
             return True, reference_form, datacr_form
@@ -437,6 +442,10 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
     else:
         if datacr_form.is_valid():
             datacr = datacr_form.save(commit=False)
+            if 'species_name' in datacr_form.cleaned_data and datacr_form.cleaned_data['species_name'] is not None:
+                species_id = datacr_form.cleaned_data['species_name'].id
+                if species_id == 24:
+                    datacr.species_name = None
             datacr.reference = existing_reference
             datacr.save()
             return True, None, datacr_form  # No need to return a reference form here

@@ -36,7 +36,7 @@ class ReferenceForm(forms.ModelForm):
 
 
 class DataCRForm(forms.ModelForm):
-    species_list = forms.ModelChoiceField(
+    species_name = forms.ModelChoiceField(
         queryset=SpeciesName.objects.all(),
         label='Species',
         empty_label="Please Select",
@@ -81,6 +81,7 @@ class DataCRForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['habitat'].required = True
         self.fields['crn'].required = True
+        self.fields['species_name'].required = False
         self.fields['habitat'].queryset = Habitat.objects.all()
         self.fields['study_type'].queryset = StudyType.objects.all()
         self.fields['radionuclide'].queryset = Radionuclide.objects.all()

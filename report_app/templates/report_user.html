@@ -69,7 +69,7 @@
             <tr>
                 <td>{% if item.salutation %} {{ item.salutation }} {%  endif %} {{ item.firstname }} {{ item.lastname }}</td>
                 {% if details_query == "nameorg" or details_query == "nameorgcontact" %}
-                    <td>{{ item.company }}</td>
+                    <td>{{ item.organisation }}</td>
                 {% endif %}
                 {% if details_query == "nameorgcontact" %}
                     <td>{{ item.email }}</td>

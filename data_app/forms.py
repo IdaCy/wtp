@@ -88,6 +88,11 @@ class DataCRForm(forms.ModelForm):
         self.fields['tissue'].queryset = Tissue.objects.all()
         self.fields['media'].queryset = Media.objects.all()
 
+        if not self.initial.get('habitat'):
+            default_habitat = Habitat.objects.first()
+            if default_habitat:
+                self.fields['habitat'].initial = default_habitat.pk
+
         # Modify the choices for wildlife_group, icrp_rap, and lifestage
         self.fields['wildlife_group'].choices = [(wg.wildlife_group_id, wg.wildlife_group_name) for wg in
                                                  WildlifeGroup.objects.all().order_by('wildlife_group_name').distinct(

@@ -108,6 +108,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Attach the functions to the change event of dropdowns
     habitatDropdown.addEventListener('change', updateMediaType);
     mediaTypeDropdown.addEventListener('change', updateMediaUnits);
+    updateMediaType();
+    updateMediaUnits();
 
     // Initialize functions on page load
     //updateMediaType();

@@ -2,15 +2,17 @@
 
 {% block content %}
     <h2>Edit Your Records</h2>
-    <table>
-        <thead>
+
+    {% if records %}
+        <table>
+            <thead>
             <tr>
                 <th>Reference ID</th>
                 <th>Article Title</th>
                 <th>CR Value</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             {% for record in records %}
                 <tr>
                     <td>
@@ -30,6 +32,9 @@
                     </td>
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    {% else %}
+        <p>You currently have no records entered.</p>
+    {% endif %}
 {% endblock %}

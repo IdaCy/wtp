@@ -527,14 +527,18 @@ def add_datacr(request):
                 )
                 print(success)
 
-            if success:
-                """reference_form = ReferenceForm(initial={
-                    'ref_id': ref_id,
-                    'volume': volume,
-                    'article_title': article_title,
-                })"""
-                initial_data = {'ref_id': ref_id, 'volume': volume, 'article_title': article_title, }
+            """if success:
+                initial_data = {'ref_id': ref_id, 'volume': volume, 'article_title': article_title}
                 print("Initial Data for Reference Form:", initial_data)
+                reference_form = ReferenceForm(initial=initial_data)
+                context.update({
+                    'reference_form': reference_form,
+                    'datacr_form': datacr_form
+                })
+
+                return render(request, 'add_datacr.html', context)"""
+
+                #initial_data = {'ref_id': ref_id, 'volume': volume, 'article_title': article_title, }
 
             # Re-instantiate the reference form with initial data to keep fields filled in all cases
             #reference_form_fields = set(ReferenceForm().fields.keys())

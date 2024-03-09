@@ -159,309 +159,246 @@
 
         <!-- Reference Section -->
         <section class="reference">
-            <!--<h2>Reference</h2>-->
             <div class="entry">
-                <!--<label for="id_reference_id">Reference ID: <span id="reference_id_placeholder"></span></label>-->
                 <label for="id_ref_id">Reference ID:</label>
-                <!--<input type="text" id="ref_id" name="ref_id" readonly>-->
                 <input type="text" id="ref_id" name="ref_id"
-                       value="{{ reference_form.ref_id.value|default_if_none:'' }}" readonly>
+                       value="{{ reference_form.ref_id.value|default_if_none:'' }}">
             </div>
+
+            <div class="entry">
+                <label for="id_author">Author:</label>
+                <input type="text" id="id_author" name="author"
+                       value="{{ reference_form.author.value|default_if_none:'' }}">
+            </div>
+
+            <div class="entry">
+                <label for="id_reference_language">Reference Language:</label>
+                {{ reference_form.language }}
+            </div>
+
+            <div class="translation">
+                <label for="id_translation">English Translation Available:</label>
+                <input type="checkbox" id="id_translation" name="translation"
+                       value="{{ reference_form.translation.value }}">
+            </div>
+
 
             <div class="pub">
                 <label for="id_article_title">Article Title:</label>
-                {# reference_form.article_title #}
                 <input class="full-width article-title-search" type="text" id="id_article_title" name="article_title"
                        style="background-image: url('../static/images/magnifying-glass.png'); background-repeat: no-repeat; background-position: 10px center;"
-                       value="{{ reference_form.article_title.value|default_if_none:'' }}">>
-                <!--<input type="text" id="id_author" name="author"
-                       value="{{ reference_form.author.value|default_if_none:'' }}">-->
+                       value="{{ reference_form.article_title.value|default_if_none:'' }}">
             </div>
             <div class="pub">
                 <label for="id_publication_title">Publication Title:</label>
                 {{ reference_form.pub_title }}
             </div>
 
-            <div class="flex-container">
-                <div class="left">
-                    <div class="entry">
-                        <label for="id_author">Author:</label>
-                        <input type="text" id="id_author" name="author"
-                               value="{{ reference_form.author.value|default_if_none:'' }}">
-                        <!--<input type="text" id="id_author" name="author">-->
-                    </div>
-                    <div class="entry">
-                        <label for="id_volume">Volume:</label>
-                        <input type="text" id="id_volume" name="volume"
-                               value="{{ reference_form.volume.value|default_if_none:'' }}">
-                        <!--<input type="text" id="id_volume" name="volume">-->
-                    </div>
-                    <div class="entry">
-                        <label for="id_pages">Page Numbers:</label>
-                        <input type="text" id="id_pages" name="pages"
-                               value="{{ reference_form.pages.value|default_if_none:'' }}">
-                        <!--<input type="text" id="id_pages" name="pages">-->
-                    </div>
-                    <div class="entry">
-                        <label for="id_reference_language">Reference Language:</label>
-                        {{ reference_form.language }}
-                    </div>
-                </div>
 
-                <div class="right">
-                    <div class="entry">
-                        <label for="id_publication_type">Publication Type:</label>
-                        {{ reference_form.pub_type }}
-                    </div>
-                    <div class="entry">
-                        <label for="id_year">Year:</label>
-                        <input type="text" id="id_year" name="year"
-                               value="{{ reference_form.year.value|default_if_none:'' }}">
-                        <!--<input type="text" id="id_year" name="year">-->
-                    </div>
-                    <div class="entry">
-                        <label for="id_part">Part:</label>
-                        <input type="text" id="id_part" name="part"
-                               value="{{ reference_form.part.value|default_if_none:'' }}">
-                        <!--<input type="text" id="id_part" name="part">-->
-                    </div>
-                    <div class="translation">
-                        <label for="id_translation">Translation into English Available:</label>
-                        <input type="checkbox" id="id_translation" name="translation"
-                               value="{{ reference_form.translation.value }}">
-                        <!--<input type="checkbox" id="id_translation" name="translation">-->
-                    </div>
-                </div>
+            <div class="entry">
+                <label for="id_volume">Volume:</label>
+                <input type="text" id="id_volume" name="volume"
+                       value="{{ reference_form.volume.value|default_if_none:'' }}">
+            </div>
+            <div class="entry">
+                <label for="id_pages">Page Numbers:</label>
+                <input type="text" id="id_pages" name="pages"
+                       value="{{ reference_form.pages.value|default_if_none:'' }}">
+            </div>
+            <div class="entry">
+                <label for="id_year">Year:</label>
+                <input type="text" id="id_year" name="year"
+                       value="{{ reference_form.year.value|default_if_none:'' }}">
+            </div>
+            <div class="entry">
+                <label for="id_part">Part:</label>
+                <input type="text" id="id_part" name="part"
+                       value="{{ reference_form.part.value|default_if_none:'' }}">
+            </div>
+            <div class="entry">
+                <label for="id_publication_type">Publication Type:</label>
+                {{ reference_form.pub_type }}
             </div>
         </section>
 
 
         <!-- Species Section -->
         <section class="species">
-            <!--<h2>Species</h2>-->
-            <div class="flex-container">
-                <div class="left-rim">
-                    <div class="entry">
-                        <label for="habitat_specific_type">Habitat:</label>
-                        {{ datacr_form.habitat | add_class:"limited" }}
-                    </div>
-                    <div class="entry">
-                        <label for="id_icrp_rap">ICRP RAP:</label>
-                        {{ datacr_form.icrp_rap | add_class:"limited" }}
-                    </div>
-                    <div class="entry">
-                        <label for="id_lifestage">Lifestage:</label>
-                        {{ datacr_form.lifestage | add_class:"limited" }}
-                    </div>
+            <div class="entry">
+                <label for="habitat_specific_type">Habitat:</label>
+                {{ datacr_form.habitat | add_class:"limited" }}
+            </div>
+            <div class="entry">
+                <label for="id_icrp_rap">ICRP RAP:</label>
+                {{ datacr_form.icrp_rap | add_class:"limited" }}
+            </div>
+            <div class="entry">
+                <label for="id_lifestage">Lifestage:</label>
+                {{ datacr_form.lifestage | add_class:"limited" }}
+            </div>
+            <div class="left-mid">
+                <div class="entry">
+                    <label for="id_wildlife_group">Wildlife Group:</label>
+                    {{ datacr_form.wildlife_group | add_class:"limited" }}
                 </div>
-                <div class="left-mid">
-                    <div class="entry">
-                        <label for="id_wildlife_group">Wildlife Group:</label>
-                        {{ datacr_form.wildlife_group | add_class:"limited" }}
-                    </div>
-                    <div class="entry">
-                        <label for="id_studytype">Studytype:</label>
-                        {{ datacr_form.study_type | add_class:"limited" }}
-                    </div>
-                    <div class="entry">
-                        <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
-                    </div>
+                <div class="entry">
+                    <label for="id_studytype">Studytype:</label>
+                    {{ datacr_form.study_type | add_class:"limited" }}
                 </div>
-                <div class="right-mid">
-                    <!-- the actual value to be saved for a speciesname instance -->
-                    <input type="hidden" name="species_name" id="species_name_id"
-                           value="{{ datacr_form.species_name.value }}">
+                <div class="entry">
+                    <textarea id="id_notes" name="notes" placeholder="Notes"></textarea>
+                </div>
+            </div>
+            <input type="hidden" name="species_name" id="species_name_id"
+                   value="{{ datacr_form.species_name.value }}">
 
-                    <div class="entry">
-                        <label for="id_name_latin">Species Latin:</label>
-                        <select class="limited" id="id_name_latin" name="name_latin">
-                            <!--<option value="">No Selection</option>-->
-                            {% for species in species_list %}
-                                <option value="{{ species.species_id }}">{{ species.name_latin }}</option>
-                            {% endfor %}
-                        </select>
+            <div class="entry">
+                <label for="id_name_latin">Species Latin:</label>
+                <select class="limited" id="id_name_latin" name="name_latin">
+                    <!--<option value="">No Selection</option>-->
+                    {% for species in species_list %}
+                        <option value="{{ species.species_id }}">{{ species.name_latin }}</option>
+                    {% endfor %}
+                </select>
 
-                        {% if datacr_form.species_name.errors %}
-                            <div class="alert alert-warning" role="alert" style="color: red">
-                                {{ datacr_form.species_name.errors.as_text }}
-                            </div>
-                        {% endif %}
+                {% if datacr_form.species_name.errors %}
+                    <div class="alert alert-warning" role="alert" style="color: red">
+                        {{ datacr_form.species_name.errors.as_text }}
                     </div>
-                    <div class="entry">
-                        <label for="id_measurement_date">Sampling Date:</label>
-                        <input type="date" id="id_measurement_date" name="measurement_date">
-                    </div>
-                    <div class="entry">
-                        <label for="id_biohalflife">Biohalflife:</label>
-                        <input type="text" id="id_biohalflife" name="biohalflife">
-                    </div>
-                </div>
-                <div class="right-rim">
-                    <div class="entry">
-                        <label for="id_name_common">Species Common:</label>
-                        <select class="limited" id="id_name_common" name="common">
-                            <!--<option value="">No Selection</option>-->
-                            {% for species in species_list %}
-                                <option value="{{ species.species_id }}">{{ species.name_common }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    {# { datacr_form.species_name | add_class:"limited" }#}
-                    <div class="entry">
-                        <label for="id_radionuclide">Element/Nuclide:</label>
-                        {{ datacr_form.radionuclide | add_class:"limited" }}
-                    </div>
+                {% endif %}
+            </div>
+            <div class="entry">
+                <label for="id_measurement_date">Sampling Date:</label>
+                <input type="date" id="id_measurement_date" name="measurement_date">
+            </div>
+            <div class="entry">
+                <label for="id_biohalflife">Biohalflife:</label>
+                <input type="text" id="id_biohalflife" name="biohalflife">
+            </div>
+            <div class="entry">
+                <label for="id_name_common">Species Common:</label>
+                <select class="limited" id="id_name_common" name="common">
+                    {% for species in species_list %}
+                        <option value="{{ species.species_id }}">{{ species.name_common }}</option>
+                    {% endfor %}
+                </select>
+                <div class="entry">
+                    <label for="id_radionuclide">Element/Nuclide:</label>
+                    {{ datacr_form.radionuclide | add_class:"limited" }}
                 </div>
             </div>
         </section>
 
         <!-- Sample Section -->
-
-
         <section class="media">
-            <div class="flex-container">
-                <div class="left-rim">
-                    <div class="entry">
-                        <label for="id_media">Media Type:</label>
-                        {{ datacr_form.media | add_class:"limited" }}
-                        <!--<select id="id_media" name="media">
-                            <option value="soil" selected>Soil</option>
-                            <option value="air">Air</option>
-                        </select>-->
-                    </div>
-                    <div class="entry">
-                        <label for="id_biota_n">N for Media:</label>
-                        <input type="text" id="id_biota_n" name="n_biota_n">
-                    </div>
-                </div>
-                <div class="left-mid">
-                    <div class="entry">
-                        <label for="id_media_wet_dry">Media Wet/Dry:</label>
-                        <select id="id_media_wet_dry" name="media_wet_dry">
-                            <option value="Wet">Wet</option>
-                            <option value="Dry">Dry</option>
-                        </select>
-                    </div>
-                    <div class="entry">
-                        <label for="id_media_sd">SD for Media:</label>
-                        <input type="text" id="id_media_sd" name="media_sd">
-                    </div>
-                </div>
-                <div class="right-mid">
-                    <div class="entry">
-                        <label for="id_media_conc">Media Concentration:</label>
-                        <input type="text" id="id_media_conc" name="media_conc">
-                    </div>
-                </div>
-                <div class="right-rim">
-                    <div class="entry">
-                        <label for="id_media_conc_units">Media Units:</label>
-                        <select id="id_media_conc_units" name="media_conc_units">
-                        </select>
-                        <!-- in-between calculations result - but saved, too -->
-                        <input type="hidden" id="id_stand_media_conc" name="stand_media_conc" value="">
-                    </div>
-                </div>
+            <div class="entry">
+                <label for="id_media">Media Type:</label>
+                {{ datacr_form.media | add_class:"limited" }}
+            </div>
+            <div class="entry">
+                <label for="id_biota_n">N for Media:</label>
+                <input type="text" id="id_biota_n" name="n_biota_n">
+            </div>
+            <div class="entry">
+                <label for="id_media_wet_dry">Media Wet/Dry:</label>
+                <select id="id_media_wet_dry" name="media_wet_dry">
+                    <option value="Wet">Wet</option>
+                    <option value="Dry">Dry</option>
+                </select>
+            </div>
+            <div class="entry">
+                <label for="id_media_sd">SD for Media:</label>
+                <input type="text" id="id_media_sd" name="media_sd">
+            </div>
+            <div class="entry">
+                <label for="id_media_conc">Media Concentration:</label>
+                <input type="text" id="id_media_conc" name="media_conc">
+            </div>
+            <div class="entry">
+                <label for="id_media_conc_units">Media Units:</label>
+                <select id="id_media_conc_units" name="media_conc_units">
+                </select>
+                <!-- in-between calculations result - but saved, too -->
+                <input type="hidden" id="id_stand_media_conc" name="stand_media_conc" value="">
             </div>
         </section>
 
         <section class="tissue">
-            <div class="flex-container">
-                <div class="left-rim">
-                    <div class="entry">
-                        <label for="id_tissue_name">Tissue Type:</label>
-                        {{ datacr_form.tissue | add_class:"limited" }}
-                    </div>
-                    <div class="entry">
-                        <label for="id_biota_n">N for Biota:</label>
-                        <input type="text" id="id_biota_n" name="biota_n">
-                    </div>
-                </div>
-                <div class="left-mid">
-                    <div class="entry">
-                        <label for="id_biota_wet_dry">Status of Biota:</label>
-                        <select id="id_biota_wet_dry" name="biota_wet_dry">
-                            <option value="Wet">Wet</option>
-                            <option value="Dry">Dry</option>
-                            <option value="Ash">Ash</option>
-                        </select>
-                    </div>
-                    <div class="entry">
-                        <label for="id_biota_sd">SD for Biota:</label>
-                        <input type="text" id="id_biota_sd" name="biota_sd">
-                    </div>
-                </div>
-                <div class="right-mid">
-                    <div class="entry">
-                        <label for="id_biota_conc">Biota Concentration:</label>
-                        <input type="text" id="id_biota_conc" name="biota_conc">
-                    </div>
-                </div>
-                <div class="right-rim">
-                    <div class="entry">
-                        <label for="id_biota_conc_units">Biota Units:</label>
-                        <select id="id_biota_conc_units" name="biota_conc_units">
-                            <option value="µCi/kg">Bq/l</option>
-                            <option value="Bq/g">Bq/l</option>
-                            <option value="Bq/kg">Bq/l</option>
-                            <option value="Bq/m2">Bq/l</option>
-                            <option value="mBq/g">Bq/l</option>
-                            <option value="mBq/kg">Bq/l</option>
-                            <option value="mg/g">mg/l</option>
-                            <option value="mg/kg">mg/l</option>
-                            <option value="pCi/g">Bq/l</option>
-                            <option value="pCi/kg">Bq/l</option>
-                            <option value="ppb">ppb</option>
-                            <option value="ppm">ppm</option>
-                            <option value="ug/g">ug/l</option>
-                            <option value="ug/kg">ug/l</option>
-                        </select>
+            <div class="entry">
+                <label for="id_tissue_name">Tissue Type:</label>
+                {{ datacr_form.tissue | add_class:"limited" }}
+            </div>
+            <div class="entry">
+                <label for="id_biota_n">N for Biota:</label>
+                <input type="text" id="id_biota_n" name="biota_n">
+            </div>
+            <div class="entry">
+                <label for="id_biota_wet_dry">Status of Biota:</label>
+                <select id="id_biota_wet_dry" name="biota_wet_dry">
+                    <option value="Wet">Wet</option>
+                    <option value="Dry">Dry</option>
+                    <option value="Ash">Ash</option>
+                </select>
+            </div>
+            <div class="entry">
+                <label for="id_biota_sd">SD for Biota:</label>
+                <input type="text" id="id_biota_sd" name="biota_sd">
+            </div>
+            <div class="entry">
+                <label for="id_biota_conc">Biota Concentration:</label>
+                <input type="text" id="id_biota_conc" name="biota_conc">
+            </div>
+            <div class="entry">
+                <label for="id_biota_conc_units">Biota Units:</label>
+                <select id="id_biota_conc_units" name="biota_conc_units">
+                    <option value="µCi/kg">Bq/l</option>
+                    <option value="Bq/g">Bq/l</option>
+                    <option value="Bq/kg">Bq/l</option>
+                    <option value="Bq/m2">Bq/l</option>
+                    <option value="mBq/g">Bq/l</option>
+                    <option value="mBq/kg">Bq/l</option>
+                    <option value="mg/g">mg/l</option>
+                    <option value="mg/kg">mg/l</option>
+                    <option value="pCi/g">Bq/l</option>
+                    <option value="pCi/kg">Bq/l</option>
+                    <option value="ppb">ppb</option>
+                    <option value="ppm">ppm</option>
+                    <option value="ug/g">ug/l</option>
+                    <option value="ug/kg">ug/l</option>
+                </select>
 
-                        <!-- in-between calculations result - but saved, too -->
-                        <input type="hidden" id="id_stand_biota_conc" name="stand_biota_conc" value="">
-                    </div>
-                </div>
+                <!-- in-between calculations result - but saved, too -->
+                <input type="hidden" id="id_stand_biota_conc" name="stand_biota_conc" value="">
             </div>
         </section>
 
         <section class="cr">
-            <div class="flex-container">
-                <div class="left-rim">
-                    <div class="entry">
-                        <label for="id_cr">Concentration Ratio:</label>
-                        <input type="text" id="id_cr" name="cr">
+            <div class="entry">
+                <label for="id_cr">Concentration Ratio:</label>
+                <input type="text" id="id_cr" name="cr">
 
-                        {% if datacr_form.cr.errors %}
-                            <div class="alert alert-warning" role="alert" style="color: red">
-                                {{ datacr_form.cr.errors.as_text }}
-                            </div>
-                        {% endif %}
+                {% if datacr_form.cr.errors %}
+                    <div class="alert alert-warning" role="alert" style="color: red">
+                        {{ datacr_form.cr.errors.as_text }}
                     </div>
-                </div>
-                <div class="left-mid">
-                    <div class="entry">
-                        <label for="id_crn">N of CR:</label>
-                        <input type="text" id="id_crn" name="crn">
+                {% endif %}
+            </div>
+            <div class="entry">
+                <label for="id_crn">N of CR:</label>
+                <input type="text" id="id_crn" name="crn">
 
-                        {% if datacr_form.crn.errors %}
-                            <div class="alert alert-warning" role="alert" style="color: red">
-                                {{ datacr_form.crn.errors.as_text }}
-                            </div>
-                        {% endif %}
+                {% if datacr_form.crn.errors %}
+                    <div class="alert alert-warning" role="alert" style="color: red">
+                        {{ datacr_form.crn.errors.as_text }}
                     </div>
-                </div>
-                <div class="right-mid">
-                    <div class="entry">
-                        <label for="id_cr_sd">SD of CR:</label>
-                        <input type="text" id="id_cr_sd" name="cr_sd">
-                    </div>
-                </div>
-                <div class="right-rim">
-                    <div class="entry">
-                    </div>
-                </div>
+                {% endif %}
+            </div>
+            <div class="entry">
+                <label for="id_cr_sd">SD of CR:</label>
+                <input type="text" id="id_cr_sd" name="cr_sd">
             </div>
         </section>
+
 
         {% block style %}
             <script src="{% static 'js/base_form_data.js' %}"></script>
@@ -472,9 +409,10 @@
             <!-- buttons decided by child templates -->
         {% endblock %}
 
+    {% block explanations %}
+        <!-- block for extra texts below the form -->
+    {% endblock explanations %}
+
     </form>
 {% endblock %}
 
-{% block specific_content %}
-    <!-- Placeholder for page-specific content -->
-{% endblock %}

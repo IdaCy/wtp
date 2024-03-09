@@ -256,7 +256,7 @@ class Language(models.Model):
 
 
 class Reference(models.Model):
-    ref_id = models.IntegerField(primary_key=True)
+    ref_id = models.BigIntegerField(primary_key=True)
     author = models.CharField(max_length=500, null=True)
     article_title = models.CharField(max_length=500, null=True)
     pub_title = models.ForeignKey(PubTitle, on_delete=models.CASCADE, null=True)

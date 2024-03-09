@@ -1,7 +1,7 @@
 {% extends 'base_form_data.html' %}
 
 {% block form_action %}
-{% url 'add_datacr' %}
+    {% url 'add_datacr' %}
 {% endblock %}
 
 {% block content %}
@@ -14,3 +14,10 @@
     <button type="submit" name="action" value="add_all">Add All</button>
     <button type="submit" name="action" value="add_mid">Add Mid</button>
 {% endblock %}
+
+
+{% block explanations %}
+    <div><br>
+        Add Mid: Retain the reference form fields to submit more data with this reference.
+    </div>
+{% endblock explanations %}

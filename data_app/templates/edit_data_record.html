@@ -285,6 +285,13 @@
             {% endblock style %}
         {% endwith %}
         <button type="submit">Save Changes</button>
+        <a href="{% url 'delete_entire_record_confirm' ref_id=reference.ref_id %}" class="btn btn-danger">Delete Entire
+            Record</a>
+
+        {% if datacr and datacr.cr_id %}
+            <a href="{% url 'delete_datacr_record_confirm' cr_id=datacr.cr_id %}" class="btn btn-danger">Delete Data
+                Record</a>
+        {% endif %}
     </form>
 
 {% endblock content %}

@@ -7,6 +7,7 @@
             <tr>
                 <th>Reference ID</th>
                 <th>Article Title</th>
+                <th>CR Value</th>
             </tr>
         </thead>
         <tbody>
@@ -20,6 +21,11 @@
                     <td>
                         <a href="{% url 'edit_data_record' record.ref_id %}">
                             {{ record.article_title }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'edit_data_record' record.ref_id %}">
+                            {{ record.cr }}
                         </a>
                     </td>
                 </tr>

@@ -89,15 +89,24 @@ def get_table_data(request):
         data['rows'] = list(elements)
     elif term == 'Habitats':
         data['headers'] = ['Habitat ID', 'Habitat Specific Type', 'Habitat Main Type', 'User ID']
-        habitats = Habitat.objects.filter(approved=True).values_list('habitat_id', 'habitat_specific_type', 'habitat_main_type_id', 'user')
+        habitats = Habitat.objects.filter(approved=True).values_list('habitat_id', 'habitat_specific_type',
+                                                                     'habitat_main_type_id', 'user')
         data['rows'] = list(habitats)
     elif term == 'WildlifeGroups':
-        data['headers'] = ['Wildlife Group ID', 'Wildlife Group Name', 'Habitat', 'Data Extract', 'User ID', 'de_tophab_topwild', 'de_tophab_indwild', 'de_indhab_topwild', 'de_indhab_indwild']
-        wildlife_groups = WildlifeGroup.objects.filter(approved=True).values_list('wildlife_group_id', 'wildlife_group_name', 'habitat', 'data_extract', 'user', 'de_tophab_topwild', 'de_tophab_indwild', 'de_indhab_topwild', 'de_indhab_indwild')
+        data['headers'] = ['Wildlife Group ID', 'Wildlife Group Name', 'Habitat', 'Data Extract', 'User ID',
+                           'de_tophab_topwild', 'de_tophab_indwild', 'de_indhab_topwild', 'de_indhab_indwild']
+        wildlife_groups = WildlifeGroup.objects.filter(approved=True).values_list('wildlife_group_id',
+                                                                                  'wildlife_group_name', 'habitat',
+                                                                                  'data_extract', 'user',
+                                                                                  'de_tophab_topwild',
+                                                                                  'de_tophab_indwild',
+                                                                                  'de_indhab_topwild',
+                                                                                  'de_indhab_indwild')
         data['rows'] = list(wildlife_groups)
     elif term == 'RAPs':
         data['headers'] = ['RAP ID', 'RAP Name', 'Habitat', 'Wildlife Group', 'Summary']
-        raps = RAP.objects.filter(approved=True).values_list('rap_id', 'rap_name', 'habitat', 'wildlife_group', 'summary')
+        raps = RAP.objects.filter(approved=True).values_list('rap_id', 'rap_name', 'habitat', 'wildlife_group',
+                                                             'summary')
         data['rows'] = list(raps)
     elif term == 'Lifestages':
         data['headers'] = ['Lifestage ID', 'Lifestage Name']
@@ -113,11 +122,13 @@ def get_table_data(request):
         data['rows'] = list(pub_types)
     elif term == 'PublicationTitles':
         data['headers'] = ['Publication Title ID', 'Publication Title Name', 'Publication Type', 'User ID']
-        pub_titles = PubTitle.objects.filter(approved=True).values_list('pub_title_id', 'pub_title_name', 'pub_type', 'user')
+        pub_titles = PubTitle.objects.filter(approved=True).values_list('pub_title_id', 'pub_title_name', 'pub_type',
+                                                                        'user')
         data['rows'] = list(pub_titles)
     elif term == 'SpeciesNames':
         data['headers'] = ['Species ID', 'Latin Name', 'Common Name', 'User ID']
-        species_names = SpeciesName.objects.filter(approved=True).values_list('species_id', 'name_latin', 'name_common', 'user')
+        species_names = SpeciesName.objects.filter(approved=True).values_list('species_id', 'name_latin', 'name_common',
+                                                                              'user')
         data['rows'] = list(species_names)
     elif term == 'StudyTypes':
         data['headers'] = ['Study Type ID', 'Study Type Name']
@@ -125,27 +136,38 @@ def get_table_data(request):
         data['rows'] = list(study_types)
     elif term == 'Tissues':
         data['headers'] = ['Tissue ID', 'Tissue Name', 'Correction Factor Tissue', 'User ID']
-        tissues = Tissue.objects.filter(approved=True).values_list('tissue_id', 'tissue_name', 'correction_factor_tissue', 'user')
+        tissues = Tissue.objects.filter(approved=True).values_list('tissue_id', 'tissue_name',
+                                                                   'correction_factor_tissue', 'user')
         data['rows'] = list(tissues)
     elif term == 'MaterialStatus':
         data['headers'] = ['Material Status ID', 'Material Status Name', 'Correction Ratio', 'Media']
-        material_status = MaterialStatus.objects.all().values_list('material_status_id', 'material_status_name', 'correction_ratio', 'media')
+        material_status = MaterialStatus.objects.all().values_list('material_status_id', 'material_status_name',
+                                                                   'correction_ratio', 'media')
         data['rows'] = list(material_status)
     elif term == 'ActivityConcentrationUnits':
         data['headers'] = ['Activity Conc. Unit ID', 'Symbol', 'Correction Factor', 'Media']
-        activity_units = ActivityConcUnit.objects.filter(approved=True).values_list('act_conc_unit_id', 'act_conc_unit_symbol', 'correction_factor_act_conc', 'media')
+        activity_units = ActivityConcUnit.objects.filter(approved=True).values_list('act_conc_unit_id',
+                                                                                    'act_conc_unit_symbol',
+                                                                                    'correction_factor_act_conc',
+                                                                                    'media')
         data['rows'] = list(activity_units)
     elif term == 'ParameterCRCalculations':
-        data['headers'] = ['CR ID', 'Wildlife Group', 'Tissue', 'Dry to Wet Ratio', 'Ash to Wet Ratio', 'Is Fresh/Marine/Terrestrial']
-        par_calcs = ParCRCalc.objects.all().values_list('cr_id', 'wildlife_group_id', 'tissue_id', 'dry_to_wet_ratio', 'ash_to_wet_ratio', 'is_fre_mar_ter')
+        data['headers'] = ['CR ID', 'Wildlife Group', 'Tissue', 'Dry to Wet Ratio', 'Ash to Wet Ratio',
+                           'Is Fresh/Marine/Terrestrial']
+        par_calcs = ParCRCalc.objects.all().values_list('cr_id', 'wildlife_group_id', 'tissue_id', 'dry_to_wet_ratio',
+                                                        'ash_to_wet_ratio', 'is_fre_mar_ter')
         data['rows'] = list(par_calcs)
     elif term == 'MaterialCRCalculations':
-        data['headers'] = ['CR ID', 'Element', 'Organism', 'Liver to Body Ratio', 'Bone to Body Ratio', 'Muscle to Body Ratio', 'Is Fresh/Marine/Terrestrial']
-        material_calcs = MaterialCRCalc.objects.all().values_list('cr_id', 'element_id', 'organism', 'liver_to_body_ratio', 'bone_to_body_ratio', 'muscle_to_body_ratio', 'is_fre_mar_ter')
+        data['headers'] = ['CR ID', 'Element', 'Organism', 'Liver to Body Ratio', 'Bone to Body Ratio',
+                           'Muscle to Body Ratio', 'Is Fresh/Marine/Terrestrial']
+        material_calcs = MaterialCRCalc.objects.all().values_list('cr_id', 'element_id', 'organism',
+                                                                  'liver_to_body_ratio', 'bone_to_body_ratio',
+                                                                  'muscle_to_body_ratio', 'is_fre_mar_ter')
         data['rows'] = list(material_calcs)
     elif term == 'Radionuclides':
         data['headers'] = ['Radionuclide ID', 'Radionuclide Name', 'Element', 'User ID']
-        radionuclides = Radionuclide.objects.filter(approved=True).values_list('radionuclide_id', 'radionuclide_name', 'element_id', 'user')
+        radionuclides = Radionuclide.objects.filter(approved=True).values_list('radionuclide_id', 'radionuclide_name',
+                                                                               'element_id', 'user')
         data['rows'] = list(radionuclides)
     elif term == 'Languages':
         data['headers'] = ['Language ID', 'Language', 'User ID']
@@ -208,7 +230,8 @@ def view_summary_results(request):
     show_all = request.GET.get('table23_show', '') == 'table23'
 
     # Using distinct and order_by to ensure unique and sorted values
-    habitats = Habitat.objects.order_by('habitat_specific_type').values_list('habitat_specific_type', flat=True).distinct()
+    habitats = Habitat.objects.order_by('habitat_specific_type').values_list('habitat_specific_type',
+                                                                             flat=True).distinct()
     wildlife_groups = WildlifeGroup.objects.order_by('wildlife_group_name').distinct('wildlife_group_name')
     raps = RAP.objects.order_by('rap_name').distinct('rap_name')
 
@@ -242,7 +265,8 @@ def view_summary_results(request):
             geo_mean_cr=Sum('crn'),
             arith_std_dev=Sum('crn'),
             geo_std_dev=Sum('crn'),
-            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True) # needing to cast reference__ref_id to a text field before aggregation
+            reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
+            # needing to cast reference__ref_id to a text field before aggregation
         ).order_by('radionuclide__element__element_symbol')
 
         # Calculate standard deviation etc for each element symbol
@@ -271,7 +295,7 @@ def view_summary_results(request):
                     arith_std_dev = None
 
                 # Geometric Standard Deviation
-                log_deviation_sum = sum((math.log(value) - math.log(geo_mean))**2 for value in cr_values)
+                log_deviation_sum = sum((math.log(value) - math.log(geo_mean)) ** 2 for value in cr_values)
                 geo_std_dev = math.exp(math.sqrt(log_deviation_sum / len(cr_values)))
 
                 item['geo_mean_cr'] = "{:.2e}".format(geo_mean) if geo_mean is not None else None
@@ -318,7 +342,7 @@ def view_summary_results(request):
                     dose=F('crn') * F('cr')
                 ).aggregate(total_dose=Sum('dose'))['total_dose']
 
-                #item['D'] = "{:.2e}".format(crn_cr_product) if crn_cr_product is not None else None
+                # item['D'] = "{:.2e}".format(crn_cr_product) if crn_cr_product is not None else None
 
                 # Assuming: for E, it's an error calculation based on variance or standard deviation
                 # Testing: placeholder calculation
@@ -333,10 +357,10 @@ def view_summary_results(request):
                 # Assign the calculated values directly without formatting
                 item['D'] = crn_cr_product
                 item['E'] = crn_cr_square_sum
-                #item['E'] = "{:.2e}".format(crn_cr_square_sum) if crn_cr_square_sum is not None else None
+                # item['E'] = "{:.2e}".format(crn_cr_square_sum) if crn_cr_square_sum is not None else None
 
-            #cr_values = DataCR.objects.filter(**filters).values_list('cr', flat=True)
-            #cr_values = [value for value in cr_values if value is not None]
+            # cr_values = DataCR.objects.filter(**filters).values_list('cr', flat=True)
+            # cr_values = [value for value in cr_values if value is not None]
 
             datacr_list3 = []
             elements = DataCR.objects.filter(**filters).values_list('radionuclide__element__element_symbol',
@@ -379,8 +403,8 @@ def view_summary_results(request):
             context['datacr_list3'] = datacr_list3
 
         context['datacr_list'] = datacr_list
-        #context['datacr_list2'] = datacr_list2
-        #context['datacr_list3'] = datacr_list3
+        # context['datacr_list2'] = datacr_list2
+        # context['datacr_list3'] = datacr_list3
         context['show_all'] = show_all
 
     return render(request, 'view_summary_results.html', context)
@@ -498,7 +522,7 @@ def add_datacr(request):
             )
             if success:
                 # Reset the reference form to clear fields after successful "Add All"
-                #reference_form = ReferenceForm()
+                # reference_form = ReferenceForm()
                 context.update({
                     'reference_form': ReferenceForm(),
                     'datacr_form': DataCRForm
@@ -538,12 +562,12 @@ def add_datacr(request):
 
                 return render(request, 'add_datacr.html', context)"""
 
-                #initial_data = {'ref_id': ref_id, 'volume': volume, 'article_title': article_title, }
+            # initial_data = {'ref_id': ref_id, 'volume': volume, 'article_title': article_title, }
 
             # Re-instantiate the reference form with initial data to keep fields filled in all cases
-            #reference_form_fields = set(ReferenceForm().fields.keys())
-            #initial_data = {key: value for key, value in request.POST.items() if key in reference_form_fields}
-            #reference_form = ReferenceForm(initial=initial_data)
+            # reference_form_fields = set(ReferenceForm().fields.keys())
+            # initial_data = {key: value for key, value in request.POST.items() if key in reference_form_fields}
+            # reference_form = ReferenceForm(initial=initial_data)
 
         if success:
             messages.success(request, "Successfully saved. Thank you for your submission!")
@@ -610,11 +634,42 @@ def get_correction_factor(request):
         return JsonResponse({'error': 'Media not found'}, status=404)
 
 
-@login_required
+"""@login_required
 def view_editable_data_records(request):
     # Fetch records with 'PENDING' status and belong to the logged-in user
     records = Reference.objects.filter(approval_status='PENDING', user=request.user)
     return render(request, 'view_editable_data_records.html', {'records': records})
+"""
+
+
+@login_required
+def view_editable_data_records(request):
+    # Fetch records with 'PENDING' status and belong to the logged-in user
+    references = Reference.objects.filter(approval_status='PENDING', user=request.user)
+
+    # Create a list to hold data that includes details from both Reference and related DataCR objects
+    records_with_details = []
+    for ref in references:
+        # For each reference, fetch related DataCR objects
+        datacr_objects = DataCR.objects.filter(reference=ref)
+
+        # Append a dictionary for each DataCR object related to the reference
+        for datacr in datacr_objects:
+            records_with_details.append({
+                'ref_id': ref.ref_id,
+                'article_title': ref.article_title,
+                'cr': datacr.cr
+            })
+
+        # If there are no related DataCR objects, still add the reference info
+        if not datacr_objects:
+            records_with_details.append({
+                'ref_id': ref.ref_id,
+                'article_title': ref.article_title,
+                'cr': None
+            })
+
+    return render(request, 'view_editable_data_records.html', {'records': records_with_details})
 
 
 @login_required
@@ -623,19 +678,21 @@ def edit_data_record(request, ref_id):
     print("Edit data record POST data:", request.POST)
     reference = get_object_or_404(Reference, pk=ref_id)
     print(reference.ref_id)
-    try:
+    datacr = DataCR.objects.filter(reference=reference).first()
+    """try:
         datacr = DataCR.objects.filter(reference=reference).first()
         if not datacr:
             messages.error(request, 'No associated DataCR record found.')
             return redirect('some_error_handling_view')
     except DataCR.DoesNotExist:
         messages.error(request, 'No associated DataCR record found.')
-        return redirect('some_error_handling_view')
+        return redirect('some_error_handling_view')"""
 
     print("next comes 'POST'")
     if request.method == 'POST':
         reference_form = ReferenceForm(request.POST, instance=reference)
-        datacr_form = DataCRForm(request.POST, instance=datacr)
+        #datacr_form = DataCRForm(request.POST, instance=datacr)
+        datacr_form = DataCRForm(request.POST, instance=datacr if datacr else None)
 
         print("next comes 'success' and entering my method")
         success, _, _ = handle_reference_datacr(reference_form, datacr_form, request.user)
@@ -657,6 +714,8 @@ def edit_data_record(request, ref_id):
         'datacr_form': datacr_form,
         'ref_id': ref_id,
         'reference': reference,
+        'datacr': datacr,
+        #'cr_id': cr_id,
         'form_action': reverse('edit_data_record', kwargs={'ref_id': ref_id})
     })
 
@@ -665,13 +724,36 @@ register = template.Library()
 
 
 @login_required
+def delete_entire_record_confirm(request, ref_id):
+    reference = get_object_or_404(Reference, pk=ref_id)
+    if request.method == 'POST':
+        reference.delete()
+        messages.success(request, "Entire record deleted successfully.")
+        return redirect('view_editable_data_records')
+    else:
+        return render(request, 'confirm_delete_entire_record.html', {'ref_id': ref_id})
+
+
+@login_required
+def delete_datacr_record_confirm(request, cr_id):
+    # This view can be used to confirm the deletion of a single DataCR record
+    datacr = get_object_or_404(DataCR, pk=cr_id)
+    if request.method == 'POST':
+        # Assuming deletion is confirmed
+        datacr.delete()
+        messages.success(request, "DataCR record deleted successfully.")
+        return redirect('view_editable_data_records')  # Redirect to your listing view
+    return render(request, 'confirm_delete_datacr_record.html', {'datacr': datacr})
+
+
+@login_required
 def view_all_data(request, ref_id=None, cr_id=None):
     # Redirect to a URL with the first Reference's ID if ref_id is not provided
     if ref_id is None:
-       #first_reference = Reference.objects.order_by('ref_id').first()
+        # first_reference = Reference.objects.order_by('ref_id').first()
         first_reference = Reference.objects.filter(approval_status='APPROVED').order_by('ref_id').first()
         if first_reference:
-           #first_datacr = first_reference.datacr_set.order_by('cr_id').first()
+            # first_datacr = first_reference.datacr_set.order_by('cr_id').first()
             first_datacr = first_reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
             if first_datacr:
                 # Redirect to a URL with both ref_id and cr_id for the first Reference and its first DataCR
@@ -703,7 +785,7 @@ def view_all_data(request, ref_id=None, cr_id=None):
 
     # Determine the first DataCR for the current Reference if cr_id is not provided
     if not cr_id:
-       #first_datacr = reference.datacr_set.first()
+        # first_datacr = reference.datacr_set.first()
         first_datacr = reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
         if first_datacr:
             cr_id = first_datacr.cr_id
@@ -717,22 +799,22 @@ def view_all_data(request, ref_id=None, cr_id=None):
         datacr = None
 
     # Calculate next and previous Reference IDs
-   #next_ref = Reference.objects.filter(ref_id__gt=ref_id).order_by('ref_id').first()
+    # next_ref = Reference.objects.filter(ref_id__gt=ref_id).order_by('ref_id').first()
     next_ref = Reference.objects.filter(ref_id__gt=ref_id, approval_status='APPROVED').order_by('ref_id').first()
-    #first_datacr = first_reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
+    # first_datacr = first_reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
     prev_ref = Reference.objects.filter(ref_id__lt=ref_id, approval_status='APPROVED').order_by('-ref_id').first()
 
     # Calculate the first DataCR ID for next and previous References
     if next_ref:
         next_ref_first_datacr = next_ref.datacr_set.first()
-       #next_ref_first_datacr = next_ref.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
-       #TAKEN FROM: first_datacr = reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
+    # next_ref_first_datacr = next_ref.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
+    # TAKEN FROM: first_datacr = reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
     else:
         next_ref_first_datacr = None
 
     if prev_ref:
         prev_ref_first_datacr = prev_ref.datacr_set.first()
-       #prev_ref_first_datacr = prev_ref.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
+    # prev_ref_first_datacr = prev_ref.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
     else:
         prev_ref_first_datacr = None
 

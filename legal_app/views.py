@@ -4,17 +4,20 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 
+
 def privacy_policy(request):
     return render(request, 'privacy_policy.html')
 
+
 def legal_disclaimer(request):
     return render(request, 'legal_disclaimer.html')
+
 
 @login_required
 def contact(request):
     if request.method == 'POST':
         user = request.user
-        #sender_email = request.POST.get('email')
+        # sender_email = request.POST.get('email')
         message_content = request.POST.get('message')
 
         # Prepare the email
@@ -29,3 +32,11 @@ def contact(request):
         return redirect('contact')
 
     return render(request, 'contact.html', {'email_address': settings.EMAIL_HOST_USER})
+
+
+def privacy_view(request):
+    return render(request, 'privacy.html')
+
+
+def legal_view(request):
+    return render(request, 'legal_disclaimer.html')

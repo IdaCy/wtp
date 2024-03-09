@@ -62,10 +62,3 @@ def logout_view(request):
     messages.success(request, 'You have been logged out.')
     return redirect('login')
 
-
-def privacy_view(request):
-    return render(request, 'privacy.html')
-
-
-def legal_view(request):
-    return render(request, 'legal.html')

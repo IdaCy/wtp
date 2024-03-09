@@ -7,6 +7,8 @@
     <title>Wildlife Transfer Parameter Database</title>
 </head>
 <body>
+
+
     <section class="landing">
         <div class="landing-content">
             <h1>Wildlife Transfer Parameter Database</h1>
@@ -30,7 +32,7 @@
         </div>
     </section>
 
-    <section class="info" id="info" >
+    <section class="parallax info" id="info" >
         <div class="info-content">
             <p>The database was started to aid both:</p>
             <ol>
@@ -88,5 +90,14 @@
             <a href="{% url 'login' %}#info">About</a>
         </div>
     </footer>
+
+    <!--<script>
+    window.addEventListener('scroll', function() {
+        var parallax = document.querySelector('.info');
+        var scrollPosition = window.pageYOffset;
+
+        parallax.style.backgroundPositionY = (scrollPosition * 0.5) + 'px';
+    });
+    </script>-->
 </body>
 </html>

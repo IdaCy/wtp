@@ -1,7 +1,11 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #dadee0;
-    margin: 0;
     padding: 0;
 }
 
@@ -40,6 +44,22 @@ nav a {
     text-decoration: none;
     color: white;
 }
+
+/************* MAIN *******************/
+
+
+main {
+    min-height: 40%;
+}
+
+main:after {
+    content: "";
+    display: block;
+}
+
+
+
+/************* FOOTER *****************/
 
 .footer-links ul {
     list-style-type: none;

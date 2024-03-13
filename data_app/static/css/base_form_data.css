@@ -10,7 +10,7 @@ section {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 input, select, textarea, input[type="checkbox"] {
-    background-color: #e9ebec;
+    background-color: #f5f6f6;
     border: 1px solid #ccc;
 }
 
@@ -139,7 +139,6 @@ div.translation {
 .translation input[type="checkbox"] {
     /*margin-right: 5px;*/
     margin-top: 3px;
-    background-color: red;
 }
 .translation input[type="checkbox"]::before {
     content: '';

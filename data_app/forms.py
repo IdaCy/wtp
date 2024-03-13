@@ -8,7 +8,26 @@ class ReferenceForm(forms.ModelForm):
     ref_id = forms.IntegerField(required=True)
     article_title = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={'class': 'article-title-search', 'autocomplete': 'off'}))
+        widget=forms.TextInput(attrs={'class': 'article-title-search', 'autocomplete': 'off'})
+    )
+    pub_title = forms.ModelChoiceField(
+        queryset=PubTitle.objects.all().order_by('pub_title_name'),
+        required=False,
+        label='Publication Title',
+        empty_label="Select Title"
+    )
+    pub_type = forms.ModelChoiceField(
+        queryset=PubType.objects.all().order_by('pub_type_name'),
+        required=False,
+        label='Publication Type',
+        empty_label="Select"
+    )
+    language = forms.ModelChoiceField(
+        queryset=Language.objects.all().order_by('language'),
+        required=False,
+        label='Language',
+        empty_label="Select"
+    )
 
     translation = forms.BooleanField(
         required=False,
@@ -72,6 +91,18 @@ class DataCRForm(forms.ModelForm):
         label='Media',
         empty_label="Select Media"
     )
+    study_type = forms.ModelChoiceField(
+        queryset=StudyType.objects.all(),
+        required=False,
+        label='Studytype',
+        empty_label="Select"
+    )
+    radionuclide = forms.ModelChoiceField(
+        queryset=Radionuclide.objects.all(),
+        required=False,
+        label='Radionuclide',
+        empty_label=""
+    )
     measurement_date = forms.DateField(
         required=False,
         label='Measured',
@@ -96,6 +127,11 @@ class DataCRForm(forms.ModelForm):
         ('Dry', 'Dry'),
         ('Ash', 'Ash')
     ]
+    biota_wet_dry = forms.ChoiceField(
+        choices=biota_wet_dry_choices,
+        required=False,
+        label='Biota Wet/Dry',
+    )
     biota_conc_units_choices = [
         ('µCi/kg', 'µCi/kg'),
         ('Bq/l', 'Bq/l'),
@@ -113,7 +149,16 @@ class DataCRForm(forms.ModelForm):
         ('ug/g', 'ug/g'),
         ('ug/kg', 'ug/kg')
     ]
-    biota_conc_units = forms.ChoiceField(choices=biota_conc_units_choices, label='Units')
+    biota_conc_units = forms.ChoiceField(
+        choices=biota_conc_units_choices,
+        label='Units'
+    )
+    tissue = forms.ModelChoiceField(
+        queryset=Tissue.objects.all().order_by('tissue_name'),
+        required=False,
+        label='Tissue',
+        empty_label="Select"
+    )
 
     class Meta:
         model = DataCR

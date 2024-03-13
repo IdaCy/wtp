@@ -11,12 +11,6 @@
 {% endblock %}
 
 {% block form_buttons %}
-    <button type="submit" name="action" value="add_all">Add All</button>
-    <button type="submit" name="action" value="add_mid">Add Mid</button>
+    <button type="submit" name="action" value="add_all" title="Adds all data and clears the form for a new entry.">Add All</button>
+    <button type="submit" name="action" value="add_mid" title="Adds the data but retains the reference fields for further entries.">Add Mid</button>
 {% endblock %}
-
-{% block explanations %}
-    <div><br>
-        Add Mid: Retain the reference form fields to submit more data with this reference.
-    </div>
-{% endblock explanations %}

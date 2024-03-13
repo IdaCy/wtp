@@ -1,12 +1,17 @@
 section {
-    /*background-color: #b0bdae;*/
-    background-color: rgba(217, 224, 221, 0.91);
+    /*background-color: #b0bdae;
+    background-color: rgba(217, 224, 221, 0.91);*/
+    background-color: rgba(255, 255, 255, 0.91);
     /*background-color: rgba(0, 66, 37, 0.91);
     color: white;*/
     padding: 10px 20px 10px 20px;
     margin: 10px 0;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+input, select, textarea, input[type="checkbox"] {
+    background-color: #e9ebec;
+    border: 1px solid #ccc;
 }
 
 /******************* REFERENCE *******************/
@@ -133,7 +138,24 @@ div.translation {
 }
 .translation input[type="checkbox"] {
     /*margin-right: 5px;*/
-    margin-top: 5px;
+    margin-top: 3px;
+    background-color: red;
+}
+.translation input[type="checkbox"]::before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-color: #e9ebec;
+    border: 1px solid #ccc;
+}
+.translation input[type="checkbox"]:checked::before {
+    background-color: #333;
+    content: '\2713'; /* Checkmark Unicode character */
+    color: #fff;
+    text-align: center; /* Center the checkmark */
+    font-size: 12px;
+    line-height: 14px; /* Center vertically */
 }
 
 /* space-joining items belonging together */

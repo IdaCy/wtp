@@ -42,13 +42,13 @@ th {
     padding: 10px;
     margin: 10px;
     text-decoration: none;
-    background-color: #007bff;
+    background-color: #004225;
     color: #fff;
     border-radius: 5px;
 }
 
 .center-links a:hover {
-    background-color: #0056b3;
+    background-color: #25a26b;
 }
 
 .center-links {

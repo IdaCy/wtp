@@ -60,10 +60,10 @@
 
            <!-- <button type="submit">Save Changes</button>-->
             {% if datacr and datacr.cr_id %}
-                <a href="{% url 'delete_datacr_record_confirm' cr_id=datacr.cr_id %}" class="btn btn-danger">Delete Data
+                <a href="{% url 'delete_datacr_record_confirm' cr_id=datacr.cr_id %}" class="button-link ">Delete Data
                     Record</a>
             {% endif %}
-            <a href="{% url 'delete_entire_record_confirm' ref_id=reference.ref_id %}" class="btn btn-danger">Delete
+            <a href="{% url 'delete_entire_record_confirm' ref_id=reference.ref_id %}" class="button-link ">Delete
                 Entire Reference & Data Record</a>
 
         {% endblock %}

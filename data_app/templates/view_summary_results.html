@@ -47,9 +47,9 @@
         </select>
 
         <br>
-        <input type="checkbox" id="table23" name="table23_show" value="table23"
+        <input type="checkbox" id="table23" name="table23_show" value="table23" title="Show extra tables with CR, M, S, V, K calculations."
                {% if show_all %}checked{% endif %}>
-        <label for="table23">Show All</label>
+        <label for="table23" title="Show extra tables with CR, M, S, V, K calculations.">Show All</label>
 
     </form>
 
@@ -150,36 +150,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Set correct dropdown visibility and selected value based on page load state
-            /*function setDropdownStateOnLoad() {
-                var selectionType = '
-
-
-
-            {{ selection_type }}';
-                var selectionId = '
-
-
-
-            {{ selection_id }}';
-
-                var wildlifeGroupSelect = document.getElementById('wildlife_group');
-                var rapGroupSelect = document.getElementById('rap_group');
-
-                if (selectionType === 'wildlife') {
-                    wildlifeGroupSelect.style.display = 'block';
-                    rapGroupSelect.style.display = 'none';
-                    wildlifeGroupSelect.value = selectionId; // Preset selected value if any
-                } else if (selectionType === 'rap') {
-                    wildlifeGroupSelect.style.display = 'none';
-                    rapGroupSelect.style.display = 'block';
-                    rapGroupSelect.value = selectionId; // Preset selected value if any
-                }
-            }
-
-            setDropdownStateOnLoad();*/
-
-
             // Function to dynamically set the name attribute and submit the form
             function handleSubmit() {
                 console.log("handleSubmit() function called");

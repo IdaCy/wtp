@@ -40,7 +40,6 @@
         <a href="{% url 'legal_disclaimer' %}">Legal Disclaimer</a>
         <span class="footer-bullet">&bull;</span>
         {% if request.user.is_authenticated %}
-            <a href="{% url 'logout' %}">Logout</a>
             <a href="{% url 'contact' %}">Get Help</a>
         {% else %}
             <a href="{% url 'login' %}#info">About</a>

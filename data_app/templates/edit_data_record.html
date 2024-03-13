@@ -8,290 +8,70 @@
     <link rel="stylesheet" href="{% static 'css/base_form_data.css' %}">
 {% endblock extra_css %}
 
-{% block content %}
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert {{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
 
-    <form method="post" action="{% url 'edit_data_record' ref_id=ref_id %}">
-        {% csrf_token %}
+<form method="post" action="{% url 'edit_data_record' ref_id=ref_id %}">
+    {% csrf_token %}
 
 
-        {% block javascript %}
-            {# needs to stay here: Django template tags are not processed in static files #}
-            {# These template tags are only interpreted by Django when they're found in .html template files! #}
-            <script>
-                $(document).ready(function () {
-                    $("#id_article_title").autocomplete({
-                        source: "{% url 'article-search' %}",
-                        minLength: 2, // Minimum length before searching
-                        select: function (event, ui) {
-                            $('#id_article_title').val(ui.item.value); // Set the value for the article title input
-                        }
-                    });
+    {% block javascript %}
+        {# needs to stay here: Django template tags are not processed in static files #}
+        {# These template tags are only interpreted by Django when they're found in .html template files! #}
+        <script>
+            $(document).ready(function () {
+                $("#id_article_title").autocomplete({
+                    source: "{% url 'article-search' %}",
+                    minLength: 2, // Minimum length before searching
+                    select: function (event, ui) {
+                        $('#id_article_title').val(ui.item.value); // Set the value for the article title input
+                    }
                 });
-                $(document).ready(function () {
-                    // Change the background image based on input
-                    $('#id_article_title').on('input', function () {
-                        if ($(this).val().length > 0) {
-                            $(this).css('background-image', 'none');
-                        } else {
-                            $(this).css('background-image', 'url("../static/images/magnifying-glass.png")');
-                        }
-                    });
+            });
+            $(document).ready(function () {
+                // Change the background image based on input
+                $('#id_article_title').on('input', function () {
+                    if ($(this).val().length > 0) {
+                        $(this).css('background-image', 'none');
+                    } else {
+                        $(this).css('background-image', 'url("../static/images/magnifying-glass.png")');
+                    }
                 });
-            </script>
+            });
+        </script>
+    {% endblock %}
+
+    {% with page_title="Edit Data Record" heading="Edit Record" button_value="save_changes" button_label="Update" %}
+
+        {% block content %}
+            {% with page_title="Edit Data Record" heading="Edit Data Record" form_action="edit_data_record" button_value="edit_data_record" button_label="Update" %}
+                {{ block.super }}
+            {% endwith %}
         {% endblock %}
 
-        {% with page_title="Edit Data Record" heading="Edit Record" button_value="save_changes" button_label="Update" %}
-            <section class="reference">
-                <div class="entry">
-                    <label for="id_ref_id">Reference ID:</label>
-                    {{ reference_form.ref_id }}
-                </div>
-                <div class="pub">
-                    <label for="id_article_title">Article Title:</label>
-                    {{ reference_form.article_title | add_class:"full-width" }}
-                </div>
-                <div class="pub">
-                    <label for="id_publication_title">Publication Title:</label>
-                    {{ reference_form.pub_title }}
-                </div>
-                <div class="flex-container">
-                    <div class="left">
-                        <div class="entry">
-                            <label for="id_author">Author:</label>
-                            {{ reference_form.author }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_volume">Volume:</label>
-                            {{ reference_form.volume }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_pages">Page Numbers:</label>
-                            {{ reference_form.pages }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_reference_language">Reference Language:</label>
-                            {{ reference_form.language }}
-                        </div>
-                    </div>
+        {% block form_buttons %}
+            <button type="submit" name="action" value="edit_data_record">Update</button>
 
-                    <div class="right">
-                        <div class="entry">
-                            <label for="id_publication_type">Publication Type:</label>
-                            {{ reference_form.pub_type }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_year">Year:</label>
-                            {{ reference_form.year }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_part">Part:</label>
-                            {{ reference_form.part }}
-                        </div>
-                        <div class="translation">
-                            <label for="id_translation">Translation into English Available:</label>
-                            {{ reference_form.translation }}
-                        </div>
-                    </div>
-                </div>
-            </section>
+           <!-- <button type="submit">Save Changes</button>-->
+            {% if datacr and datacr.cr_id %}
+                <a href="{% url 'delete_datacr_record_confirm' cr_id=datacr.cr_id %}" class="btn btn-danger">Delete Data
+                    Record</a>
+            {% endif %}
+            <a href="{% url 'delete_entire_record_confirm' ref_id=reference.ref_id %}" class="btn btn-danger">Delete
+                Entire Reference & Data Record</a>
 
+        {% endblock %}
 
-            <!-- Species Section -->
-            <section class="species">
-                <!--<h2>Species</h2>-->
-                <div class="flex-container">
-                    <div class="left-rim">
-                        <div class="entry">
-                            <label for="habitat_specific_type">Habitat:</label>
-                            {{ datacr_form.habitat | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_icrp_rap">ICRP RAP:</label>
-                            {{ datacr_form.icrp_rap | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_lifestage">Lifestage:</label>
-                            {{ datacr_form.lifestage | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="left-mid">
-                        <div class="entry">
-                            <label for="id_wildlife_group">Wildlife Group:</label>
-                            {{ datacr_form.wildlife_group | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_studytype">Studytype:</label>
-                            {{ datacr_form.study_type | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_notes">Notes:</label>
-                            {{ datacr_form.notes | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="right-mid">
-                        <!-- the actual value to be saved for a speciesname instance -->
-                        <input type="hidden" name="species_name" id="species_name_id"
-                               value="{{ datacr_form.species_name.value }}">
+        {% block style %}
+            <script src="{% static 'js/base_form_data.js' %}"></script>
+            <script src="{% static 'js/add_datacr.js' %}"></script>
+        {% endblock style %}
+    {% endwith %}
 
-                        <div class="entry">
-                            <label for="id_name_common">Species Common:</label>
-                            <select class="limited" id="id_name_common">
-                                {% for species in species_list %}
-                                    <option value="{{ species.species_id }}"
-                                            {% if species.species_id == datacr_form.species_name.value %}selected{% endif %}>{{ species.name_common }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="entry">
-                            <label for="id_measurement_date">Sampling Date:</label>
-                            {{ datacr_form.measurement_date | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_dynamic_info">Dynamic Info:</label>
-                            <input type="text" id="id_dynamic_info" name="dynamic_info" readonly>
-                        </div>
-                    </div>
-                    <div class="right-rim">
-                        <div class="entry">
-                            <label for="id_name_latin">Species Latin:</label>
-                            <select class="limited" id="id_name_latin">
-                                {% for species in species_list %}
-                                    <option value="{{ species.species_id }}"
-                                            {% if species.species_id == datacr_form.species_name.value %}selected{% endif %}>{{ species.name_latin }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="entry">
-                            <label for="id_radionuclide">Element/Nuclide:</label>
-                            {{ datacr_form.radionuclide | add_class:"limited" }}
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="media">
-                <div class="flex-container">
-                    <div class="left-rim">
-                        <div class="entry">
-                            <label for="id_media">Media Type:</label>
-                            {{ datacr_form.media | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_biota_n">N for Media:</label>
-                            {{ datacr_form.biota_n | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="left-mid">
-                        <div class="entry">
-                            <label for="id_media_wet_dry">Media Wet/Dry:</label>
-                            {{ datacr_form.media_wet_dry | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_media_sd">SD for Media:</label>
-                            {{ datacr_form.media_sd | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="right-mid">
-                        <div class="entry">
-                            <label for="id_media_conc">Media Concentration:</label>
-                            {{ datacr_form.media_conc | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="right-rim">
-                        <div class="entry">
-                            <label for="id_media_conc_units">Media Units:</label>
-                            {{ datacr_form.media_conc_units | add_class:"limited" }}
-                            <!-- in-between calculations result - but saved, too -->
-                            <input type="hidden" id="id_media_standardised" name="media_standardised" value="">
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="tissue">
-                <div class="flex-container">
-                    <div class="left-rim">
-                        <div class="entry">
-                            <label for="id_tissue_name">Tissue Type:</label>
-                            {{ datacr_form.tissue | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_biota_n">N for Biota:</label>
-                            {{ datacr_form.biota_n | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="left-mid">
-                        <div class="entry">
-                            <label for="id_biota_wet_dry">Status of Biota:</label>
-                            {{ datacr_form.biota_wet_dry | add_class:"limited" }}
-                        </div>
-                        <div class="entry">
-                            <label for="id_biota_sd">SD for Biota:</label>
-                            {{ datacr_form.biota_sd | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="right-mid">
-                        <div class="entry">
-                            <label for="id_biota_conc">Biota Concentration:</label>
-                            {{ datacr_form.biota_conc | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="right-rim">
-                        <div class="entry">
-                            <label for="id_biota_conc_units">Biota Units:</label>
-                            {{ datacr_form.biota_conc_units | add_class:"limited" }}
-
-                            <!-- in-between calculations result - but saved, too -->
-                            <input type="hidden" id="id_biota_standardised" name="biota_standardised" value="">
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="cr">
-                <div class="flex-container">
-                    <div class="left-rim">
-                        <div class="entry">
-                            <label for="id_cr">Concentration Ratio:</label>
-                            {{ datacr_form.cr | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="left-mid">
-                        <div class="entry">
-                            <label for="id_crn">N of CR:</label>
-                            {{ datacr_form.crn | add_class:"limited" }}
-                        </div>
-                    </div>
-                    <div class="right-mid">
-                        <div class="entry">
-                            <label for="id_cr_sd">SD of CR:</label>
-                            {{ datacr_form.cr_sd | add_class:"limited" }}
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-
-            {% block style %}
-                <script src="{% static 'js/base_form_data.js' %}"></script>
-                <script src="{% static 'js/add_datacr.js' %}"></script>
-            {% endblock style %}
-        {% endwith %}
-        <button type="submit">Save Changes</button>
-        <a href="{% url 'delete_entire_record_confirm' ref_id=reference.ref_id %}" class="btn btn-danger">Delete Entire
-            Record</a>
-
-        {% if datacr and datacr.cr_id %}
-            <a href="{% url 'delete_datacr_record_confirm' cr_id=datacr.cr_id %}" class="btn btn-danger">Delete Data
-                Record</a>
-        {% endif %}
-    </form>
-
-{% endblock content %}
+</form>

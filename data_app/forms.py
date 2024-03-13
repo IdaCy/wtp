@@ -10,13 +10,18 @@ class ReferenceForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={'class': 'article-title-search', 'autocomplete': 'off'}))
 
+    translation = forms.BooleanField(
+        required=False,
+        label='English Translation Available'
+    )
+
     """article_title = forms.ModelChoiceField(
         queryset=Reference.objects.all().order_by('article_title'),
         required=False,
         label='Article Title',
         empty_label="Select Article Title"
     )"""
-    translation = forms.BooleanField(required=False)
+    #translation = forms.BooleanField(required=False)
 
     class Meta:
         model = Reference
@@ -36,12 +41,12 @@ class ReferenceForm(forms.ModelForm):
 
 
 class DataCRForm(forms.ModelForm):
-    """species_name = forms.ModelChoiceField(
+    species_name = forms.ModelChoiceField(
         queryset=SpeciesName.objects.all(),
         label='Species',
         empty_label="Please Select",
         required=False
-    )"""
+    )
 
     lifestage = forms.ModelChoiceField(
         queryset=Lifestage.objects.all().order_by('lifestage_name').distinct('lifestage_name'),
@@ -67,11 +72,48 @@ class DataCRForm(forms.ModelForm):
         label='Media',
         empty_label="Select Media"
     )
+    measurement_date = forms.DateField(
+        required=False,
+        label='Measured',
+        widget=forms.DateInput(attrs={'type': 'date'})
+    )
+    notes = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'placeholder': 'Notes...'}),
+        label='Notes'
+    )
+    media_wet_dry_choices = [
+        ('Wet', 'Wet'),
+        ('Dry', 'Dry')
+    ]
     media_wet_dry = forms.ChoiceField(
-        choices=DataCR.media_wet_dry_choices,
+        choices=media_wet_dry_choices,
         required=False,
         label='Media Wet/Dry'
     )
+    biota_wet_dry_choices = [
+        ('Wet', 'Wet'),
+        ('Dry', 'Dry'),
+        ('Ash', 'Ash')
+    ]
+    biota_conc_units_choices = [
+        ('µCi/kg', 'µCi/kg'),
+        ('Bq/l', 'Bq/l'),
+        ('Bq/g', 'Bq/g'),
+        ('Bq/kg', 'Bq/kg'),
+        ('Bq/m2', 'Bq/m2'),
+        ('mBq/g', 'mBq/g'),
+        ('mBq/kg', 'mBq/kg'),
+        ('mg/g', 'mg/g'),
+        ('mg/kg', 'mg/kg'),
+        ('pCi/g', 'pCi/g'),
+        ('pCi/kg', 'pCi/kg'),
+        ('ppb', 'ppb'),
+        ('ppm', 'ppm'),
+        ('ug/g', 'ug/g'),
+        ('ug/kg', 'ug/kg')
+    ]
+    biota_conc_units = forms.ChoiceField(choices=biota_conc_units_choices, label='Units')
 
     class Meta:
         model = DataCR
@@ -81,7 +123,7 @@ class DataCRForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['habitat'].required = True
         self.fields['crn'].required = True
-        #self.fields['species_name'].required = False
+        # self.fields['species_name'].required = False
         self.fields['habitat'].queryset = Habitat.objects.all()
         self.fields['study_type'].queryset = StudyType.objects.all()
         self.fields['radionuclide'].queryset = Radionuclide.objects.all()
@@ -113,4 +155,3 @@ class DataCRForm(forms.ModelForm):
         if data == "" or str(data).lower() == "none":
             return None
         return data"""
-

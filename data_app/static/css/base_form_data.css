@@ -1,33 +1,28 @@
 section {
-    /*background-color: #b0b6af;*/
-    background-color: #b0bdae;
+    /*background-color: #b0bdae;*/
+    background-color: rgba(217, 224, 221, 0.91);
+    /*background-color: rgba(0, 66, 37, 0.91);
+    color: white;*/
     padding: 10px 20px 10px 20px;
     margin: 10px 0;
-    /*padding: 20px;*/
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /******************* REFERENCE *******************/
 
-.reference {
-    /*display: flex;
-    flex-direction: column;*/
-    /* align-items: center; Centering the content horizontally? */
-}
-
 .flex-container {
     display: flex;
     width: 100%;
 }
 
-.left, .right {
+/*.left, .right {
     width: 50%;
     display: flex;
-    flex-direction: column; /* make the content stack vertically */
+    flex-direction: column;  make the content stack vertically
 }
 
-/* some margin between the labels and inputs/select */
+some margin between the labels and inputs/select
 .left label,
 .right label,
 .left input,
@@ -39,81 +34,194 @@ section {
 div.entry, div.pub {
     margin: 5px;
     width: 100%;
-}
-div.translation {
-    margin-top: 5px;
-}
+} */
 
-
-/* Publication Title Lable & Field */
-div.pub {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.pub label {
-    margin-right: 10px;
-    white-space: nowrap; /* Prevent label from wrapping to the next line */
-}
-
-.pub select {
-    flex: 1;
-    /*width: auto;  Let the select element determine its width based on content */
-    width: 100%;
-    margin-left: 5px; /* Adjust margin to separate label and select */
-}
 
 /*.article-title-search {
     padding: 5px;
     background-size: 20px 20px;
      padding-left: 34px; Adjust padding to make room for the icon */
-    /* background-color: #FFF; */
-    /*border: 2px solid #CCC;  */
-    /* Change as needed */
-    /*background: white url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-solid-900.svg#search') no-repeat scroll 7px 7px;
-    */
-    /*background-position: 10px center;
-    background-repeat: no-repeat;
-    background-size: 20px 20px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23000' d='M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128s128 57.2 128 128c0 70.7-57.2 128-128 128z'%3E%3C/path%3E%3C/svg%3E");
-     border-radius: 5px;
+/* background-color: #FFF; */
+/*border: 2px solid #CCC;  */
+/* Change as needed */
+/*background: white url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/webfonts/fa-solid-900.svg#search') no-repeat scroll 7px 7px;
+*/
+/*background-position: 10px center;
+background-repeat: no-repeat;
+background-size: 20px 20px;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23000' d='M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128s128 57.2 128 128c0 70.7-57.2 128-128 128z'%3E%3C/path%3E%3C/svg%3E");
+ border-radius: 5px;
 }
 
 .article-title-search {
-    background-repeat: no-repeat;
-    background-position: 10px center;
-    padding-left: 40px;
+background-repeat: no-repeat;
+background-position: 10px center;
+padding-left: 40px;
 }*/
 
 .article-title-search {
-    background-size: 20px 20px;
-    padding: 5px;
-
+    background-size: 15px 15px;
+    padding: 1px;
 }
 
 /******************* SPECIES SECTION *******************/
 
-.left-rim, .left-mid, .right-mid, .right-rim {
+/*.left-rim, .left-mid, .right-mid, .right-rim {
     width: 25%;
     display: flex;
-    flex-direction: column; /* Updated to make the content stack vertically */
+    flex-direction: column;
 }
 
-/* some margin between the labels and inputs/select */
+
 .left label,
 .right label,
 .left input,
 .right select,
 .right input {
     margin-bottom: 10px;
-}
+}*/
 
-div.entry select.limited {
+/*div.entry select.limited {
     width: 100%;
     max-width: 120px;
-}
+}*/
 
-input.full-width {
+input.article-title-search {
     width: 100%;
 }
+
+.top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    /*background-color: rgba(0, 82, 46, 0.07);
+    #background-color: rgba(0, 66, 37, 0.91);
+    #background-color: #e4eee8;*/
+    color: black;
+    margin-bottom: 5px;
+}
+
+.top input {
+    border: none;
+    background-color: unset;
+    font-size: 1em;
+    font-weight: bold;
+    width: 140px;
+}
+
+/* top 2 rows article & publication */
+.ref-left {
+    width: 83%;
+}
+.ref-right {
+    width: 17%;
+    padding-left: 4px;
+}
+
+#article-label {
+    padding-right: 5px;
+}
+
+/* volume to translation row */
+div.translation {
+    margin-top: 2px;
+}
+.translation {
+    display: flex;
+    align-items: center;
+}
+.translation input[type="checkbox"] {
+    /*margin-right: 5px;*/
+    margin-top: 5px;
+}
+
+/* space-joining items belonging together */
+div.line {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.line label {
+    white-space: nowrap; /* Prevent label from wrapping to the next line */
+}
+.line select {
+    /*flex: 1;*/
+    width: 100%;
+    margin-left: 5px;
+}
+.line input {
+    width: 100%;
+}
+.ref-small {
+    width: 75px;
+}
+
+/* balancing the space in a line */
+.space-balance .entry {
+    margin: auto;
+}
+.space-balance .entry:first-child {
+    margin-left: 0;
+}
+
+.small-input {
+    width: 60px;
+    margin: auto;
+}
+.status {
+    width: 50px;
+}
+
+
+/********** HABITAT *********/
+#habitat {
+    margin-bottom: 5px;
+}
+
+#id_notes {
+    width: 100%;
+    height: 40px;
+    margin-left: 5px;
+}
+
+.limited {
+    width: 90px;
+}
+
+.nuclide {
+    width: 40px;
+}
+
+input#id_biohalflife {
+    width: 50px;
+}
+
+input#id_measurement_date {
+    width: 80px;
+}
+
+
+
+/************ MEDIA **********/
+
+h2 {
+    font-size: 1em;
+    margin: 0;
+    padding: 0;
+}
+
+
+.date {
+    width: 10px;
+}
+
+
+
+
+
+
+
+
+
+

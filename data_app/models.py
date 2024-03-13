@@ -100,7 +100,7 @@ class Media(models.Model):
         return f"{self.media_id} ({self.media_type})"
 
     def get_media_id(self):
-        return str(self.name_latin)
+        return str(self.media_id)
 
     def get_media_type(self):
         return str(self.media_type)
@@ -266,7 +266,7 @@ class Reference(models.Model):
     pages = models.CharField(max_length=50, blank=True, null=True)
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=True)
     pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE, null=True)
-    translation = models.CharField(max_length=5, blank=True)
+    translation = models.BooleanField(default=False)
     notes = models.CharField(max_length=500, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     approval_choices = [

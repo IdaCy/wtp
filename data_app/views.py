@@ -448,6 +448,7 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
     if submit_ref:
         # For "Add All" action
         if reference_form.is_valid() and datacr_form.is_valid():
+            #reference_form.instance.translation = False
             print(datacr_form.errors)
             reference = reference_form.save(commit=False)
             reference.user = user
@@ -503,10 +504,14 @@ def add_datacr(request):
         if species_name == "None":
             datacr_form.species_name = None"""
 
+        #if 'translation' not in request.POST:
+         #   reference_form.instance.translation = False
+
         # Capture reference form values to re-populate after submission
         ref_id = request.POST.get('ref_id', '')
         volume = request.POST.get('volume', '')
         article_title = request.POST.get('article_title', '')
+
 
         context = {
             'reference_form': reference_form,
@@ -693,6 +698,11 @@ def edit_data_record(request, ref_id):
         reference_form = ReferenceForm(request.POST, instance=reference)
         #datacr_form = DataCRForm(request.POST, instance=datacr)
         datacr_form = DataCRForm(request.POST, instance=datacr if datacr else None)
+
+        if 'translation' not in request.POST:
+            reference_form.instance.translation = False
+        else:
+            reference_form.instance.translation = True
 
         print("next comes 'success' and entering my method")
         success, _, _ = handle_reference_datacr(reference_form, datacr_form, request.user)

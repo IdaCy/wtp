@@ -10,16 +10,20 @@
 <body>
 <header>
     <nav class="top-menu">
-        <h1>Wildlife Transfer Parameter Database</h1>
+        <!-- Make 'home' the dashboard link only if the user is logged in -->
+        {% if request.user.is_authenticated %}
+            <h1><a href="{% url 'dashboard' %}">Wildlife Transfer Parameter Database</a></h1>
+        {% else %}
+            <h1><a href="{% url 'login' %}">Wildlife Transfer Parameter Database</a></h1>
+        {% endif %}
+
         <ul>
-            {% block dashboard_link %}
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>{% endblock %}
+            <!-- Show dashboard & logout link only if the user is logged in -->
             {% if request.user.is_authenticated %}
-                <!-- Show the logout link only if the user is logged in -->
-                <a href="{% url 'logout' %}">Logout</a>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
             {% else %}
-                <!-- Optionally, show a login link if the user is not logged in -->
-                <a href="{% url 'login' %}">Login</a>
+                <li><a href="{% url 'login' %}">Login</a></li>
             {% endif %}
         </ul>
     </nav>
@@ -35,7 +39,12 @@
         <span class="footer-bullet">&bull;</span>
         <a href="{% url 'legal_disclaimer' %}">Legal Disclaimer</a>
         <span class="footer-bullet">&bull;</span>
-        <a href="{% url 'contact' %}">Get Help</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'contact' %}">Get Help</a>
+        {% else %}
+            <a href="{% url 'login' %}#info">About</a>
+        {% endif %}
     </div>
 </footer>
 </body>

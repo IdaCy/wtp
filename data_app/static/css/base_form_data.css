@@ -9,6 +9,7 @@ section {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 input, select, textarea, input[type="checkbox"] {
     background-color: #f5f6f6;
     border: 1px solid #ccc;
@@ -107,18 +108,20 @@ input.article-title-search {
     margin-bottom: 5px;
 }
 
-.top input {
+.top input, .top label {
     border: none;
     background-color: unset;
     font-size: 1em;
     font-weight: bold;
     width: 140px;
+    color: #00723f;
 }
 
 /* top 2 rows article & publication */
 .ref-left {
     width: 83%;
 }
+
 .ref-right {
     width: 17%;
     padding-left: 4px;
@@ -132,14 +135,17 @@ input.article-title-search {
 div.translation {
     margin-top: 2px;
 }
+
 .translation {
     display: flex;
     align-items: center;
 }
+
 .translation input[type="checkbox"] {
     /*margin-right: 5px;*/
     margin-top: 3px;
 }
+
 .translation input[type="checkbox"]::before {
     content: '';
     display: inline-block;
@@ -148,6 +154,7 @@ div.translation {
     background-color: #e9ebec;
     border: 1px solid #ccc;
 }
+
 .translation input[type="checkbox"]:checked::before {
     background-color: #333;
     content: '\2713'; /* Checkmark Unicode character */
@@ -163,17 +170,21 @@ div.line {
     align-items: center;
     margin-bottom: 5px;
 }
+
 .line label {
     white-space: nowrap; /* Prevent label from wrapping to the next line */
 }
+
 .line select {
     /*flex: 1;*/
     width: 100%;
     margin-left: 5px;
 }
+
 .line input {
     width: 100%;
 }
+
 .ref-small {
     width: 75px;
 }
@@ -182,6 +193,7 @@ div.line {
 .space-balance .entry {
     margin: auto;
 }
+
 .space-balance .entry:first-child {
     margin-left: 0;
 }
@@ -190,6 +202,7 @@ div.line {
     width: 60px;
     margin: auto;
 }
+
 .status {
     width: 50px;
 }
@@ -223,20 +236,19 @@ input#id_measurement_date {
 }
 
 
-
 /************ MEDIA **********/
 
 h2 {
     font-size: 1em;
     margin: 0;
     padding: 0;
+    color: #00723f;
 }
 
 
 .date {
     width: 10px;
 }
-
 
 
 button[type="submit"], .button-link {
@@ -251,7 +263,7 @@ button[type="submit"], .button-link {
     transition: background-color 0.3s ease;
 }
 
-button[type="submit"], .button-link:hover {
+button[type="submit"]:hover, .button-link:hover {
     background-color: #077947;
 }
 

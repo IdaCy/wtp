@@ -213,8 +213,6 @@
                     </div>
 
                     <div class="flex-container space-balance">
-                        <input type="hidden" name="species_name" id="species_name_id"
-                               value="{{ datacr_form.species_name.value }}">
 
                         <div class="entry">
                             <label for="id_name_common">Species Common:</label>
@@ -239,6 +237,8 @@
                             {% endif %}
                         </div>
 
+                        <input type="hidden" name="species_name" id="species_name_id"
+                               value="{{ datacr_form.species_name.value }}">
                         <div class="entry">
                             <label for="id_measurement_date">Measured:</label>
                             {{ datacr_form.measurement_date | add_class:"date" }}

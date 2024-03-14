@@ -4,13 +4,10 @@
 {% block title %}Dashboard - Wildlife Transfer Parameter Database{% endblock %}
 
 {% block content %}
-    <h1>Dashboard of Tools</h1>
+    <h1>Dashboard of Options</h1>
     <div class="dashboard-options">
         <div class="dashboard-option">
             <a href="{% url 'add_datacr' %}">Add new data</a>
-        </div>
-        <div class="dashboard-option">
-            <a href="{% url 'view_summary_results' %}">View Summary Results</a>
         </div>
         <div class="dashboard-option">
             <a href="{% url 'view_editable_data_records' %}">Edit Data Records</a>
@@ -24,7 +21,10 @@
         <div class="dashboard-option">
             <a href="{% url 'all_reports' %}">View Reports & Lookup Tables</a>
         </div>
-        <!--<div class="dashboard-option">
+        <!--
+        <div class="dashboard-option">
+            <a href="{% url 'view_summary_results' %}">View Summary Results</a>
+        </div><div class="dashboard-option">
             <a href="{ url 'view_summary_results' }">Summary (Individual Wildlife/Habitat)</a>
         </div>-->
         <!--<div class="dashboard-option">

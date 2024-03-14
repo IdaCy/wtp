@@ -91,6 +91,12 @@ class DataCRForm(forms.ModelForm):
         label='Media',
         empty_label="Select Media"
     )
+    tissue = forms.ModelChoiceField(
+        queryset=Tissue.objects.all(),
+        required=False,
+        label='Tissue',
+        empty_label="Select"
+    )
     study_type = forms.ModelChoiceField(
         queryset=StudyType.objects.all(),
         required=False,
@@ -152,12 +158,6 @@ class DataCRForm(forms.ModelForm):
     biota_conc_units = forms.ChoiceField(
         choices=biota_conc_units_choices,
         label='Units'
-    )
-    tissue = forms.ModelChoiceField(
-        queryset=Tissue.objects.all().order_by('tissue_name'),
-        required=False,
-        label='Tissue',
-        empty_label="Select"
     )
 
     class Meta:

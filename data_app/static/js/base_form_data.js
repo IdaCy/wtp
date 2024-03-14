@@ -1,30 +1,41 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log("DOM content loaded");
 
-    // Get references to the Media Type and Media Units dropdowns
     var habitatDropdown = document.getElementById('id_habitat');
     var mediaTypeDropdown = document.getElementById('id_media');
+    var mediaNField = document.getElementById('id_media_n');
+    var mediaConcField = document.getElementById('id_media_conc');
+    var mediaStatusDropdown = document.getElementById('id_media_wet_dry');
     var mediaUnitsDropdown = document.getElementById('id_media_conc_units');
-    var mediaWetDryDropdown = document.getElementById('id_media_wet_dry');
+    var biotaNField = document.getElementById('id_biota_n');
+    var biotaConcField = document.getElementById('id_biota_conc');
+    var biotaStatusDropdown = document.getElementById('id_biota_wet_dry');
+    var biotaUnitsDropdown = document.getElementById('id_biota_conc_units');
 
-    // Function to update Media Type based on the selected Habitat
+
+    // Helper functions to add options to the dropdown
+    function addMediaUnitOption(text, value) {
+        var option = document.createElement('option');
+        option.text = text;
+        option.value = value;
+        mediaUnitsDropdown.add(option);
+    }
+
+    function addStatusOption(text, value) {
+        var option = document.createElement('option');
+        option.text = text;
+        option.value = value;
+        mediaStatusDropdown.add(option);
+    }
+
     function updateMediaType() {
         console.log("updateMediaType() started");
+
         // Clear previous options
         mediaTypeDropdown.innerHTML = '';
 
         // Get the selected value of Habitat
         var selectedHabitat = habitatDropdown.value.toLowerCase();
-        var selectedHabitatIndex = habitatDropdown.selectedIndex;
-        var selectedHabitatText = habitatDropdown.options[selectedHabitatIndex].text.toLowerCase();
-        console.log("Selected Habitat: ", selectedHabitatText);
-
-        console.log("Selected Habitat no: ", selectedHabitat);
-
-
-        console.log("changes follow");
-        //var selectedHabitatId = habitatDropdown.value;
-        //console.log("Selected Habitat ID: ", selectedHabitatId);
 
         fetch(`/get-media-for-habitat/?habitat_id=${selectedHabitat}`)
             .then(response => response.json())
@@ -35,29 +46,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Filter out 'Biota' from the options, add else
                 data.filter(media => media.media_type.toLowerCase() !== 'biota').forEach(function (media) {
                     var option = new Option(media.media_type, media.media_id);
-                    console.log("media_type: ", media.media_type);
-                    console.log("id: ", media.id);
-                    console.log("media_id: ", media.media_id);
                     mediaTypeDropdown.add(option);
                 });
+                // Following the Media Type selection, update the media units possible
+                updateMediaUnits();
             })
             .catch(error => console.error('Error fetching media types:', error));
     }
 
     // Function to update Media Units based on the selected Media Type
     function updateMediaUnits() {
+        if (!mediaTypeDropdown.options.length || mediaTypeDropdown.selectedIndex < 0) {
+            console.log("Media type not selected or options not available.");
+            return; // Exit if no options are available or selected
+        }
         console.log("updateMediaUnits() started");
+
         // Clear previous options
         mediaUnitsDropdown.innerHTML = '';
-        mediaWetDryDropdown.innerHTML = '';
+        mediaStatusDropdown.innerHTML = '';
 
         // Get the selected value of Media Type
         var selectedMedia = mediaTypeDropdown.options[mediaTypeDropdown.selectedIndex];
-        console.log("selectedMedia: ", selectedMedia);
-        var selectedMediaID = selectedMedia.value;
-        console.log("selectedMediaID: ", selectedMediaID);
+
         var selectedMediaType = selectedMedia.text.toLowerCase();
-        console.log("selectedMediaType: ", selectedMediaType);
 
         // Add unit options based on the selected Media Type
         if (selectedMediaType === 'air') {
@@ -82,59 +94,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Add wt/dry options based on the selected Media Type
         if (selectedMediaType === 'air') {
-            addWetDryOption('Air', 'Air');
+            addStatusOption('Air', 'Air');
         } else if (selectedMediaType === "water") {
-            addWetDryOption('Water', 'Water');
+            addStatusOption('Water', 'Water');
         } else if (selectedMediaType === 'soil') {
-            addWetDryOption('Dry', 'Dry');
+            addStatusOption('Dry', 'Dry');
         }
+
+        // If possible, fill in the CR now
+        updateConcentrationRatio();
     }
 
-    // Helper functions to add options to the dropdown
-    function addMediaUnitOption(text, value) {
-        var option = document.createElement('option');
-        option.text = text;
-        option.value = value;
-        mediaUnitsDropdown.add(option);
-    }
 
-    function addWetDryOption(text, value) {
-        var option = document.createElement('option');
-        option.text = text;
-        option.value = value;
-        mediaWetDryDropdown.add(option);
-    }
-
-    // Attach the functions to the change event of dropdowns
-    habitatDropdown.addEventListener('change', updateMediaType);
-    mediaTypeDropdown.addEventListener('change', updateMediaUnits);
+    habitatDropdown.addEventListener('input', updateMediaType);
+    mediaTypeDropdown.addEventListener('input', updateMediaUnits);
     updateMediaType();
     updateMediaUnits();
 
-    // Initialize functions on page load
-    //updateMediaType();
-    //updateMediaUnits();
-
-    var mediaConcField = document.getElementById('id_media_conc');
-    var biotaConcField = document.getElementById('id_biota_conc');
-    mediaConcField.addEventListener('input', updateTest);
-    mediaUnitsDropdown.addEventListener('input', updateTest);
-
-    function updateTest() {
-        console.log("updateTest() started");
-        console.log("updateTest() started");
-        console.log("updateTest() started");
-        console.log("updateTest() started");
-    }
-
-
-    /******************* CR CALCULATIONS ***************************/
-
-        // Get references to the relevant input fields and select dropdowns
-    var biotaUnitsDropdown = document.getElementById('id_biota_conc_units');
-
     // Function to update Concentration Ratio based on Media and Biota Concentration
     function updateConcentrationRatio() {
+        if (mediaUnitsDropdown.selectedIndex < 0 || biotaUnitsDropdown.selectedIndex < 0) {
+            console.log("Prerequisites for updateConcentrationRatio not met");
+            return; // Exit if required selections are not made
+        }
         console.log("updateConcentrationRatio() started");
         var mediaUnitSymbol = document.getElementById('id_media_conc_units').value;
         console.log("mediaUnitSymbol", mediaUnitSymbol);
@@ -142,12 +124,14 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("biotaUnitSymbol", biotaUnitSymbol);
         var mediaType = document.getElementById('id_media').options[document.getElementById('id_media').selectedIndex].text;
         console.log("mediaType", mediaType);
+        var biotaType = document.getElementById('id_tissue').options[document.getElementById('id_tissue').selectedIndex].text;
+        console.log("biotaType", biotaType);
 
         fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media_type=${mediaType}`)
             .then(response => response.json())
             .then(mediaData => {
                 // Make AJAX request for biota unit correction factor
-                fetch(`/get_correction_factor/?unit_symbol=${biotaUnitSymbol}&media_type=${mediaType}`)
+                fetch(`/get_correction_factor/?unit_symbol=${biotaUnitSymbol}&media_type=${biotaType}`)
                     .then(response => response.json())
                     .then(biotaData => {
                         // Display the result for media unit
@@ -183,10 +167,12 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Attach the updateConcentrationRatio function to the input event of Media and Biota Concentration fields
+    mediaNField.addEventListener('input', updateConcentrationRatio);
     mediaConcField.addEventListener('input', updateConcentrationRatio);
-    biotaConcField.addEventListener('input', updateConcentrationRatio);
+    mediaStatusDropdown.addEventListener('input', updateConcentrationRatio);
     mediaUnitsDropdown.addEventListener('input', updateConcentrationRatio);
+    biotaNField.addEventListener('input', updateConcentrationRatio);
+    biotaConcField.addEventListener('input', updateConcentrationRatio);
+    biotaStatusDropdown.addEventListener('input', updateConcentrationRatio);
     biotaUnitsDropdown.addEventListener('input', updateConcentrationRatio);
-    mediaUnitsDropdown.addEventListener('change', updateConcentrationRatio);
-});
+})

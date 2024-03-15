@@ -746,10 +746,10 @@ def delete_entire_record_confirm(request, ref_id):
 
 @login_required
 def delete_datacr_record_confirm(request, cr_id):
-    # This view can be used to confirm the deletion of a single DataCR record
+    # View used to confirm the deletion of a single DataCR record
     datacr = get_object_or_404(DataCR, pk=cr_id)
     if request.method == 'POST':
-        # Assuming deletion is confirmed
+        # So, deletion is confirmed
         datacr.delete()
         messages.success(request, "DataCR record deleted successfully.")
         return redirect('view_editable_data_records')  # Redirect to your listing view

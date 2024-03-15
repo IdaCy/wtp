@@ -28,30 +28,61 @@ document.addEventListener('DOMContentLoaded', function () {
         mediaStatusDropdown.add(option);
     }
 
-    function updateMediaType() {
-        console.log("updateMediaType() started");
 
-        // Clear previous options
-        mediaTypeDropdown.innerHTML = '';
+    // Function to update Concentration Ratio based on Media and Biota Concentration
+    function updateConcentrationRatio() {
+        if (mediaUnitsDropdown.selectedIndex < 0 || biotaUnitsDropdown.selectedIndex < 0) {
+            console.log("Prerequisites for updateConcentrationRatio not met");
+            return; // Exit if required selections are not made
+        }
+        console.log("updateConcentrationRatio() started");
+        var mediaUnitSymbol = document.getElementById('id_media_conc_units').value;
+        console.log("mediaUnitSymbol", mediaUnitSymbol);
+        var biotaUnitSymbol = document.getElementById('id_biota_conc_units').value;
+        console.log("biotaUnitSymbol", biotaUnitSymbol);
+        var mediaType = document.getElementById('id_media').options[document.getElementById('id_media').selectedIndex].text;
+        console.log("mediaType", mediaType);
+        //var biotaType = document.getElementById('id_tissue').options[document.getElementById('id_tissue').selectedIndex].text;
+        //console.log("biotaType", biotaType);
 
-        // Get the selected value of Habitat
-        var selectedHabitat = habitatDropdown.value.toLowerCase();
-
-        fetch(`/get-media-for-habitat/?habitat_id=${selectedHabitat}`)
+        fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media_type=${mediaType}`)
             .then(response => response.json())
-            .then(data => {
-                // Clear previous options
-                mediaTypeDropdown.innerHTML = '';
+            .then(mediaData => {
+                // Make AJAX request for biota unit correction factor
+                fetch(`/get_correction_factor/?unit_symbol=${biotaUnitSymbol}&media_type=${mediaType}`)
+                    .then(response => response.json())
+                    .then(biotaData => {
+                        // Display the result for media unit
+                        var mediaCorrectionFactor = mediaData.correction_factor || 1.0;
+                        var mediaConcentration = parseFloat(mediaConcField.value);
+                        var mediaResult = mediaCorrectionFactor * mediaConcentration;
+                        // updating invisible field to save this too
+                        console.log("setting stand_media_conc with ", mediaResult);
+                        document.getElementById('id_stand_media_conc').value = mediaResult;
 
-                // Filter out 'Biota' from the options, add else
-                data.filter(media => media.media_type.toLowerCase() !== 'biota').forEach(function (media) {
-                    var option = new Option(media.media_type, media.media_id);
-                    mediaTypeDropdown.add(option);
-                });
-                // Following the Media Type selection, update the media units possible
-                updateMediaUnits();
+                        // Display the result for biota unit
+                        var biotaCorrectionFactor = biotaData.correction_factor || 1.0;
+                        var biotaConcentration = parseFloat(biotaConcField.value);
+                        var biotaResult = biotaCorrectionFactor * biotaConcentration;
+                        console.log("setting stand_biota_conc with ", biotaResult);
+                        document.getElementById('id_stand_biota_conc').value = biotaResult;
+
+                        // Calculate and display the Concentration Ratio
+                        var crField = document.getElementById('id_cr');
+                        var concentrationRatio = biotaResult / mediaResult;
+                        console.log("Concentration Ratio before conversion:", concentrationRatio);
+                        concentrationRatio = concentrationRatio.toFixed(10); // limit to 10 decimal places
+                        console.log("Concentration Ratio after conversion:", concentrationRatio);
+                        crField.value = concentrationRatio;
+                        document.getElementById('id_cr').value = concentrationRatio;
+                    })
+                    .catch(biotaError => {
+                        console.error('Error fetching biota correction factor:', biotaError);
+                    });
             })
-            .catch(error => console.error('Error fetching media types:', error));
+            .catch(mediaError => {
+                console.error('Error fetching media correction factor:', mediaError);
+            });
     }
 
     // Function to update Media Units based on the selected Media Type
@@ -105,67 +136,34 @@ document.addEventListener('DOMContentLoaded', function () {
         updateConcentrationRatio();
     }
 
+    function updateMediaType() {
+        console.log("updateMediaType() started");
+
+        // Clear previous options
+        mediaTypeDropdown.innerHTML = '';
+
+        // Get the selected value of Habitat
+        var selectedHabitat = habitatDropdown.value.toLowerCase();
+
+        fetch(`/get-media-for-habitat/?habitat_id=${selectedHabitat}`)
+            .then(response => response.json())
+            .then(data => {
+                // Clear previous options
+                mediaTypeDropdown.innerHTML = '';
+
+                // Filter out 'Biota' from the options, add else
+                data.filter(media => media.media_type.toLowerCase() !== 'biota').forEach(function (media) {
+                    var option = new Option(media.media_type, media.media_id);
+                    mediaTypeDropdown.add(option);
+                });
+                // Following the Media Type selection, update the media units possible
+                updateMediaUnits();
+            })
+            .catch(error => console.error('Error fetching media types:', error));
+    }
 
     habitatDropdown.addEventListener('input', updateMediaType);
     mediaTypeDropdown.addEventListener('input', updateMediaUnits);
-    updateMediaType();
-    updateMediaUnits();
-
-    // Function to update Concentration Ratio based on Media and Biota Concentration
-    function updateConcentrationRatio() {
-        if (mediaUnitsDropdown.selectedIndex < 0 || biotaUnitsDropdown.selectedIndex < 0) {
-            console.log("Prerequisites for updateConcentrationRatio not met");
-            return; // Exit if required selections are not made
-        }
-        console.log("updateConcentrationRatio() started");
-        var mediaUnitSymbol = document.getElementById('id_media_conc_units').value;
-        console.log("mediaUnitSymbol", mediaUnitSymbol);
-        var biotaUnitSymbol = document.getElementById('id_biota_conc_units').value;
-        console.log("biotaUnitSymbol", biotaUnitSymbol);
-        var mediaType = document.getElementById('id_media').options[document.getElementById('id_media').selectedIndex].text;
-        console.log("mediaType", mediaType);
-        var biotaType = document.getElementById('id_tissue').options[document.getElementById('id_tissue').selectedIndex].text;
-        console.log("biotaType", biotaType);
-
-        fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media_type=${mediaType}`)
-            .then(response => response.json())
-            .then(mediaData => {
-                // Make AJAX request for biota unit correction factor
-                fetch(`/get_correction_factor/?unit_symbol=${biotaUnitSymbol}&media_type=${biotaType}`)
-                    .then(response => response.json())
-                    .then(biotaData => {
-                        // Display the result for media unit
-                        var mediaCorrectionFactor = mediaData.correction_factor || 1.0;
-                        var mediaConcentration = parseFloat(mediaConcField.value);
-                        var mediaResult = mediaCorrectionFactor * mediaConcentration;
-                        // updating invisible field to save this too
-                        console.log("setting stand_media_conc with ", mediaResult);
-                        document.getElementById('id_stand_media_conc').value = mediaResult;
-
-                        // Display the result for biota unit
-                        var biotaCorrectionFactor = biotaData.correction_factor || 1.0;
-                        var biotaConcentration = parseFloat(biotaConcField.value);
-                        var biotaResult = biotaCorrectionFactor * biotaConcentration;
-                        console.log("setting stand_biota_conc with ", biotaResult);
-                        document.getElementById('id_stand_biota_conc').value = biotaResult;
-
-                        // Calculate and display the Concentration Ratio
-                        var crField = document.getElementById('id_cr');
-                        var concentrationRatio = biotaResult / mediaResult;
-                        console.log("Concentration Ratio before conversion:", concentrationRatio);
-                        concentrationRatio = concentrationRatio.toFixed(10); // limit to 10 decimal places
-                        console.log("Concentration Ratio after conversion:", concentrationRatio);
-                        crField.value = concentrationRatio;
-                        document.getElementById('id_cr').value = concentrationRatio;
-                    })
-                    .catch(biotaError => {
-                        console.error('Error fetching biota correction factor:', biotaError);
-                    });
-            })
-            .catch(mediaError => {
-                console.error('Error fetching media correction factor:', mediaError);
-            });
-    }
 
     mediaNField.addEventListener('input', updateConcentrationRatio);
     mediaConcField.addEventListener('input', updateConcentrationRatio);
@@ -175,4 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
     biotaConcField.addEventListener('input', updateConcentrationRatio);
     biotaStatusDropdown.addEventListener('input', updateConcentrationRatio);
     biotaUnitsDropdown.addEventListener('input', updateConcentrationRatio);
+
+    updateMediaType();
+    updateMediaUnits();
 })

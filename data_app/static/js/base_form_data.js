@@ -27,6 +27,14 @@ document.addEventListener('DOMContentLoaded', function () {
         option.value = value;
         mediaStatusDropdown.add(option);
     }
+    function setBiotaUnits(text, value) {
+        biotaUnitsDropdown.innerHTML = '';
+
+        var option = document.createElement('option');
+        option.text = text;
+        option.value = value;
+        biotaUnitsDropdown.add(option);
+    }
 
 
     // Function to update Concentration Ratio based on Media and Biota Concentration
@@ -105,6 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // Add unit options based on the selected Media Type
         if (selectedMediaType === 'air') {
             addMediaUnitOption('Bq/m3', 'Bq/m3');
+            setBiotaUnits('Bq/m3', 'Bq/m3');
+            //addMediaUnitOption('ppm', 'ppm');
         } else if ((selectedMediaType === 'soil')
             || (selectedMediaType === "sediment")
             || (selectedMediaType === "water")) {

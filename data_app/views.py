@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.shortcuts import render
+from django.utils.html import strip_tags
+
 from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName, ReferenceRejectionReason
 from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element, Radionuclide, Tissue
 from .models import MaterialStatus, ParCRCalc, MaterialCRCalc
@@ -497,6 +499,15 @@ def add_datacr(request):
 
         reference_form = ReferenceForm(request.POST)
         datacr_form = DataCRForm(request.POST)
+
+        if not datacr_form.is_valid():
+            for field, errors in datacr_form.errors.items():
+                for error in errors:
+                    # Strip HTML tags and decode HTML entities
+                    clean_error = strip_tags(str(error))
+                    messages.error(request, f"Error in {field}: {clean_error}\n\n")
+                #messages.error(request, f"Error in {error}: {datacr_form.errors[error]}")
+
         print(datacr_form.errors)
         """print("request.POST.get('species_name', ''): ")
         print(request.POST.get('species_name', ''))
@@ -711,6 +722,7 @@ def edit_data_record(request, ref_id):
             print("was successful actually - so should print message in cmd !")
             messages.success(request, 'Record updated successfully!')
             print("printed it in cmd???")
+            return redirect('view_editable_data_records')
         else:
             print("aha! that's why... error after all")
             messages.error(request, "There was a problem with your submission. Please review the form and try again.")

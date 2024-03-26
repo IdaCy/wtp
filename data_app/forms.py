@@ -40,7 +40,8 @@ class ReferenceForm(forms.ModelForm):
         label='Article Title',
         empty_label="Select Article Title"
     )"""
-    #translation = forms.BooleanField(required=False)
+
+    # translation = forms.BooleanField(required=False)
 
     class Meta:
         model = Reference
@@ -120,6 +121,7 @@ class DataCRForm(forms.ModelForm):
         label='Notes'
     )
     media_wet_dry_choices = [
+        ('Air', 'Air'),
         ('Wet', 'Wet'),
         ('Dry', 'Dry')
     ]
@@ -140,20 +142,26 @@ class DataCRForm(forms.ModelForm):
     )
     biota_conc_units_choices = [
         ('µCi/kg', 'µCi/kg'),
-        ('Bq/l', 'Bq/l'),
         ('Bq/g', 'Bq/g'),
         ('Bq/kg', 'Bq/kg'),
+        ('Bq/l', 'Bq/l'),
         ('Bq/m2', 'Bq/m2'),
+        ('Bq/m3', 'Bq/m3'),
         ('mBq/g', 'mBq/g'),
         ('mBq/kg', 'mBq/kg'),
+        ('mBq/l', 'mBq/l'),
         ('mg/g', 'mg/g'),
         ('mg/kg', 'mg/kg'),
+        ('mg/l', 'mg/l'),
         ('pCi/g', 'pCi/g'),
         ('pCi/kg', 'pCi/kg'),
+        ('pCi/l', 'pCi/l'),
         ('ppb', 'ppb'),
         ('ppm', 'ppm'),
+        ('uCi/l', 'uCi/l'),
         ('ug/g', 'ug/g'),
-        ('ug/kg', 'ug/kg')
+        ('ug/kg', 'ug/kg'),
+        ('ug/l', 'ug/l'),
     ]
     biota_conc_units = forms.ChoiceField(
         choices=biota_conc_units_choices,

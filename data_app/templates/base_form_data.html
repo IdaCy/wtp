@@ -121,6 +121,11 @@
                     <label for="id_ref_id">Reference ID:</label>
                     <input type="text" id="ref_id" name="ref_id"
                            value="{{ reference_form.ref_id.value|default_if_none:'' }}" readonly>
+                    {% if datacr_form.ref_id.errors %}
+                        <div class="alert alert-warning" role="alert" style="color: red">
+                            {{ datacr_form.ref_id.errors.as_text }}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -132,10 +137,20 @@
                                name="article_title"
                                style="background-image: url('../static/images/magnifying-glass.png'); background-repeat: no-repeat; background-position: 10px center;"
                                value="{{ reference_form.article_title.value|default_if_none:'' }}">
+                        {% if datacr_form.article_title.errors %}
+                            <div class="alert alert-warning" role="alert" style="color: red">
+                                {{ datacr_form.article_title.errors.as_text }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="line">
                         <label for="id_publication_title">Publication Title:</label>
                         {{ reference_form.pub_title }}
+                        {% if datacr_form.pub_title.errors %}
+                            <div class="alert alert-warning" role="alert" style="color: red">
+                                {{ datacr_form.pub_title.errors.as_text }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="ref-right">
@@ -143,10 +158,20 @@
                         <label for="id_author">Author:</label>
                         <input type="text" id="id_author" name="author"
                                value="{{ reference_form.author.value|default_if_none:'' }}">
+                        {% if datacr_form.author.errors %}
+                            <div class="alert alert-warning" role="alert" style="color: red">
+                                {{ datacr_form.author.errors.as_text }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="line">
                         <label for="id_publication_type">Type:</label>
                         {{ reference_form.pub_type }}
+                        {% if datacr_form.pub_type.errors %}
+                            <div class="alert alert-warning" role="alert" style="color: red">
+                                {{ datacr_form.pub_type.errors.as_text }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -156,30 +181,60 @@
                     <label for="id_volume">Volume:</label>
                     <input type="text" id="id_volume" name="volume" class="small-input"
                            value="{{ reference_form.volume.value|default_if_none:'' }}">
+                    {% if datacr_form.volume.errors %}
+                        <div class="alert alert-warning" role="alert" style="color: red">
+                            {{ datacr_form.volume.errors.as_text }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="entry">
                     <label for="id_pages">Page Numbers:</label>
                     <input type="text" id="id_pages" name="pages" class="small-input"
                            value="{{ reference_form.pages.value|default_if_none:'' }}">
+                    {% if datacr_form.pages.errors %}
+                        <div class="alert alert-warning" role="alert" style="color: red">
+                            {{ datacr_form.pages.errors.as_text }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="entry">
                     <label for="id_year">Year:</label>
                     <input type="text" id="id_year" name="year" class="small-input"
                            value="{{ reference_form.year.value|default_if_none:'' }}">
+                    {% if datacr_form.year.errors %}
+                        <div class="alert alert-warning" role="alert" style="color: red">
+                            {{ datacr_form.year.errors.as_text }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="entry">
                     <label for="id_part">Part:</label>
                     <input type="text" id="id_part" name="part" class="small-input"
                            value="{{ reference_form.part.value|default_if_none:'' }}">
+                    {% if datacr_form.part.errors %}
+                        <div class="alert alert-warning" role="alert" style="color: red">
+                            {{ datacr_form.part.errors.as_text }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="entry">
                     <label for="id_reference_language">Reference Language:</label>
                     {{ reference_form.language | add_class:"ref-small" }}
+                    {% if datacr_form.language.errors %}
+                        <div class="alert alert-warning" role="alert" style="color: red">
+                            {{ datacr_form.language.errors.as_text }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="translation">
                     <label for="id_translation">English Translation Available:</label>
                     {{ reference_form.translation }}
+                    {% if datacr_form.translation.errors %}
+                        <div class="alert alert-warning" role="alert" style="color: red">
+                            {{ datacr_form.translation.errors.as_text }}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </section>
@@ -192,22 +247,47 @@
                         <div class="entry">
                             <label for="id_habitat">Habitat:</label>
                             {{ datacr_form.habitat | add_class:"limited" }}
+                            {% if datacr_form.habitat.errors %}
+                                <div class="alert alert-warning" role="alert" style="color: red">
+                                    {{ datacr_form.habitat.errors.as_text }}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="entry">
                             <label for="id_icrp_rap">ICRP RAP:</label>
                             {{ datacr_form.icrp_rap | add_class:"limited" }}
+                            {% if datacr_form.habitat.errors %}
+                                <div class="alert alert-warning" role="alert" style="color: red">
+                                    {{ datacr_form.habitat.errors.as_text }}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="entry">
                             <label for="id_lifestage">Lifestage:</label>
                             {{ datacr_form.lifestage | add_class:"limited" }}
+                            {% if datacr_form.lifestage.errors %}
+                                <div class="alert alert-warning" role="alert" style="color: red">
+                                    {{ datacr_form.lifestage.errors.as_text }}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="entry">
                             <label for="id_wildlife_group">Wildlife Group:</label>
                             {{ datacr_form.wildlife_group | add_class:"limited" }}
+                            {% if datacr_form.wildlife_group.errors %}
+                                <div class="alert alert-warning" role="alert" style="color: red">
+                                    {{ datacr_form.wildlife_group.errors.as_text }}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="entry">
                             <label for="id_studytype">Studytype:</label>
                             {{ datacr_form.study_type | add_class:"limited" }}
+                            {% if datacr_form.study_type.errors %}
+                                <div class="alert alert-warning" role="alert" style="color: red">
+                                    {{ datacr_form.study_type.errors.as_text }}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -220,6 +300,11 @@
                                     <option value="{{ species.species_id }}">{{ species.name_common }}</option>
                                 {% endfor %}
                             </select>
+                            {% if datacr_form.name_common.errors %}
+                                <div class="alert alert-warning" role="alert" style="color: red">
+                                    {{ datacr_form.name_common.errors.as_text }}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="entry">
                             <label for="id_name_latin">Latin:</label>
@@ -242,14 +327,29 @@
                             <label for="id_measurement_date">Measured:</label>
                             {{ datacr_form.measurement_date | add_class:"date" }}
                             <!--<input type="date" id="id_measurement_date" name="measurement_date">-->
+                            {% if datacr_form.measurement_date.errors %}
+                                <div class="alert alert-warning" role="alert" style="color: red">
+                                    {{ datacr_form.measurement_date.errors.as_text }}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="entry">
                             <label for="id_biohalflife">Biohalflife:</label>
                             {{ datacr_form.biohalflife | add_class:"limited" }}
+                            {% if datacr_form.biohalflife.errors %}
+                                <div class="alert alert-warning" role="alert" style="color: red">
+                                    {{ datacr_form.biohalflife.errors.as_text }}
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="entry">
                             <label for="id_radionuclide">Element/Nuclide:</label>
                             {{ datacr_form.radionuclide | add_class:"nuclide" }}
+                            {% if datacr_form.radionuclide.errors %}
+                                <div class="alert alert-warning" role="alert" style="color: red">
+                                    {{ datacr_form.radionuclide.errors.as_text }}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

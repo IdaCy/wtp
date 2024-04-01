@@ -170,5 +170,3 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'wildlifetransferdb@gmail.com'
 EMAIL_HOST_PASSWORD = 'tnsfqxgfccchyoij'
 EMAIL_RECIPIENT = 'wildlifetransferdb@gmail.com'
-
-

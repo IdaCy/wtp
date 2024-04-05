@@ -21,8 +21,8 @@ class Command(BaseCommand):
         if not os.path.isdir(file_path):
             raise CommandError(f'"{file_path}" is not a valid directory')
 
-        #for model in [Element, Habitat, WildlifeGroup, RAP, Lifestage, Media, PubType, PubTitle, SpeciesName, StudyType, Tissue, MaterialStatus, ActivityConcUnit, ParCRCalc, MaterialCRCalc, Radionuclide, Language, Reference, ReferenceRejectionReason, DataCR]:
-        for model in [Reference, ReferenceRejectionReason, DataCR]:
+        for model in [Element, Habitat, WildlifeGroup, RAP, Lifestage, Media, PubType, PubTitle, SpeciesName, StudyType, Tissue, MaterialStatus, ActivityConcUnit, ParCRCalc, MaterialCRCalc, Radionuclide, Language, Reference, ReferenceRejectionReason, DataCR]:
+        #for model in [Reference, ReferenceRejectionReason, DataCR]:
             file_name = os.path.join(file_path, model.__name__ + '.xlsx')
             if os.path.exists(file_name):
                 self.stdout.write(f'Importing data for {model.__name__}...')

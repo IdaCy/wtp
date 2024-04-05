@@ -1,0 +1,8 @@
+<!-- templates/register_disabled.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Registration Disabled</h2>
+    <p>Registration is currently disabled. Please try again later.</p>
+    <a href="{% url 'login' %}">Back to login</a>
+{% endblock %}

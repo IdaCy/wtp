@@ -9,6 +9,9 @@ from data_app.models import User
 
 
 def register_view(request):
+    # Temporarily disable registration
+    return render(request, 'register_disabled.html')
+    '''
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -33,7 +36,7 @@ def register_view(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
-
+'''
 
 def login_view(request):
     if request.method == 'POST':

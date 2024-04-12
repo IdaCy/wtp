@@ -36,6 +36,9 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+from django.utils import timezone
+import time
+
 #@login_required
 def tables_panel(request):
     term = request.GET.get('term', '')
@@ -472,6 +475,7 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
             if species_name == "" or species_name == "None" or species_name is None:
                 datacr.species_name = None"""
 
+            datacr.cr_id = int(time.time())
             datacr.reference = reference
             datacr.save()
             return True, reference_form, datacr_form
@@ -484,6 +488,7 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
             if species_name == "" or species_name == "None" or species_name is None:
                 datacr.species_name = None"""
             datacr.reference = existing_reference
+            datacr.cr_id = int(time.time())
             datacr.save()
             return True, None, datacr_form  # No need to return a reference form here
         else:
@@ -496,7 +501,7 @@ def add_datacr(request):
     try:
         default_user = User.objects.get(id=default_user_id)
     except User.DoesNotExist:
-        default_user = None  # or handle error appropriatel
+        default_user = None  # or handle error appropriately
 
     # Defining 'species_list' here so it's available regardless of if...else outcome
     species_list = SpeciesName.objects.filter(approved=True).order_by('name_latin')
@@ -669,8 +674,14 @@ def view_editable_data_records(request):
 
 #@login_required
 def view_editable_data_records(request):
+    default_user_id = 1  # Set the default user ID
+    try:
+        default_user = User.objects.get(id=default_user_id)
+    except User.DoesNotExist:
+        default_user = None  # or handle error appropriately
+
     # Fetch records with 'PENDING' status and belong to the logged-in user
-    references = Reference.objects.filter(approval_status='PENDING', user=request.user)
+    references = Reference.objects.filter(approval_status='PENDING', user=default_user)
 
     # Create a list to hold data that includes details from both Reference and related DataCR objects
     records_with_details = []

@@ -314,7 +314,8 @@ class DataCR(models.Model):
         ('ug/l', 'ug/l'),
     ]
 
-    cr_id = models.AutoField(primary_key=True)
+    #cr_id = models.AutoField(primary_key=True)
+    cr_id = models.BigIntegerField(primary_key=True)
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True, blank=True)
     habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE, null=True, blank=True)
     wildlife_group = models.ForeignKey(WildlifeGroup, on_delete=models.CASCADE, null=True, blank=True)

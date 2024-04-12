@@ -123,7 +123,8 @@ class DataCRForm(forms.ModelForm):
     media_wet_dry_choices = [
         ('Air', 'Air'),
         ('Wet', 'Wet'),
-        ('Dry', 'Dry')
+        ('Dry', 'Dry'),
+        ('Water', 'Water')
     ]
     media_wet_dry = forms.ChoiceField(
         choices=media_wet_dry_choices,

@@ -32,8 +32,11 @@ import statistics
 import math
 from django.db.models.functions import RowNumber
 
+from django.contrib.auth import get_user_model
 
-@login_required
+User = get_user_model()
+
+#@login_required
 def tables_panel(request):
     term = request.GET.get('term', '')
     context = {
@@ -79,7 +82,7 @@ def tables_panel(request):
     return render(request, 'tables_panel.html', context)
 
 
-@login_required
+#@login_required
 def get_table_data(request):
     term = request.GET.get('term')
     data = {'headers': [], 'rows': []}
@@ -211,18 +214,18 @@ def article_title_search(request):
     return JsonResponse([], safe=False)
 
 
-@login_required
+#@login_required
 def data_view(request):
     dataobj = ActivityConcUnit.objects.all()
     return render(request, 'data.html', {'data': dataobj})
 
 
-@login_required
+#@login_required
 def download_summaries(request):
     return render(request, 'download_summaries.html')
 
 
-@login_required
+#@login_required
 def view_summary_results(request):
     habitat_query = request.GET.get('habitat', '')
     selection_type = request.GET.get('selection_type', '')
@@ -412,7 +415,7 @@ def view_summary_results(request):
     return render(request, 'view_summary_results.html', context)
 
 
-@login_required
+#@login_required
 def view_xxx(request):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         # Extract query parameters from AJAX request
@@ -487,8 +490,14 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
             return False, None, datacr_form
 
 
-@login_required
+#@login_required
 def add_datacr(request):
+    default_user_id = 1  # Set the default user ID
+    try:
+        default_user = User.objects.get(id=default_user_id)
+    except User.DoesNotExist:
+        default_user = None  # or handle error appropriatel
+
     # Defining 'species_list' here so it's available regardless of if...else outcome
     species_list = SpeciesName.objects.filter(approved=True).order_by('name_latin')
 
@@ -534,7 +543,7 @@ def add_datacr(request):
             success, reference_form, datacr_form = handle_reference_datacr(
                 reference_form=reference_form,
                 datacr_form=datacr_form,
-                user=request.user
+                user=default_user
             )
             if success:
                 # Reset the reference form to clear fields after successful "Add All"
@@ -553,7 +562,7 @@ def add_datacr(request):
                 success, _, datacr_form = handle_reference_datacr(
                     reference_form=None,  # Not used in this case
                     datacr_form=datacr_form,
-                    user=request.user,
+                    user=default_user,
                     submit_ref=False,
                     existing_reference=existing_reference
                 )
@@ -563,7 +572,7 @@ def add_datacr(request):
                 success, reference_form, datacr_form = handle_reference_datacr(
                     reference_form=reference_form,
                     datacr_form=datacr_form,
-                    user=request.user
+                    user=default_user
                 )
                 print(success)
 
@@ -604,7 +613,7 @@ def add_datacr(request):
     return render(request, 'add_datacr.html', context)
 
 
-@login_required
+#@login_required
 def get_media_for_habitat(request):
     habitat_id = request.GET.get('habitat_id')
     media_options = Media.objects.filter(habitat_id=habitat_id).values('media_type', 'media_id')
@@ -619,7 +628,7 @@ def get_media_for_habitat(request):
 # unit_symbol = unit_symbol
 # media_type_string = media_type
 
-@login_required
+#@login_required
 def get_correction_factor(request):
     unit_symbol = request.GET.get('unit_symbol', '')
     media_type_string = request.GET.get('media_type', '')
@@ -650,7 +659,7 @@ def get_correction_factor(request):
         return JsonResponse({'error': 'Media not found'}, status=404)
 
 
-"""@login_required
+"""#@login_required
 def view_editable_data_records(request):
     # Fetch records with 'PENDING' status and belong to the logged-in user
     records = Reference.objects.filter(approval_status='PENDING', user=request.user)
@@ -658,7 +667,7 @@ def view_editable_data_records(request):
 """
 
 
-@login_required
+#@login_required
 def view_editable_data_records(request):
     # Fetch records with 'PENDING' status and belong to the logged-in user
     references = Reference.objects.filter(approval_status='PENDING', user=request.user)
@@ -688,7 +697,7 @@ def view_editable_data_records(request):
     return render(request, 'view_editable_data_records.html', {'records': records_with_details})
 
 
-@login_required
+#@login_required
 def edit_data_record(request, ref_id):
     species_list = SpeciesName.objects.all()
     print("Edit data record POST data:", request.POST)
@@ -745,7 +754,7 @@ def edit_data_record(request, ref_id):
 register = template.Library()
 
 
-@login_required
+#@login_required
 def delete_entire_record_confirm(request, ref_id):
     reference = get_object_or_404(Reference, pk=ref_id)
     if request.method == 'POST':
@@ -756,7 +765,7 @@ def delete_entire_record_confirm(request, ref_id):
         return render(request, 'confirm_delete_entire_record.html', {'ref_id': ref_id})
 
 
-@login_required
+#@login_required
 def delete_datacr_record_confirm(request, cr_id):
     # View used to confirm the deletion of a single DataCR record
     datacr = get_object_or_404(DataCR, pk=cr_id)
@@ -768,7 +777,7 @@ def delete_datacr_record_confirm(request, cr_id):
     return render(request, 'confirm_delete_datacr_record.html', {'datacr': datacr})
 
 
-@login_required
+#@login_required
 def view_all_data(request, ref_id=None, cr_id=None):
     # Redirect to a URL with the first Reference's ID if ref_id is not provided
     if ref_id is None:

@@ -27,16 +27,9 @@ SECRET_KEY = 'django-insecure--=v=pk*_0wyinh-mf$a4^msiv=4l%qv-u8cd_xfe7ua!unrm#^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#SECURE_SSL_REDIRECT = True
-#CSRF_COOKIE_SECURE = True
-#SESSION_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = False
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-
 #ALLOWED_HOSTS = ['wtp.cs.stir.ac.uk', 'localhost', '127.0.0.1']
-#ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = ['wtp.cs.stir.ac.uk', 'localhost', '127.0.0.1', '139.153.255.81']
+ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['wtp.cs.stir.ac.uk', 'localhost', '127.0.0.1', '139.153.255.81']
 
 # Application definition
 
@@ -60,7 +53,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+#    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

@@ -35,7 +35,7 @@ def contact(request):
 
 
 def privacy_view(request):
-    return render(request, 'privacy.html')
+    return render(request, 'xxprivacy.html')
 
 
 def legal_view(request):

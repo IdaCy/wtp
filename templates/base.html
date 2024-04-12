@@ -30,7 +30,7 @@
             {% if request.resolver_match.url_name == 'login' %}
                 <li><a href="{% url 'logout' %}" class="active">Login</a></li>
             {% endif %}
-            {% if request.resolver_match.url_name == 'privacy' %}
+            {% if request.resolver_match.url_name == 'privacy_policy' %}
                 <li><a href="{% url 'logout' %}" class="active">Login</a></li>
             {% endif %}
             {% if request.resolver_match.url_name == 'legal_disclaimer' %}

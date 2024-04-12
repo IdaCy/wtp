@@ -13,7 +13,7 @@ def legal_disclaimer(request):
     return render(request, 'legal_disclaimer.html')
 
 
-@login_required
+#@login_required
 def contact(request):
     if request.method == 'POST':
         user = request.user

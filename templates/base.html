@@ -19,12 +19,74 @@
 
         <ul>
             <!-- Show dashboard & logout link only if the user is logged in -->
-            {% if request.user.is_authenticated %}
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a href="{% url 'logout' %}">Logout</a></li>
-            {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
+            {#% if request.user.is_authenticated %#}
+            <!--<li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            {#% else %#}
+            <li><a href="{% url 'login' %}">Login</a></li>-->
+            {#% endif %#}
+
+            <!-- logged out replacement IONOS -->
+            {% if request.resolver_match.url_name == 'login' %}
+                <li><a href="{% url 'logout' %}" class="active">Login</a></li>
             {% endif %}
+            {% if request.resolver_match.url_name == 'privacy' %}
+                <li><a href="{% url 'logout' %}" class="active">Login</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'legal_disclaimer' %}
+                <li><a href="{% url 'logout' %}" class="active">Login</a></li>
+            {% endif %}
+
+            <!-- logged in replacement IONOS -->
+            {% if request.resolver_match.url_name == 'dashboard' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'add_datacr' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'view_editable_data_records' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'contact' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'download_summaries' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'all_reports' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'tables_panel' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'report_user' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'report_authors' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'view_summary_results' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'reference' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name == 'view_all_data' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
+
         </ul>
     </nav>
 </header>

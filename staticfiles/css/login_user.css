@@ -5,10 +5,15 @@
     font-style: normal;
 }
 
-body {
+body, html {
+    height: 100%;
     margin: 0;
+    padding: 0;
+}
+
+body {
     font-family: Arial, sans-serif;
-    background-color: black;
+    background-color: #003300;
 }
 
 section {
@@ -54,10 +59,14 @@ section {
 .info {
     height: 45vh;
     background-image: url('/static/images/fox-ears.jpg');
-    background-size: cover;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-size: 100% auto;
+    background-color: #003300;
     background-position: center bottom;
     /*padding: 100px 0;*/
+
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 
 .info .info-content {
@@ -184,6 +193,9 @@ footer {
     text-align: center;
 }*/
 
+
+/****** links under login ******/
+
 .register a {
     color: #88c99c;
     font-weight: bold;
@@ -192,5 +204,45 @@ footer {
 
 .register a:hover, .register a:focus {
     color: #5f9850;
+    text-decoration: none;
+}
+
+
+/****** FOOTER LINKS *******/
+
+.footer-links ul {
+    list-style-type: none;
+}
+
+footer {
+    height: 20vh;
+    /*padding: 20px;*/
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-links {
+    text-align: center;
+}
+
+.footer-links a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 16px;
+}
+
+.footer-bullet {
+    color: #fff;
+    font-size: 16px;
+    margin: 0 5px;
+}
+
+body footer div.footer-links a {
+    color: white;
     text-decoration: none;
 }

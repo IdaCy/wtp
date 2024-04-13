@@ -86,6 +86,10 @@
                 <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
                 <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
             {% endif %}
+            {% if request.resolver_match.url_name == 'edit_data_record' %}
+                <li><a href="{% url 'logout' %}" class="active">Logout</a></li>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+            {% endif %}
 
         </ul>
     </nav>

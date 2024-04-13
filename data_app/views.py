@@ -710,6 +710,12 @@ def view_editable_data_records(request):
 
 #@login_required
 def edit_data_record(request, ref_id):
+    default_user_id = 1  # Set the default user ID
+    try:
+        default_user = User.objects.get(id=default_user_id)
+    except User.DoesNotExist:
+        default_user = None  # or handle error appropriately
+
     species_list = SpeciesName.objects.all()
     print("Edit data record POST data:", request.POST)
     reference = get_object_or_404(Reference, pk=ref_id)
@@ -736,7 +742,7 @@ def edit_data_record(request, ref_id):
             reference_form.instance.translation = True
 
         print("next comes 'success' and entering my method")
-        success, _, _ = handle_reference_datacr(reference_form, datacr_form, request.user)
+        success, _, _ = handle_reference_datacr(reference_form, datacr_form, default_user)
         print("my method is through")
         if success:
             print("was successful actually - so should print message in cmd !")

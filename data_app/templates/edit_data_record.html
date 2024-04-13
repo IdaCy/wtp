@@ -20,33 +20,6 @@
 <form method="post" action="{% url 'edit_data_record' ref_id=ref_id %}">
     {% csrf_token %}
 
-
-    {% block javascript %}
-        {# needs to stay here: Django template tags are not processed in static files #}
-        {# These template tags are only interpreted by Django when they're found in .html template files! #}
-        <script>
-            $(document).ready(function () {
-                $("#id_article_title").autocomplete({
-                    source: "{% url 'article-search' %}",
-                    minLength: 2, // Minimum length before searching
-                    select: function (event, ui) {
-                        $('#id_article_title').val(ui.item.value); // Set the value for the article title input
-                    }
-                });
-            });
-            $(document).ready(function () {
-                // Change the background image based on input
-                $('#id_article_title').on('input', function () {
-                    if ($(this).val().length > 0) {
-                        $(this).css('background-image', 'none');
-                    } else {
-                        $(this).css('background-image', 'url("../static/images/magnifying-glass.png")');
-                    }
-                });
-            });
-        </script>
-    {% endblock %}
-
     {% with page_title="Edit Data Record" heading="Edit Record" button_value="save_changes" button_label="Update" %}
 
         {% block content %}

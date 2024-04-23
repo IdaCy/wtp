@@ -23,7 +23,6 @@ urlpatterns = [
     path('get-table-data/', data_views.get_table_data, name='get_table_data'),
     path('dashboard/', dashboard_views.board_view, name='dashboard'),
     path('register/', manageuser_views.register_view, name='register'),
-    #path('privacy/', legal_views.privacy_view, name='privacy'),
     path('legal/', legal_views.legal_view, name='legal'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('logout/', manageuser_views.logout_view, name='logout'),

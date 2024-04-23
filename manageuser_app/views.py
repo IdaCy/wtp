@@ -9,9 +9,6 @@ from data_app.models import User
 
 
 def register_view(request):
-    # Temporarily disable registration
-    return render(request, 'register_disabled.html')
-    '''
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -36,17 +33,9 @@ def register_view(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
-'''
+
 
 def login_view(request):
-    if request.method == 'POST':
-        # Bypass the form validation and user authentication
-        return redirect('dashboard')
-    else:
-        # form = CustomAuthenticationForm()  # Not needed for this bypass
-        pass
-    return render(request, 'login.html', {})
-'''
     if request.method == 'POST':
         form = CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -66,7 +55,7 @@ def login_view(request):
     else:
         form = CustomAuthenticationForm()
     return render(request, 'login.html', {'form': form})
-'''
+
 
 def logout_view(request):
     logout(request)

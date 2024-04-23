@@ -6,18 +6,18 @@ from django.shortcuts import render
 from data_app.models import DataCR, WildlifeGroup, Habitat, RAP, User, Reference
 
 
-#@login_required
+@login_required
 def all_reports(request):
     return render(request, 'all_reports.html')
 
 
-#@login_required
+@login_required
 def reference(request):
     refobj = Reference.objects.filter(approval_status="APPROVED")
     return render(request, 'reference.html', {'reference': refobj})
 
 
-#@login_required
+@login_required
 def report_user(request):
     details_query = request.GET.get('parameter', '')
     print(details_query)
@@ -75,7 +75,7 @@ def report_user(request):
     return render(request, 'report_user.html', context)
 
 
-#@login_required
+@login_required
 def report_authors(request):
     selection_id = request.GET.get('selection_id', '')
 

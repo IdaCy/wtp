@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         option.value = value;
         mediaStatusDropdown.add(option);
     }
+
     function setBiotaUnits(text, value) {
         biotaUnitsDropdown.innerHTML = '';
 
@@ -43,6 +44,26 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("Prerequisites for updateConcentrationRatio not met");
             return; // Exit if required selections are not made
         }
+
+        // Check if either concentration field is empty
+        if (!mediaConcField.value || !biotaConcField.value) {
+            console.log("Media or Biota concentration is not provided, skipping update");
+            return; // Exit the function if either field is empty
+        }
+
+        if (mediaUnitsDropdown.selectedIndex < 0 || biotaUnitsDropdown.selectedIndex < 0) {
+            console.log("Unit selections not made, skipping update");
+            return; // Exit if required selections are not made
+        }
+
+        console.log("updateConcentrationRatio() started");
+        var mediaUnitSymbol = document.getElementById('id_media_conc_units').value;
+        console.log("mediaUnitSymbol", mediaUnitSymbol);
+        var biotaUnitSymbol = document.getElementById('id_biota_conc_units').value;
+        console.log("biotaUnitSymbol", biotaUnitSymbol);
+        var mediaType = document.getElementById('id_media').options[document.getElementById('id_media').selectedIndex].text;
+        console.log("mediaType", mediaType);
+
         console.log("updateConcentrationRatio() started");
         var mediaUnitSymbol = document.getElementById('id_media_conc_units').value;
         console.log("mediaUnitSymbol", mediaUnitSymbol);

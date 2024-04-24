@@ -267,12 +267,12 @@ def view_summary_results(request):
             'radionuclide__element__element_symbol'
         ).annotate(
             arith_mean_cr=Avg('cr'),
-            sum_crn=Sum('crn'),
+            sum_cr_n=Sum('cr_n'),
             min_cr=Min('cr'),
             max_cr=Max('cr'),
-            geo_mean_cr=Sum('crn'),
-            arith_std_dev=Sum('crn'),
-            geo_std_dev=Sum('crn'),
+            geo_mean_cr=Sum('cr_n'),
+            arith_std_dev=Sum('cr_n'),
+            geo_std_dev=Sum('cr_n'),
             reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True)
             # needing to cast reference__ref_id to a text field before aggregation
         ).order_by('radionuclide__element__element_symbol')
@@ -322,7 +322,7 @@ def view_summary_results(request):
                 'radionuclide__element__element_symbol'
             ).annotate(
                 CR=Sum('cr'),
-                CRN=Sum('crn'),
+                CRN=Sum('cr_n'),
                 CRSD=Avg('cr_sd'),
                 D=Sum('cr'),
                 E=Sum('cr'),
@@ -340,26 +340,26 @@ def view_summary_results(request):
             ).order_by('radionuclide__element__element_symbol')
 
             for item in datacr_list2:
-                # Assuming D = CRN * CR
-                # Assuming: need to calculate D for each record - iterating over individual records with CR & CRN values
+                # Assuming D = cr_n * CR
+                # Assuming: need to calculate D for each record - iterating over individual records with CR & cr_n values
                 # Testing: using aggregate functions as placeholders
                 crn_cr_product = DataCR.objects.filter(
                     radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
                     habitat__habitat_specific_type=habitat_query
                 ).annotate(
-                    dose=F('crn') * F('cr')
+                    dose=F('cr_n') * F('cr')
                 ).aggregate(total_dose=Sum('dose'))['total_dose']
 
                 # item['D'] = "{:.2e}".format(crn_cr_product) if crn_cr_product is not None else None
 
                 # Assuming: for E, it's an error calculation based on variance or standard deviation
                 # Testing: placeholder calculation
-                # Assuming: E could be a sum of (CRN * CR^2) - this is an assumption tho!!
+                # Assuming: E could be a sum of (cr_n * CR^2) - this is an assumption tho!!
                 crn_cr_square_sum = DataCR.objects.filter(
                     radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
                     habitat__habitat_specific_type=habitat_query
                 ).annotate(
-                    crn_cr_square=F('crn') * F('cr') * F('cr')
+                    crn_cr_square=F('cr_n') * F('cr') * F('cr')
                 ).aggregate(total_crn_cr_square=Sum('crn_cr_square'))['total_crn_cr_square']
 
                 # Assign the calculated values directly without formatting
@@ -438,7 +438,7 @@ def view_xxx(request):
             arithmetic_mean=Sum('cr'),
             arithmetic_std_dev=Sum('cr'),
             geometric_std_dev=Sum('cr'),
-            n=Sum('crn'),
+            n=Sum('cr_n'),
             ref_id=Sum(F('reference__ref_id'))
         )
 

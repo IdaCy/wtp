@@ -314,7 +314,6 @@ class DataCR(models.Model):
         ('ug/l', 'ug/l'),
     ]
 
-    #cr_id = models.AutoField(primary_key=True)
     cr_id = models.BigIntegerField(primary_key=True)
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True, blank=True)
     habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE, null=True, blank=True)
@@ -325,15 +324,11 @@ class DataCR(models.Model):
     study_type = models.ForeignKey(StudyType, on_delete=models.CASCADE, null=True, blank=True)
     tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE, null=True, blank=True)
     media = models.ForeignKey(Media, on_delete=models.CASCADE, null=True, blank=True)
-    # goes up to other foreign keys
     radionuclide = models.ForeignKey(Radionuclide, on_delete=models.CASCADE, null=True, blank=True)
     cr = models.DecimalField(max_digits=25, decimal_places=10, null=True)
-    # goes renamed:
     cr_n = models.IntegerField(null=True, blank=True) # how many times they did the calculation to get CR ("number of replicates")
     cr_sd = models.DecimalField(max_digits=25, decimal_places=10, null=True, blank=True) # standard deviation
     notes = models.CharField(max_length=500, null=True, blank=True)
-    # double?????? - delete!!!
-    #accepted = models.BooleanField(default=False)
     media_conc = models.CharField(max_length=30, null=True, blank=True)
     media_n = models.CharField(max_length=30, null=True, blank=True)
     media_conc_units = models.CharField(max_length=20, choices=unit_choices, null=True, blank=True)
@@ -362,14 +357,6 @@ class DataCR(models.Model):
         ('undefined', 'undefined'),
     ]
     biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, null=True, blank=True)
-    # goes deleted:
-    #data_extract = models.IntegerField(null=True, blank=True)
-
-    # goes deleted:
-    #other_tissue = models.CharField(max_length=30, null=True, blank=True)
-    # goes deleted:
-    #qc = models.BooleanField(default=False)
-    rep_organ_units = models.CharField(max_length=30, null=True, blank=True)
     reproductive_organ = models.CharField(max_length=30, null=True, blank=True)
     rep_wet_dry_choices = [
         ('Water', 'Water'),
@@ -385,10 +372,6 @@ class DataCR(models.Model):
     stand_biota_sd = models.CharField(max_length=30, null=True, blank=True)
     stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
     stand_media_sd = models.CharField(max_length=30, null=True, blank=True)
-    # goes deleted:
-    #summary_approve = models.BooleanField(default=False)
-    # goes to the end:
-    #measurement_date = models.CharField(max_length=50, null=True, blank=True)
     measurement_date = models.DateField(null=True, blank=True)
     approval_choices = [
         ('PENDING', 'Pending'),

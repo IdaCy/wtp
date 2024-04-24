@@ -184,32 +184,25 @@ class DataCRForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        # Handle 'stand_media_conc'
-        stand_media_conc = cleaned_data.get('stand_media_conc', None)  # Default to None if key doesn't exist
-        if stand_media_conc in [None, '', 'None']:  # Check for None, empty string, or 'None' string
+        # Assume None if conversion fails or fields are empty
+        try:
+            if cleaned_data.get('stand_media_conc'):
+                cleaned_data['stand_media_conc'] = float(cleaned_data['stand_media_conc'])
+        except (ValueError, TypeError):
             cleaned_data['stand_media_conc'] = None
-        else:
-            try:
-                cleaned_data['stand_media_conc'] = float(stand_media_conc)
-            except ValueError:
-                self.add_error('stand_media_conc', 'Enter a valid number.')
 
-        # Handle 'stand_biota_conc'
-        stand_biota_conc = cleaned_data.get('stand_biota_conc', None)
-        if stand_biota_conc in [None, '', 'None']:
+        try:
+            if cleaned_data.get('stand_biota_conc'):
+                cleaned_data['stand_biota_conc'] = float(cleaned_data['stand_biota_conc'])
+        except (ValueError, TypeError):
             cleaned_data['stand_biota_conc'] = None
-        else:
-            try:
-                cleaned_data['stand_biota_conc'] = float(stand_biota_conc)
-            except ValueError:
-                self.add_error('stand_biota_conc', 'Enter a valid number.')
 
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['habitat'].required = True
-        self.fields['crn'].required = True
+        self.fields['cr_n'].required = True
         # self.fields['species_name'].required = False
         self.fields['habitat'].queryset = Habitat.objects.all()
         self.fields['study_type'].queryset = StudyType.objects.all()
@@ -233,7 +226,7 @@ class DataCRForm(forms.ModelForm):
                                                 'lifestage_name')]
 
         for name, field in self.fields.items():
-            if name not in ['cr', 'crn', 'habitat']:
+            if name not in ['cr', 'cr_n', 'habitat']:
                 field.required = False
 
     """def clean_species_name(self):

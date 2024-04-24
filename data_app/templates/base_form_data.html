@@ -444,12 +444,12 @@
                     {% endif %}
                 </div>
                 <div class="entry">
-                    <label for="id_crn">N of CR:</label>
-                    {{ datacr_form.crn }}
+                    <label for="id_cr_n">N of CR:</label>
+                    {{ datacr_form.cr_n }}
 
-                    {% if datacr_form.crn.errors %}
+                    {% if datacr_form.cr_n.errors %}
                         <div class="alert alert-warning" role="alert" style="color: red">
-                            {{ datacr_form.crn.errors.as_text }}
+                            {{ datacr_form.cr_n.errors.as_text }}
                         </div>
                     {% endif %}
                 </div>

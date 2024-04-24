@@ -61,6 +61,13 @@ class ReferenceForm(forms.ModelForm):
 
 
 class DataCRForm(forms.ModelForm):
+    stand_media_conc = forms.FloatField(
+        required=False, widget=forms.HiddenInput()
+    )
+    stand_biota_conc = forms.FloatField(
+        required=False, widget=forms.HiddenInput()
+    )
+
     species_name = forms.ModelChoiceField(
         queryset=SpeciesName.objects.all(),
         label='Species',
@@ -171,7 +178,33 @@ class DataCRForm(forms.ModelForm):
 
     class Meta:
         model = DataCR
+        fields = '__all__'
         exclude = ['reference']  # Exclude reference as it will be handled separately
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Handle 'stand_media_conc'
+        stand_media_conc = cleaned_data.get('stand_media_conc', None)  # Default to None if key doesn't exist
+        if stand_media_conc in [None, '', 'None']:  # Check for None, empty string, or 'None' string
+            cleaned_data['stand_media_conc'] = None
+        else:
+            try:
+                cleaned_data['stand_media_conc'] = float(stand_media_conc)
+            except ValueError:
+                self.add_error('stand_media_conc', 'Enter a valid number.')
+
+        # Handle 'stand_biota_conc'
+        stand_biota_conc = cleaned_data.get('stand_biota_conc', None)
+        if stand_biota_conc in [None, '', 'None']:
+            cleaned_data['stand_biota_conc'] = None
+        else:
+            try:
+                cleaned_data['stand_biota_conc'] = float(stand_biota_conc)
+            except ValueError:
+                self.add_error('stand_biota_conc', 'Enter a valid number.')
+
+        return cleaned_data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

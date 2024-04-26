@@ -183,18 +183,17 @@ class DataCRForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        stand_media_conc = cleaned_data.get('stand_media_conc')
+        stand_biota_conc = cleaned_data.get('stand_biota_conc')
 
-        # Assume None if conversion fails or fields are empty
         try:
-            if cleaned_data.get('stand_media_conc'):
-                cleaned_data['stand_media_conc'] = float(cleaned_data['stand_media_conc'])
+            if stand_media_conc is not None:
+                cleaned_data['stand_media_conc'] = float(stand_media_conc)
+            if stand_biota_conc is not None:
+                cleaned_data['stand_biota_conc'] = float(stand_biota_conc)
         except (ValueError, TypeError):
+            # If there's an error converting to float, reset to None or default
             cleaned_data['stand_media_conc'] = None
-
-        try:
-            if cleaned_data.get('stand_biota_conc'):
-                cleaned_data['stand_biota_conc'] = float(cleaned_data['stand_biota_conc'])
-        except (ValueError, TypeError):
             cleaned_data['stand_biota_conc'] = None
 
         return cleaned_data

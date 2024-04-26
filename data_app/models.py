@@ -328,7 +328,6 @@ class DataCR(models.Model):
     cr = models.DecimalField(max_digits=25, decimal_places=10, null=True)
     cr_n = models.IntegerField(null=True, blank=True) # how many times they did the calculation to get CR ("number of replicates")
     cr_sd = models.DecimalField(max_digits=25, decimal_places=10, null=True, blank=True) # standard deviation
-    notes = models.CharField(max_length=500, null=True, blank=True)
     media_conc = models.CharField(max_length=30, null=True, blank=True)
     media_n = models.CharField(max_length=30, null=True, blank=True)
     media_conc_units = models.CharField(max_length=20, choices=unit_choices, null=True, blank=True)
@@ -357,22 +356,11 @@ class DataCR(models.Model):
         ('undefined', 'undefined'),
     ]
     biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, null=True, blank=True)
-    reproductive_organ = models.CharField(max_length=30, null=True, blank=True)
-    rep_wet_dry_choices = [
-        ('Water', 'Water'),
-        ('Wet', 'Wet'),
-        ('Dry', 'Dry'),
-        ('Air', 'Air'),
-        ('Soil', 'Soil'),
-        ('undefined', 'undefined'),
-    ]
-    rep_wet_dry = models.CharField(max_length=10, choices=rep_wet_dry_choices, null=True, blank=True)
     # goes implemented:
     stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
-    stand_biota_sd = models.CharField(max_length=30, null=True, blank=True)
     stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
-    stand_media_sd = models.CharField(max_length=30, null=True, blank=True)
     measurement_date = models.DateField(null=True, blank=True)
+    notes = models.CharField(max_length=500, null=True, blank=True)
     approval_choices = [
         ('PENDING', 'Pending'),
         ('APPROVED', 'Approved'),

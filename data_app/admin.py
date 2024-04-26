@@ -1,8 +1,21 @@
 from django.contrib import admin
+from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName, ReferenceRejectionReason, RAP, Lifestage, StudyType, ActivityConcUnit, Media, WildlifeGroup, Element, Radionuclide, Tissue, MaterialStatus, ParCRCalc, MaterialCRCalc
 
-from .models import DataCR, Reference, ParCRCalc, WildlifeGroup
+# Optionally customize the admin interface
+class DataCRAdmin(admin.ModelAdmin):
+    list_display = ['cr', 'cr_n', 'media_conc', 'biota_conc']
+    search_fields = ['cr', 'media_conc_units']
 
-admin.site.register(DataCR)
+admin.site.register(DataCR, DataCRAdmin)
+admin.site.register(PubType)
+admin.site.register(PubTitle)
+admin.site.register(Language)
 admin.site.register(Reference)
-admin.site.register(ParCRCalc)
+admin.site.register(Habitat)
+admin.site.register(SpeciesName)
+admin.site.register(ReferenceRejectionReason)
+admin.site.register(Media)
 admin.site.register(WildlifeGroup)
+admin.site.register(Element)
+admin.site.register(Radionuclide)
+admin.site.register(Tissue)

@@ -3,7 +3,9 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
-from data_app.models import User  # Assuming your User model is in the same app
+from django import forms
+from django.contrib.auth.forms import UserChangeForm
+from data_app.models import User
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -63,3 +65,10 @@ class CustomAuthenticationForm(forms.Form):
 
     def get_user(self):
         return self.cleaned_data.get('user')
+
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'salutation', 'jobtitle', 'organisation', 'admin_priv', 'is_active', 'is_staff')
+

@@ -12,7 +12,6 @@ class User(AbstractUser):
         ('Ms', 'Ms'),
         ('Other', 'Other'),
     ]
-
     salutation = models.CharField(max_length=20, choices=SALUTATION_CHOICES, blank=True, null=True)
     first_name = models.CharField(max_length=30, blank=True, null=True)
     last_name = models.CharField(max_length=30, blank=True, null=True)
@@ -21,12 +20,10 @@ class User(AbstractUser):
     organisation = models.CharField(max_length=200, blank=True, null=True)
     admin_priv = models.SmallIntegerField(default=0, null=True)
 
-    # Use email as the username field
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
-        # Handle the case where first_name or last_name might be None
         full_name = f"{self.first_name or ''} {self.last_name or ''}".strip()
         return full_name if full_name else self.email
 
@@ -181,7 +178,7 @@ class ActivityConcUnit(models.Model):
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.correction_factor_act_conc
+        return str(self.correction_factor_act_conc)
 
 
 class ParCRCalc(models.Model):

@@ -357,8 +357,10 @@ class DataCR(models.Model):
     ]
     biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, null=True, blank=True)
     # goes implemented:
-    stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
-    stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
+    #stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
+    #stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
+    stand_biota_conc = models.FloatField(null=True, blank=True)
+    stand_media_conc = models.FloatField(null=True, blank=True)
     measurement_date = models.DateField(null=True, blank=True)
     notes = models.CharField(max_length=500, null=True, blank=True)
     approval_choices = [

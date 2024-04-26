@@ -23,12 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure--=v=pk*_0wyinh-mf$a4^msiv=4l%qv-u8cd_xfe7ua!unrm#^'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = ['wtp.cs.stir.ac.uk', 'localhost', '127.0.0.1']
-#ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = ['wtp.cs.stir.ac.uk', 'localhost', '127.0.0.1', '139.153.255.81']
 
 # Application definition
@@ -148,14 +144,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# authentication
+# Authentication
 LOGIN_URL = 'login'
-#LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'dashboard'
 
 AUTH_USER_MODEL = 'data_app.User'
 
-# contact
+# Contact
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

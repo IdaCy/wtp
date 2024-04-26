@@ -4,35 +4,42 @@
 {% block title %}Dashboard - Wildlife Transfer Parameter Database{% endblock %}
 
 {% block content %}
+    {# Heading for the dashboard #}
     <h1>Dashboard of Options</h1>
+
+    {# Container for all dashboard options #}
     <div class="dashboard-options">
+        {# Individual option for adding new data #}
         <div class="dashboard-option">
             <a href="{% url 'add_datacr' %}">Add new data</a>
         </div>
+
+        {# Option for editing existing records #}
         <div class="dashboard-option">
             <a href="{% url 'view_editable_data_records' %}">Edit Data Records</a>
         </div>
+
+        {# Option for suggesting improvements #}
         <div class="dashboard-option">
             <a href="{% url 'contact' %}">Suggest Improvements</a>
         </div>
+
+        {# Link to download summary tables #}
         <div class="dashboard-option">
             <a href="{% url 'download_summaries' %}">Download Summary Tables</a>
         </div>
+
+        {# Link to view reports and lookup tables #}
         <div class="dashboard-option">
             <a href="{% url 'all_reports' %}">View Reports & Lookup Tables</a>
         </div>
-        <!--
-        <div class="dashboard-option">
-            <a href="{% url 'view_summary_results' %}">View Summary Results</a>
-        </div><div class="dashboard-option">
-            <a href="{ url 'view_summary_results' }">Summary (Individual Wildlife/Habitat)</a>
-        </div>-->
-        <!--<div class="dashboard-option">
-            <a href="{ url 'data' }">Assign Admin Privileges To Users</a>
-        </div>-->
+
+        {# Link to view all data in the system #}
         <div class="dashboard-option">
             <a href="{% url 'view_all_data' %}">View All Data</a>
         </div>
     </div>
+
+    {# Link to the CSS file specific to this page #}
     <link rel="stylesheet" href="{% static '/css/dashboard.css' %}">
 {% endblock %}

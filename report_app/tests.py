@@ -1,10 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser
-
-from data_app.models import Reference
-from .views import all_reports, reference, download_summaries, report_user, report_authors
 
 User = get_user_model()
 

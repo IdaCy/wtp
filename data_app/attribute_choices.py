@@ -1,3 +1,5 @@
+# Externalised choices for attributes, as they are re-used across app
+
 units = [
     ('µCi/kg', 'µCi/kg'),
     ('Bq/g', 'Bq/g'),

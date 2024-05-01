@@ -9,7 +9,6 @@ User = get_user_model()
 
 class TestViews(TestCase):
     def setUp(self):
-        User = get_user_model()
         self.user = User.objects.create_user(
             username='testunittest@user.gmail.com',
             email='testunittest@user.gmail.com',

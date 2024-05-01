@@ -34,7 +34,6 @@ class TestReportViews(TestCase):
         # Test with query parameters
         response = self.client.get(reverse('report_user'), {'parameter': 'value', 'approval_show': 'approval'})
         self.assertEqual(response.status_code, 200)
-        # Add more assertions as needed
 
     def test_report_authors(self):
         # Test without query parameters

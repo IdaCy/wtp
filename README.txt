@@ -59,3 +59,4 @@ pg_ctl -D "C:\Program Files\PostgreSQL\16\data" restart
 
 Access the Application:
 Open a browser and go to http://127.0.0.1:8000/ to view the application.
+

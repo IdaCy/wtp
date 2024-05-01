@@ -40,10 +40,10 @@ class Element(models.Model):
 
 class Habitat(models.Model):
     habitat_id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     habitat_specific_type = models.CharField(max_length=200)
     habitat_main_type_id = models.SmallIntegerField()
     approved = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.habitat_specific_type
@@ -51,15 +51,15 @@ class Habitat(models.Model):
 
 class WildlifeGroup(models.Model):
     wildlife_group_id = models.IntegerField(primary_key=True)
-    wildlife_group_name = models.CharField(max_length=200)
-    approved = models.BooleanField(default=False)
     habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
-    data_extract = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    wildlife_group_name = models.CharField(max_length=200)
+    data_extract = models.IntegerField()
     de_tophab_topwild = models.IntegerField()
     de_tophab_indwild = models.IntegerField()
     de_indhab_topwild = models.IntegerField()
     de_indhab_indwild = models.IntegerField()
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.wildlife_group_name
@@ -67,10 +67,10 @@ class WildlifeGroup(models.Model):
 
 class RAP(models.Model):
     rap_id = models.IntegerField(primary_key=True)
-    rap_name = models.CharField(max_length=200)
     habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
-    approved = models.BooleanField(default=False)
     wildlife_group = models.ForeignKey(WildlifeGroup, on_delete=models.CASCADE)
+    rap_name = models.CharField(max_length=200)
+    approved = models.BooleanField(default=False)
     summary = models.CharField(max_length=200)
 
     def __str__(self):
@@ -79,9 +79,9 @@ class RAP(models.Model):
 
 class Lifestage(models.Model):
     lifestage_id = models.IntegerField(primary_key=True)
+    rap = models.ForeignKey(RAP, on_delete=models.CASCADE)
     lifestage_name = models.CharField(max_length=50)
     approved = models.BooleanField(default=False)
-    rap = models.ForeignKey(RAP, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.lifestage_name
@@ -89,10 +89,10 @@ class Lifestage(models.Model):
 
 class Media(models.Model):
     media_id = models.IntegerField(primary_key=True)
+    habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     media_type = models.CharField(max_length=50)
     approved = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.media_id} ({self.media_type})"
@@ -106,9 +106,9 @@ class Media(models.Model):
 
 class PubType(models.Model):
     pub_type_id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_type_name = models.CharField(max_length=200)
     approved = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.pub_type_name
@@ -116,10 +116,10 @@ class PubType(models.Model):
 
 class PubTitle(models.Model):
     pub_title_id = models.IntegerField(primary_key=True)
+    pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_title_name = models.CharField(max_length=200)
     approved = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.pub_title_name
@@ -127,10 +127,10 @@ class PubTitle(models.Model):
 
 class SpeciesName(models.Model):
     species_id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name_latin = models.CharField(max_length=200)
     name_common = models.CharField(max_length=200)
     approved = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name_latin} ({self.name_common})"
@@ -152,10 +152,10 @@ class StudyType(models.Model):
 
 class Tissue(models.Model):
     tissue_id = models.IntegerField(primary_key=True)
-    tissue_name = models.CharField(max_length=50)
-    approved = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    tissue_name = models.CharField(max_length=50)
     correction_factor_tissue = models.DecimalField(max_digits=10, decimal_places=3)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.tissue_name
@@ -163,9 +163,9 @@ class Tissue(models.Model):
 
 class MaterialStatus(models.Model):
     material_status_id = models.IntegerField(primary_key=True)
+    media = models.ForeignKey(Media, on_delete=models.CASCADE)
     material_status_name = models.CharField(max_length=50)
     correction_ratio = models.DecimalField(max_digits=10, decimal_places=3)
-    media = models.ForeignKey(Media, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.material_status_name
@@ -173,10 +173,10 @@ class MaterialStatus(models.Model):
 
 class ActivityConcUnit(models.Model):
     act_conc_unit_id = models.AutoField(primary_key=True)
-    act_conc_unit_symbol = models.CharField(max_length=50)
-    approved = models.BooleanField(default=False)
-    correction_factor_act_conc = models.DecimalField(max_digits=10, decimal_places=3)
     media = models.ForeignKey(Media, on_delete=models.CASCADE)
+    act_conc_unit_symbol = models.CharField(max_length=50)
+    correction_factor_act_conc = models.DecimalField(max_digits=10, decimal_places=3)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.correction_factor_act_conc)
@@ -224,10 +224,10 @@ class MaterialCRCalc(models.Model):
 
 class Radionuclide(models.Model):
     radionuclide_id = models.IntegerField(primary_key=True)
-    radionuclide_name = models.CharField(max_length=50)
     element = models.ForeignKey(Element, on_delete=models.CASCADE)
-    approved = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    radionuclide_name = models.CharField(max_length=50)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return self.radionuclide_name
@@ -235,9 +235,9 @@ class Radionuclide(models.Model):
 
 class Language(models.Model):
     language_id = models.IntegerField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     language = models.CharField(max_length=50)
     approved = models.BooleanField(default=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.language
@@ -245,18 +245,18 @@ class Language(models.Model):
 
 class Reference(models.Model):
     ref_id = models.BigIntegerField(primary_key=True)
+    pub_title = models.ForeignKey(PubTitle, on_delete=models.CASCADE, null=True)
+    pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     author = models.CharField(max_length=500, null=True)
     article_title = models.CharField(max_length=500, null=True)
-    pub_title = models.ForeignKey(PubTitle, on_delete=models.CASCADE, null=True)
     year = models.CharField(max_length=30, blank=True, null=True)
     volume = models.CharField(max_length=50, blank=True, null=True)
     part = models.CharField(max_length=50, blank=True, null=True)
     pages = models.CharField(max_length=50, blank=True, null=True)
     language = models.ForeignKey(Language, on_delete=models.CASCADE, null=True)
-    pub_type = models.ForeignKey(PubType, on_delete=models.CASCADE, null=True)
     translation = models.BooleanField(default=False)
     notes = models.CharField(max_length=500, blank=True, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     approval_status = models.CharField(max_length=20, choices=approval_choices, default='PENDING', null=True, blank=True)
 
     def __str__(self):

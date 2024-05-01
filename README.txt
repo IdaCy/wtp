@@ -62,3 +62,23 @@ pg_ctl -D "C:\Program Files\PostgreSQL\16\data" restart
 Access the Application:
 Open a browser and go to http://127.0.0.1:8000/ to view the application.
 
+
+
+## Importing Data
+The WTP system uses on tables including `ActivityConcUnit`, `Habitat`, `Element`, `User`, `StudyType`, `Reference`, `DataCR`, etc.
+Sample data files for these models are provided in the `static/excels` directory.
+
+### Importing Data Files
+To import data into the system, use custom management commands in the `data_app` directory.
+This is how they are used to import data:
+
+#### Using the `importdata` Command:
+python manage.py importdata --path "static/excels"
+
+#### Using the `importusers` Command:
+python manage.py importusers --path "static/excels"
+
+### Changing Data Models
+Whenever a model is changed, run:
+python manage.py makemigrations
+python manage.py migrate

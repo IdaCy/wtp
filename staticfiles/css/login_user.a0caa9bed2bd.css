@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Climate Crisis';
-    src: url('/static/fonts/ClimateCrisis.ttf') format('truetype');
+    src: url("/static/fonts/ClimateCrisis.a8c28ef6d90a.ttf") format('truetype');
     font-style: normal;
 }
 
@@ -57,7 +57,7 @@ section {
 
 .info {
     height: 45vh;
-    background-image: url('/static/images/fox-ears.jpg');
+    background-image: url("/static/images/fox-ears.0871e7040e19.jpg");
     background-size: 100% auto;
     background-color: #003300;
     background-position: center bottom;

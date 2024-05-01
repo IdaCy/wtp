@@ -371,7 +371,6 @@ def view_summary_results(request):
     return render(request, 'view_summary_results.html', context)
 
 
-@login_required
 def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, existing_reference=None):
     if submit_ref:
         # For "Add All" action

@@ -234,43 +234,6 @@
                 </div>
             </div>
 
-            <script>
-                console.log("test test test");
-                document.addEventListener('DOMContentLoaded', function () {
-                    const languageDropdown = document.getElementById('id_language');
-                    const translationCheckbox = document.getElementById('id_translation');
-
-                    console.log('Language Dropdown:', languageDropdown);
-                    console.log('Translation Checkbox:', translationCheckbox);
-
-                    function updateTranslationCheckbox() {
-                        console.log('Updating Checkbox. Current language:', languageDropdown.value);
-                        const isEnglish = languageDropdown.value === 'English';
-                        translationCheckbox.disabled = isEnglish;
-                        if (isEnglish) {
-                            translationCheckbox.checked = false;
-                        }
-                    }
-
-                    console.log('Language Dropdown:', languageDropdown);
-                    console.log('Translation Checkbox:', translationCheckbox);
-
-                    if (!languageDropdown) {
-                        console.error('Language dropdown not found.');
-                    }
-                    if (!translationCheckbox) {
-                        console.error('Translation checkbox not found.');
-                    }
-
-                    if (languageDropdown && translationCheckbox) {
-                        languageDropdown.addEventListener('change', updateTranslationCheckbox);
-                        updateTranslationCheckbox();
-                    } else {
-                        console.error('One or more elements are not found.');
-                    }
-                });
-            </script>
-
         </section>
 
         <!-- Species Section -->

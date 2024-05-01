@@ -4,7 +4,7 @@ td a {
     text-decoration: none;
     position: relative;
 }
-/*td:nth-child(2) {*/
+
 th, td {
     border: none;
     border-bottom: 1px solid black;

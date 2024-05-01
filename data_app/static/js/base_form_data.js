@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
         biotaUnitsDropdown.add(option);
     }
 
-
     // Function to update Concentration Ratio based on Media and Biota Concentration
     function updateConcentrationRatio() {
         if (mediaUnitsDropdown.selectedIndex < 0 || biotaUnitsDropdown.selectedIndex < 0) {
@@ -71,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("biotaUnitSymbol", biotaUnitSymbol);
         var mediaType = document.getElementById('id_media').options[document.getElementById('id_media').selectedIndex].text;
         console.log("mediaType", mediaType);
-        //var biotaType = document.getElementById('id_tissue').options[document.getElementById('id_tissue').selectedIndex].text;
-        //console.log("biotaType", biotaType);
 
         fetch(`/get_correction_factor/?unit_symbol=${mediaUnitSymbol}&media_type=${mediaType}`)
             .then(response => response.json())
@@ -128,14 +125,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get the selected value of Media Type
         var selectedMedia = mediaTypeDropdown.options[mediaTypeDropdown.selectedIndex];
-
         var selectedMediaType = selectedMedia.text.toLowerCase();
 
         // Add unit options based on the selected Media Type
         if (selectedMediaType === 'air') {
             addMediaUnitOption('Bq/m3', 'Bq/m3');
             setBiotaUnits('Bq/m3', 'Bq/m3');
-            //addMediaUnitOption('ppm', 'ppm');
         } else if ((selectedMediaType === 'soil')
             || (selectedMediaType === "sediment")
             || (selectedMediaType === "water")) {

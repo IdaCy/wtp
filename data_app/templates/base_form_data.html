@@ -27,9 +27,7 @@
         {% endfor %}
     {% endif %}
 
-    <!--<form method="post" action="{ block form_action_url %}{ endblock form_action_url %}">-->
     <form method="post" action="{% block form_action %}{% endblock form_action %}">
-        <!--<form method="post" action="{#  #}{ form_action }}">-->
         {% csrf_token %}
 
         <!-- Display form errors here -->
@@ -62,17 +60,17 @@
             </div>
         {% endif %}
 
-
         {% block javascript %}
             {# needs to stay here: Django template tags are not processed in static files #}
             {# These template tags are only interpreted by Django when they're found in .html template files! #}
             <script>
+                // Source: https://stackoverflow.com/questions/43116471/call-an-autocomplete-function-on-document-ready
                 $(document).ready(function () {
                     $("#id_article_title").autocomplete({
                         source: "{% url 'article-search' %}",
                         minLength: 2, // Minimum length before searching
                         select: function (event, ui) {
-                            $('#id_article_title').val(ui.item.value); // Set the value for the article title input
+                            $('#id_article_title').val(ui.item.value);
                         }
                     });
                 });
@@ -89,14 +87,12 @@
 
                 $(document).ready(function () {
                     function updateSpeciesSelection(selectedID) {
-                        // Update logic as before
                         $('#species_name_id').val(selectedID);
                         $('#id_name_common').val(selectedID);
                         $('#id_name_latin').val(selectedID);
-                        // Include any additional logic needed for synchronization
                     }
 
-                    // Initialize the species selection based on the current dropdown values
+                    // Initialise the species selection based on the current dropdown values
                     var initialSelectedID = $('#id_name_latin').val() || $('#id_name_common').val();
                     updateSpeciesSelection(initialSelectedID);
 
@@ -237,6 +233,7 @@
                     {% endif %}
                 </div>
             </div>
+
             <script>
                 console.log("test test test");
                 document.addEventListener('DOMContentLoaded', function () {
@@ -447,7 +444,7 @@
                     {{ datacr_form.biota_n }}
                 </div>
                 <div class="entry">
-                    <label for="id_biota_wet_dry">Status</label>
+                    <label for="id_biota_wet_dry">Status:</label>
                     {{ datacr_form.biota_wet_dry | add_class:"status" }}
                 </div>
                 <div class="entry">

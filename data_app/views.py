@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render
 from django.utils.html import strip_tags
 
 from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, SpeciesName, ReferenceRejectionReason
@@ -8,36 +7,24 @@ from .models import RAP, Lifestage, StudyType, ActivityConcUnit, Media, Wildlife
 from .models import MaterialStatus, ParCRCalc, MaterialCRCalc
 from .forms import DataCRForm, ReferenceForm
 
+import statistics
+import math
+
 from django import template
-
-from django.http import JsonResponse
-from math import exp, log
-
-from django.http import JsonResponse
-from django.views import View
-
-from django.db.models.functions import Concat
 from django.contrib.postgres.aggregates import StringAgg
-from django.db.models.functions import Cast
-from django.db.models.fields import TextField
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.contrib import messages
-
 from django.http import JsonResponse
 
-from django.db.models import Avg, Sum, Min, Max, Count, Window, F, StdDev
-import statistics
-import math
+from django.db.models.functions import Cast
+from django.db.models.fields import TextField
+from django.db.models import Avg, Sum, Min, Max, Window, F
 from django.db.models.functions import RowNumber
 
-from django.contrib.auth import get_user_model
 
-User = get_user_model()
-
-from django.utils import timezone
 import time
+
 
 @login_required
 def tables_panel(request):
@@ -456,7 +443,7 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
     if submit_ref:
         # For "Add All" action
         if reference_form.is_valid() and datacr_form.is_valid():
-            #reference_form.instance.translation = False
+            # reference_form.instance.translation = False
             print(datacr_form.errors)
             reference = reference_form.save(commit=False)
             reference.user = user
@@ -497,12 +484,6 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
 
 @login_required
 def add_datacr(request):
-    default_user_id = 1  # Set the default user ID
-    try:
-        default_user = User.objects.get(id=default_user_id)
-    except User.DoesNotExist:
-        default_user = None  # or handle error appropriately
-
     # Defining 'species_list' here so it's available regardless of if...else outcome
     species_list = SpeciesName.objects.filter(approved=True).order_by('name_latin')
 
@@ -520,23 +501,8 @@ def add_datacr(request):
                     # Strip HTML tags and decode HTML entities
                     clean_error = strip_tags(str(error))
                     messages.error(request, f"Error in {field}: {clean_error}\n\n")
-                #messages.error(request, f"Error in {error}: {datacr_form.errors[error]}")
 
         print(datacr_form.errors)
-        """print("request.POST.get('species_name', ''): ")
-        print(request.POST.get('species_name', ''))
-        species_name = request.POST.get('species_name', '')
-        if species_name == "None":
-            datacr_form.species_name = None"""
-
-        #if 'translation' not in request.POST:
-         #   reference_form.instance.translation = False
-
-        # Capture reference form values to re-populate after submission
-        ref_id = request.POST.get('ref_id', '')
-        volume = request.POST.get('volume', '')
-        article_title = request.POST.get('article_title', '')
-
 
         context = {
             'reference_form': reference_form,
@@ -548,7 +514,7 @@ def add_datacr(request):
             success, reference_form, datacr_form = handle_reference_datacr(
                 reference_form=reference_form,
                 datacr_form=datacr_form,
-                user=default_user
+                user=request.user
             )
             if success:
                 # Reset the reference form to clear fields after successful "Add All"
@@ -567,7 +533,7 @@ def add_datacr(request):
                 success, _, datacr_form = handle_reference_datacr(
                     reference_form=None,  # Not used in this case
                     datacr_form=datacr_form,
-                    user=default_user,
+                    user=request.user,
                     submit_ref=False,
                     existing_reference=existing_reference
                 )
@@ -577,27 +543,13 @@ def add_datacr(request):
                 success, reference_form, datacr_form = handle_reference_datacr(
                     reference_form=reference_form,
                     datacr_form=datacr_form,
-                    user=default_user
+                    user=request.user
                 )
                 print(success)
-
-            """if success:
-                initial_data = {'ref_id': ref_id, 'volume': volume, 'article_title': article_title}
-                print("Initial Data for Reference Form:", initial_data)
-                reference_form = ReferenceForm(initial=initial_data)
+            if success:
                 context.update({
-                    'reference_form': reference_form,
-                    'datacr_form': datacr_form
+                    'datacr_form': DataCRForm
                 })
-
-                return render(request, 'add_datacr.html', context)"""
-
-            # initial_data = {'ref_id': ref_id, 'volume': volume, 'article_title': article_title, }
-
-            # Re-instantiate the reference form with initial data to keep fields filled in all cases
-            # reference_form_fields = set(ReferenceForm().fields.keys())
-            # initial_data = {key: value for key, value in request.POST.items() if key in reference_form_fields}
-            # reference_form = ReferenceForm(initial=initial_data)
 
         if success:
             messages.success(request, "Successfully saved. Thank you for your submission!")
@@ -674,14 +626,8 @@ def view_editable_data_records(request):
 
 @login_required
 def view_editable_data_records(request):
-    default_user_id = 1  # Set the default user ID
-    try:
-        default_user = User.objects.get(id=default_user_id)
-    except User.DoesNotExist:
-        default_user = None  # or handle error appropriately
-
     # Fetch records with 'PENDING' status and belong to the logged-in user
-    references = Reference.objects.filter(approval_status='PENDING', user=default_user)
+    references = Reference.objects.filter(approval_status='PENDING', user=request.user)
 
     # Create a list to hold data that includes details from both Reference and related DataCR objects
     records_with_details = []
@@ -710,12 +656,6 @@ def view_editable_data_records(request):
 
 @login_required
 def edit_data_record(request, ref_id):
-    default_user_id = 1  # Set the default user ID
-    try:
-        default_user = User.objects.get(id=default_user_id)
-    except User.DoesNotExist:
-        default_user = None  # or handle error appropriately
-
     species_list = SpeciesName.objects.all()
     print("Edit data record POST data:", request.POST)
     reference = get_object_or_404(Reference, pk=ref_id)
@@ -733,7 +673,7 @@ def edit_data_record(request, ref_id):
     print("next comes 'POST'")
     if request.method == 'POST':
         reference_form = ReferenceForm(request.POST, instance=reference)
-        #datacr_form = DataCRForm(request.POST, instance=datacr)
+        # datacr_form = DataCRForm(request.POST, instance=datacr)
         datacr_form = DataCRForm(request.POST, instance=datacr if datacr else None)
 
         if 'translation' not in request.POST:
@@ -742,7 +682,7 @@ def edit_data_record(request, ref_id):
             reference_form.instance.translation = True
 
         print("next comes 'success' and entering my method")
-        success, _, _ = handle_reference_datacr(reference_form, datacr_form, default_user)
+        success, _, _ = handle_reference_datacr(reference_form, datacr_form, request.user)
         print("my method is through")
         if success:
             print("was successful actually - so should print message in cmd !")
@@ -763,7 +703,7 @@ def edit_data_record(request, ref_id):
         'ref_id': ref_id,
         'reference': reference,
         'datacr': datacr,
-        #'cr_id': cr_id,
+        # 'cr_id': cr_id,
         'form_action': reverse('edit_data_record', kwargs={'ref_id': ref_id})
     })
 

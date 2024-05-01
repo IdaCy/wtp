@@ -1,7 +1,6 @@
 @font-face {
     font-family: 'Climate Crisis';
-    src: url('/static/fonts/ClimateCrisis.ttf') format('truetype'); /* Replace with the actual path to your font file */
-    font-weight: normal;
+    src: url('/static/fonts/ClimateCrisis.ttf') format('truetype');
     font-style: normal;
 }
 
@@ -62,9 +61,8 @@ section {
     background-size: 100% auto;
     background-color: #003300;
     background-position: center bottom;
-    /*padding: 100px 0;*/
 
-    /* Create the parallax scrolling effect */
+    /* Create the parallax scrolling effect | Source: https://www.w3schools.com/howto/howto_css_parallax.asp */
     background-attachment: fixed;
     background-repeat: no-repeat;
 }
@@ -74,11 +72,6 @@ section {
     padding: 5px 20px;
 
     background-color: rgba(255, 255, 255, 0.42);
-    /*z-index: 1;
-    position: absolute;
-    top: 50%;
-    left: 50%;*/
-    /*transform: translate(-50%, -50%);*/
     font-size: 15px;
     line-height: 1.5;
     text-align: left;
@@ -147,7 +140,6 @@ ul li {
 
 footer {
     height: 20vh;
-    /*padding: 20px;*/
     background-color: #333;
     color: #fff;
     text-align: center;
@@ -173,27 +165,6 @@ footer {
     margin: 0 5px;
 }
 
-/* link to register */
-
-/* Style for login form and messages */
-.login-form {
-    /* Existing styles */
-}
-
-.messages {
-    /* Existing styles */
-}
-
-
-/* register link */
-
-/*.register p {
-    margin-top: 20px;
-    font-size: 16px;
-    text-align: center;
-}*/
-
-
 /****** links under login ******/
 
 .register a {
@@ -216,7 +187,6 @@ footer {
 
 footer {
     height: 20vh;
-    /*padding: 20px;*/
     background-color: #333;
     color: #fff;
     text-align: center;

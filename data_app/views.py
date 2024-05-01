@@ -372,61 +372,16 @@ def view_summary_results(request):
 
 
 @login_required
-def view_xxx(request):
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        # Extract query parameters from AJAX request
-        habitat = request.GET.get('habitat')
-        choice = request.GET.get('choice')
-        additional_choice = request.GET.get('additionalChoice')
-        media_type = request.GET.get('mediaType')
-
-        # Perform database query and aggregation
-        query_result = DataCR.objects.filter(
-            habitat__habitat_specific_type=habitat,
-            # ...
-            media__media_type=media_type
-        ).values(
-            'element__element_symbol'
-        ).annotate(
-            arithmetic_mean=Sum('cr'),
-            arithmetic_std_dev=Sum('cr'),
-            geometric_std_dev=Sum('cr'),
-            n=Sum('cr_n'),
-            ref_id=Sum(F('reference__ref_id'))
-        )
-
-        # Convert to list of dicts
-        data_list = list(query_result)
-
-        # Return as JSON
-        return JsonResponse(data_list, safe=False)
-
-    # For non-AJAX requests, just render the template with no data
-    return render(request, 'view_summary_results.html', {'data': []})
-
-
 def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, existing_reference=None):
     if submit_ref:
         # For "Add All" action
         if reference_form.is_valid() and datacr_form.is_valid():
-            # reference_form.instance.translation = False
             print(datacr_form.errors)
             reference = reference_form.save(commit=False)
             reference.user = user
             reference.save()
 
             datacr = datacr_form.save(commit=False)
-            """print("species name selected?")
-            print(datacr_form.cleaned_data.get('species_name'))
-
-            if 'species_name' in datacr_form.cleaned_data and datacr_form.cleaned_data['species_name'] is not None:
-                species_id = datacr_form.cleaned_data['species_name'].species_id
-                if species_id == 24:
-                    datacr.species_name = None"""
-
-            """species_name = datacr_form.cleaned_data.get('species_name')
-            if species_name == "" or species_name == "None" or species_name is None:
-                datacr.species_name = None"""
 
             datacr.cr_id = int(time.time())
             datacr.reference = reference
@@ -437,9 +392,6 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
     else:
         if datacr_form.is_valid():
             datacr = datacr_form.save(commit=False)
-            """species_name = datacr_form.cleaned_data.get('species_name')
-            if species_name == "" or species_name == "None" or species_name is None:
-                datacr.species_name = None"""
             datacr.reference = existing_reference
             datacr.cr_id = int(time.time())
             datacr.save()
@@ -464,7 +416,7 @@ def add_datacr(request):
         if not datacr_form.is_valid():
             for field, errors in datacr_form.errors.items():
                 for error in errors:
-                    # Strip HTML tags and decode HTML entities
+                    # Strip HTML tags
                     clean_error = strip_tags(str(error))
                     messages.error(request, f"Error in {field}: {clean_error}\n\n")
 
@@ -484,7 +436,6 @@ def add_datacr(request):
             )
             if success:
                 # Reset the reference form to clear fields after successful "Add All"
-                # reference_form = ReferenceForm()
                 context.update({
                     'reference_form': ReferenceForm(),
                     'datacr_form': DataCRForm
@@ -497,7 +448,7 @@ def add_datacr(request):
             if existing_reference:
                 print("Attempting Add Mid WITHOUT ref")
                 success, _, datacr_form = handle_reference_datacr(
-                    reference_form=None,  # Not used in this case
+                    reference_form=None,
                     datacr_form=datacr_form,
                     user=request.user,
                     submit_ref=False,
@@ -527,7 +478,7 @@ def add_datacr(request):
         reference_form = ReferenceForm()
         datacr_form = DataCRForm()
 
-    # needing 'species_list' in the context
+    # Requiring 'species_list' in the context
     context = {
         'reference_form': reference_form,
         'datacr_form': datacr_form,
@@ -546,10 +497,6 @@ def get_media_for_habitat(request):
 
     return JsonResponse(media_options_list, safe=False)
 
-
-# def get_correction_factor(request, unit_symbol, media_type):
-# unit_symbol = unit_symbol
-# media_type_string = media_type
 
 @login_required
 def get_correction_factor(request):
@@ -580,14 +527,6 @@ def get_correction_factor(request):
 
     except Media.DoesNotExist:
         return JsonResponse({'error': 'Media not found'}, status=404)
-
-
-"""@login_required
-def view_editable_data_records(request):
-    # Fetch records with 'PENDING' status and belong to the logged-in user
-    records = Reference.objects.filter(approval_status='PENDING', user=request.user)
-    return render(request, 'view_editable_data_records.html', {'records': records})
-"""
 
 
 @login_required
@@ -627,14 +566,6 @@ def edit_data_record(request, ref_id):
     reference = get_object_or_404(Reference, pk=ref_id)
     print(reference.ref_id)
     datacr = DataCR.objects.filter(reference=reference).first()
-    """try:
-        datacr = DataCR.objects.filter(reference=reference).first()
-        if not datacr:
-            messages.error(request, 'No associated DataCR record found.')
-            return redirect('some_error_handling_view')
-    except DataCR.DoesNotExist:
-        messages.error(request, 'No associated DataCR record found.')
-        return redirect('some_error_handling_view')"""
 
     print("next comes 'POST'")
     if request.method == 'POST':
@@ -704,10 +635,8 @@ def delete_datacr_record_confirm(request, cr_id):
 def view_all_data(request, ref_id=None, cr_id=None):
     # Redirect to a URL with the first Reference's ID if ref_id is not provided
     if ref_id is None:
-        # first_reference = Reference.objects.order_by('ref_id').first()
         first_reference = Reference.objects.filter(approval_status='APPROVED').order_by('ref_id').first()
         if first_reference:
-            # first_datacr = first_reference.datacr_set.order_by('cr_id').first()
             first_datacr = first_reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
             if first_datacr:
                 # Redirect to a URL with both ref_id and cr_id for the first Reference and its first DataCR
@@ -739,7 +668,6 @@ def view_all_data(request, ref_id=None, cr_id=None):
 
     # Determine the first DataCR for the current Reference if cr_id is not provided
     if not cr_id:
-        # first_datacr = reference.datacr_set.first()
         first_datacr = reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
         if first_datacr:
             cr_id = first_datacr.cr_id
@@ -753,22 +681,17 @@ def view_all_data(request, ref_id=None, cr_id=None):
         datacr = None
 
     # Calculate next and previous Reference IDs
-    # next_ref = Reference.objects.filter(ref_id__gt=ref_id).order_by('ref_id').first()
     next_ref = Reference.objects.filter(ref_id__gt=ref_id, approval_status='APPROVED').order_by('ref_id').first()
-    # first_datacr = first_reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
     prev_ref = Reference.objects.filter(ref_id__lt=ref_id, approval_status='APPROVED').order_by('-ref_id').first()
 
     # Calculate the first DataCR ID for next and previous References
     if next_ref:
         next_ref_first_datacr = next_ref.datacr_set.first()
-    # next_ref_first_datacr = next_ref.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
-    # TAKEN FROM: first_datacr = reference.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
     else:
         next_ref_first_datacr = None
 
     if prev_ref:
         prev_ref_first_datacr = prev_ref.datacr_set.first()
-    # prev_ref_first_datacr = prev_ref.datacr_set.filter(approval_status='APPROVED').order_by('cr_id').first()
     else:
         prev_ref_first_datacr = None
 
@@ -814,110 +737,3 @@ def view_all_data(request, ref_id=None, cr_id=None):
     })
 
     return render(request, 'view_all_data.html', context)
-
-
-############## HELPERS ###############
-
-def get_habitat_id(habitat_name):
-    habitats = Habitat.objects.filter(habitat_specific_type=habitat_name)
-
-    if habitats.exists():
-        # Return the ID of the first with the given name
-        return habitats.first().habitat_id
-    else:
-        # Handle the case where none with the given name exists
-        return None
-
-
-def get_wildlife_group_id(wildlife_group_n):
-    wildlife_group = WildlifeGroup.objects.filter(wildlife_group_name=wildlife_group_n)
-
-    if wildlife_group.exists():
-        # Return the ID of the first with the given name
-        return wildlife_group.first().wildlife_group_id
-    else:
-        # Handle the case where none with the given name exists
-        return None
-
-
-def get_rap_id(rap_n, habitat_id):
-    rap = RAP.objects.filter(rap_name=rap_n, habitat=habitat_id).first()
-
-    return rap.rap_id if rap else None
-
-
-def get_lifestage_id(lifestage_n):
-    lifestage = Lifestage.objects.filter(lifestage_name=lifestage_n)
-
-    if lifestage.exists():
-        # Return the ID of the first with the given name
-        return lifestage.first().lifestage_id
-    else:
-        # Handle the case where none with the given name exists
-        return None
-
-
-def get_name_common_id(name_c):
-    speciesname = SpeciesName.objects.filter(name_common=name_c)
-
-    if speciesname.exists():
-        # Return the ID of the first with the given name
-        return speciesname.first().species_id
-    else:
-        # Handle the case where none with the given name exists
-        return None
-
-
-def get_name_latin_id(name_l):
-    speciesname = SpeciesName.objects.filter(name=name_l)
-
-    if speciesname.exists():
-        # Return the ID of the first with the given name
-        return speciesname.first().species_id
-    else:
-        # Handle the case where none with the given name exists
-        return None
-
-
-def get_studytype_id(studytype_name):
-    studytype = StudyType.objects.filter(study_type_name=studytype_name)
-
-    if studytype.exists():
-        # Return the ID of the first with the given name
-        return studytype.first().study_type_id
-    else:
-        # Handle the case where none with the given name exists
-        return None
-
-
-def get_tissue_id(tissue_n):
-    tissue = Tissue.objects.filter(tissue_name=tissue_n)
-
-    if tissue.exists():
-        # Return the ID of the first with the given name
-        return tissue.first().tissue_id
-    else:
-        # Handle the case where none with the given name exists
-        return None
-
-
-def get_media_id(media_name):
-    media = Media.objects.filter(media_type=media_name)
-
-    if media.exists():
-        # Return the ID of the first with the given name
-        return media.first().media_id
-    else:
-        # Handle the case where none with the given name exists
-        return None
-
-
-def get_radionuclide_id(radionuclide_n):
-    radionuclide = Radionuclide.objects.filter(radionuclide_name=radionuclide_n)
-
-    if radionuclide.exists():
-        # Return the ID of the first with the given name
-        return radionuclide.first().radionuclide_id
-    else:
-        # Handle the case where none with the given name exists
-        return None

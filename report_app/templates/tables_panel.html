@@ -30,17 +30,17 @@
         <table id="dynamicTable" style="display: none;">
             <thead>
             <tr id="tableHeaders">
-                <!-- Table headers will be inserted here -->
+                <!-- Table headers are dynamically inserted here -->
             </tr>
             </thead>
             <tbody id="tableBody">
-            <!-- Table rows will be inserted here -->
+            <!-- Table rows are dynamically inserted here -->
             </tbody>
         </table>
     </div>
 
     <script>
-        // JavaScript for handling term selection and table update
+        // Handling term selection and table update
         document.getElementById('termSelector').addEventListener('change', function () {
             var selectedTerm = this.value;
             if (selectedTerm) {
@@ -64,7 +64,7 @@
             headers.innerHTML = '';
             body.innerHTML = '';
 
-            // Assuming 'data' contains 'headers' and 'rows' keys
+            // With 'data' containing 'headers' and 'rows' keys
             data.headers.forEach(header => {
                 var th = document.createElement('th');
                 th.textContent = header;
@@ -90,14 +90,8 @@
         /* CSS for spacing between columns */
         #dynamicTable {
             border-collapse: separate;
-            border-spacing: 10px; /* Adjust spacing as needed */
+            border-spacing: 10px;
         }
-
-        /*#dynamicTable th,
-        #dynamicTable td {
-            padding: 8px;
-            border: 1px solid #ddd;
-        }*/
     </style>
 
 {% endblock %}

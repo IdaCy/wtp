@@ -3,7 +3,7 @@ from django.contrib.postgres.aggregates import StringAgg
 from django.db.models.functions import Cast
 from django.db.models.fields import TextField
 from django.shortcuts import render
-from data_app.models import DataCR, WildlifeGroup, Habitat, RAP, User, Reference
+from data_app.models import DataCR, WildlifeGroup, RAP, User, Reference
 
 
 @login_required
@@ -20,7 +20,6 @@ def reference(request):
 @login_required
 def download_summaries(request):
     return render(request, 'download_summaries.html')
-
 
 
 @login_required
@@ -72,8 +71,6 @@ def report_user(request):
                                distinct=True),
             organisation=StringAgg(Cast('reference__user__organisation', output_field=TextField()), delimiter=', ',
                               distinct=True),
-            # reference_ids=StringAgg(Cast('reference__ref_id', output_field=TextField()), delimiter=', ', distinct=True),
-            # approval=StringAgg(Cast('reference__approval_status', output_field=TextField()), delimiter=', ', distinct=True),
         ).distinct().order_by('reference__user__email')
 
         context['datacr_list'] = datacr_list

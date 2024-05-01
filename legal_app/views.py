@@ -17,7 +17,6 @@ def legal_disclaimer(request):
 def contact(request):
     if request.method == 'POST':
         user = request.user
-        # sender_email = request.POST.get('email')
         message_content = request.POST.get('message')
 
         # Prepare the email
@@ -32,10 +31,6 @@ def contact(request):
         return redirect('contact')
 
     return render(request, 'contact.html', {'email_address': settings.EMAIL_HOST_USER})
-
-
-def privacy_view(request):
-    return render(request, 'xxprivacy.html')
 
 
 def legal_view(request):

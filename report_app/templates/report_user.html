@@ -9,7 +9,7 @@
         <label for="approval">Show approval data</label>
         <br>
 
-        <!-- radio buttons -->
+        <!-- Radio buttons -->
         <input type="radio" id="wildlife" name="selection_type" value="wildlife"
                {% if selection_type == "wildlife" %}checked{% endif %}>
         <label for="wildlife">Wildlife Group</label>
@@ -18,7 +18,7 @@
                {% if selection_type == "rap" %}checked{% endif %}>
         <label for="rap">ICRP RAP</label>
 
-        <!-- apppearing dropdown -->
+        <!-- Apppearing dropdown -->
         <select id="wildlife_group" name="selection_id"
                 style="{% if selection_type == 'wildlife' %}display:block;{% else %}display:none;{% endif %}">
             {% for group in wildlife_groups %}
@@ -39,7 +39,7 @@
         </select>
         <br>
 
-        <!-- always-there appearing dropdown -->
+        <!-- Always-there appearing dropdown -->
         <label for="parameter">Choose Parameter:</label>
         <select id="parameter" name="parameter">
             <option value="" {% if details_query == "" %}selected{% endif %}>Please select</option>

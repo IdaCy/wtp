@@ -1,11 +1,7 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from django.shortcuts import render, redirect
-from data_app.models import User
-
-from data_app.models import User
 
 
 def register_view(request):
@@ -42,14 +38,14 @@ def login_view(request):
             user = form.get_user()
             if user is not None:
                 login(request, user)
-                print("Successful login for user:", user.email)  # Adjusted to use user.email
+                print("Successful login for user:", user.email)
                 messages.success(request, f'Welcome back, {user.get_full_name()}!')
                 return redirect('dashboard')
             else:
-                print("Invalid email or password")  # for debugging
+                print("Invalid email or password")
                 messages.error(request, 'Invalid email or password.')
         else:
-            print("Form is not valid:", form.errors)  # for debugging
+            print("Form is not valid:", form.errors)
             for error in form.errors:
                 messages.error(request, form.errors[error])
     else:
@@ -61,4 +57,3 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out.')
     return redirect('login')
-

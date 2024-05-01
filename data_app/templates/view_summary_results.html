@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {# !! comment like this #}
+{% extends 'base.html' %}
 
 {% block content %}
     <h1>Summary of Records</h1>
@@ -17,7 +17,7 @@
 
         <br>
 
-        <!-- radio buttons -->
+        <!-- Radio buttons -->
         <input type="radio" id="wildlife" name="selection_type" value="wildlife"
                {% if selection_type == "wildlife" %}checked{% endif %}>
         <label for="wildlife">Wildlife Group</label>
@@ -26,7 +26,7 @@
                {% if selection_type == "rap" %}checked{% endif %}>
         <label for="rap">ICRP RAP</label>
 
-        <!-- second dropdown -->
+        <!-- Second dropdown -->
         <select id="wildlife_group" name="selection_id"
                 style="{% if selection_type == 'wildlife' %}display:block;{% else %}display:none;{% endif %}">
             {% for group in wildlife_groups %}
@@ -162,7 +162,6 @@
                 var rapGroupSelect = document.getElementById('rap_group');
 
                 var showAllChecked = document.getElementById('table23');
-                //var showAllChecked = document.querySelector('input[name="table23"]:checked').value;
                 console.log("table23 selected:", showAllChecked);
 
                 // Initially remove the name attribute from both dropdowns

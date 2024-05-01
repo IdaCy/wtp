@@ -1,17 +1,16 @@
 {% extends 'base_form_data.html' %}
 
 {% block form_action %}
-    {% url 'add_datacr' %} <!-- URL for form submission -->
+    {% url 'add_datacr' %}
 {% endblock %}
 
 {% block content %}
     {% with page_title="Add DataCR" heading="Add Record" form_action="add_datacr" button_value="add_all" button_label="Add All" %}
-        {{ block.super }} <!-- Content from the parent block -->
+        {{ block.super }}
     {% endwith %}
 {% endblock %}
 
 {% block form_buttons %}
-        <!-- Buttons for form submission with add-data specific actions -->
     <button type="submit" name="action" value="add_all" title="Adds all data and clears the form for a new entry.">Add All</button>
     <button type="submit" name="action" value="add_mid" title="Adds the data but retains the reference fields for further entries.">Add Mid</button>
 {% endblock %}

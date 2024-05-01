@@ -1,13 +1,13 @@
 {% extends 'base_form_data.html' %}
+{# Source of tweak Widget Tweak: https://stackoverflow.com/questions/43250331/form-not-uploading-with-widget-tweaks-django #}
 {% load widget_tweaks %}
 
 {% load static %}
 
 {% block extra_css %}
-    {{ block.super }} <!-- Keeps the base template's styles and adds new ones -->
+    {{ block.super }}
     <link rel="stylesheet" href="{% static 'css/base_form_data.css' %}">
 {% endblock extra_css %}
-
 
 {% if messages %}
     {% for message in messages %}
@@ -31,7 +31,6 @@
         {% block form_buttons %}
             <button type="submit" name="action" value="edit_data_record">Update</button>
 
-           <!-- <button type="submit">Save Changes</button>-->
             {% if datacr and datacr.cr_id %}
                 <a href="{% url 'delete_datacr_record_confirm' cr_id=datacr.cr_id %}" class="button-link ">Delete Data
                     Record</a>

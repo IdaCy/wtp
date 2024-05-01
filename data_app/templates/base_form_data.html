@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load widget_tweaks %}
+{% load widget_tweaks %}{# Source of tweak Widget Tweak: https://stackoverflow.com/questions/43250331/form-not-uploading-with-widget-tweaks-django #}
 
 {% block title %}{{ page_title }} - Wildlife Transfer Parameter DB{% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/base_form_data.css' %}">
 
-    <!-- libraries for the JQuery for making article_title a search bar -->
+    <!-- Libraries for the JQuery for making article_title a search bar -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <!-- getting magnifying glass for heuristic -->
+    <!-- Getting magnifying glass for heuristic -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
@@ -64,7 +64,7 @@
             {# needs to stay here: Django template tags are not processed in static files #}
             {# These template tags are only interpreted by Django when they're found in .html template files! #}
             <script>
-                // Source: https://stackoverflow.com/questions/43116471/call-an-autocomplete-function-on-document-ready
+                // Source for autocomplete field: https://stackoverflow.com/questions/43116471/call-an-autocomplete-function-on-document-ready
                 $(document).ready(function () {
                     $("#id_article_title").autocomplete({
                         source: "{% url 'article-search' %}",
@@ -85,6 +85,7 @@
                     });
                 });
 
+                // Source to the value of each other: https://stackoverflow.com/questions/2780566/get-selected-value-of-a-dropdowns-item-using-jquery
                 $(document).ready(function () {
                     function updateSpeciesSelection(selectedID) {
                         $('#species_name_id').val(selectedID);
@@ -323,7 +324,6 @@
                         <div class="entry">
                             <label for="id_measurement_date">Measured:</label>
                             {{ datacr_form.measurement_date | add_class:"date" }}
-                            <!--<input type="date" id="id_measurement_date" name="measurement_date">-->
                             {% if datacr_form.measurement_date.errors %}
                                 <div class="alert alert-warning" role="alert" style="color: red">
                                     {{ datacr_form.measurement_date.errors.as_text }}
@@ -452,7 +452,6 @@
                 </div>
                 <div class="entry">
                     <label for="id_cr_sd">SD of CR:</label>
-                    <!--<input type="text" id="id_cr_sd" name="cr_sd">-->
                     {{ datacr_form.cr_sd }}
                 </div>
             </div>
@@ -465,7 +464,7 @@
         {% endblock style %}
 
         {% block form_buttons %}
-            <!-- buttons decided by child templates -->
+            <!-- Buttons decided by child templates -->
         {% endblock %}
     </form>
 {% endblock %}

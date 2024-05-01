@@ -1,0 +1,19 @@
+td a {
+    display: block;
+    color: blue;
+    text-decoration: none;
+    position: relative;
+}
+
+th, td {
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+td:first-child {
+    border-right: none;
+}
+
+tr:hover {
+    background-color: #f2f2f2;
+}

@@ -30,7 +30,8 @@ class User(AbstractUser):
 
 
 class Element(models.Model):
-    element_id = models.IntegerField(primary_key=True)
+    element_id = models.AutoField(primary_key=True)
+    #element_id = models.IntegerField(primary_key=True)
     element_symbol = models.CharField(max_length=10)
     approved = models.BooleanField(default=False)
 

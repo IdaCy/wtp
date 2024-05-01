@@ -1,17 +1,21 @@
 from django.contrib import admin
+
+from django.urls import include
+from django.urls import path
+from django.shortcuts import redirect
+
 from dashboard_app import views as dashboard_views
 from data_app import views as data_views
 from manageuser_app import views as manageuser_views
 from legal_app import views as legal_views
 from report_app import views as report_views
-from django.urls import include
-from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
 
     # User Management
+    path('', lambda request: redirect('login/'), name='root'),
     path('register/', manageuser_views.register_view, name='register'),
     path('logout/', manageuser_views.logout_view, name='logout'),
     path('login/', manageuser_views.login_view, name='login'),

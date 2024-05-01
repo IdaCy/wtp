@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 ### 3. Setting Up PostgreSQL
 To create the database, open through the command prompt the PostgreSQL command line:
-psql -D postgres
+psql -U postgres
 
 This requires knowledge ot the password from the PostgreSQL installation.
 
@@ -39,6 +39,7 @@ ALTER ROLE wtp_user SET timezone TO 'UTC';
 GRANT ALL PRIVILEGES ON DATABASE wtp_db TO wtp_user;
 GRANT USAGE, CREATE ON SCHEMA public TO wtp_user;
 ALTER DATABASE wtp_db OWNER TO wtp_user;
+ALTER USER wtp_user CREATEDB; (for testing)
 
 If you use a different username or password, you need to change this in the database connection information in _wtp/settings.py.
 
@@ -50,18 +51,23 @@ python manage.py migrate
 
 
 ### 5. Testing the Installation
-Before running the server, collect all static files:
-python manage.py collectstatic
-
 Start the Django development server to test if everything is set up correctly:
 python manage.py runserver
 
-Make sure PostgreSQL is running:
+Access the Application:
+Open a browser and call http://127.0.0.1:8000/ to see the website.
+
+
+## Debugging
+
+If the website has no styling, run:
+python manage.py collectstatic
+
+If the re is a 'connection refused' error, restart PostgreSQL:
 pg_ctl -D "C:\Program Files\PostgreSQL\16\data" restart
 
-Access the Application:
-Open a browser and go to http://127.0.0.1:8000/ to view the application.
-
+To manually edit PostgreSQL tables, use:
+psql -U wtp_user -d wtp_db (or replace with your differing table and user)
 
 
 ## Importing Data
@@ -73,10 +79,10 @@ To import data into the system, use custom management commands in the `data_app`
 This is how they are used to import data:
 
 #### Using the `importdata` Command:
-python manage.py importdata --path "static/excels"
+python manage.py importdata /path/to/excel_files/
 
 #### Using the `importusers` Command:
-python manage.py importusers --path "static/excels"
+python manage.py importusers /path/to/excel_files/
 
 ### Changing Data Models
 Whenever a model is changed, run:

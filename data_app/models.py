@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from .attribute_choices import units, fmt_choices, wet_dry_choices, approval_choices
 
 
 class User(AbstractUser):
@@ -16,7 +17,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=30, blank=True, null=True)
     last_name = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(unique=True)
-    jobtitle = models.CharField(max_length=200, blank=True, null=True)
+    job_title = models.CharField(max_length=200, blank=True, null=True)
     organisation = models.CharField(max_length=200, blank=True, null=True)
     admin_priv = models.SmallIntegerField(default=0, null=True)
 
@@ -187,11 +188,6 @@ class ParCRCalc(models.Model):
     tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE)
     dry_to_wet_ratio = models.DecimalField(max_digits=3, decimal_places=2, null=True)
     ash_to_wet_ratio = models.DecimalField(max_digits=3, decimal_places=2, null=True)
-    fmt_choices = [
-        ('F', 'Freshwater'),
-        ('M', 'Marine'),
-        ('T', 'Terrestrial'),
-    ]
     is_fre_mar_ter = models.CharField(max_length=1, choices=fmt_choices)
 
     def __str__(self):
@@ -211,11 +207,6 @@ class MaterialCRCalc(models.Model):
     liver_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     bone_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     muscle_to_body_ratio = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    fmt_choices = [
-        ('F', 'Freshwater'),
-        ('M', 'Marine'),
-        ('T', 'Terrestrial'),
-    ]
     is_fre_mar_ter = models.CharField(max_length=1, choices=fmt_choices)
 
     def __str__(self):
@@ -266,11 +257,6 @@ class Reference(models.Model):
     translation = models.BooleanField(default=False)
     notes = models.CharField(max_length=500, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    approval_choices = [
-        ('PENDING', 'Pending'),
-        ('APPROVED', 'Approved'),
-        ('REJECTED', 'Rejected'),
-    ]
     approval_status = models.CharField(max_length=20, choices=approval_choices, default='PENDING', null=True, blank=True)
 
     def __str__(self):
@@ -286,31 +272,6 @@ class ReferenceRejectionReason(models.Model):
 
 
 class DataCR(models.Model):
-
-    unit_choices = [ # both for media and for biota conc units
-        ('µCi/kg', 'µCi/kg'),
-        ('Bq/g', 'Bq/g'),
-        ('Bq/kg', 'Bq/kg'),
-        ('Bq/l', 'Bq/l'),
-        ('Bq/m2', 'Bq/m2'),
-        ('Bq/m3', 'Bq/m3'),
-        ('mBq/g', 'mBq/g'),
-        ('mBq/kg', 'mBq/kg'),
-        ('mBq/l', 'mBq/l'),
-        ('mg/g', 'mg/g'),
-        ('mg/kg', 'mg/kg'),
-        ('mg/l', 'mg/l'),
-        ('pCi/g', 'pCi/g'),
-        ('pCi/kg', 'pCi/kg'),
-        ('pCi/l', 'pCi/l'),
-        ('ppb', 'ppb'),
-        ('ppm', 'ppm'),
-        ('uCi/l', 'uCi/l'),
-        ('ug/g', 'ug/g'),
-        ('ug/kg', 'ug/kg'),
-        ('ug/l', 'ug/l'),
-    ]
-
     cr_id = models.BigIntegerField(primary_key=True)
     reference = models.ForeignKey(Reference, on_delete=models.CASCADE, null=True, blank=True)
     habitat = models.ForeignKey(Habitat, on_delete=models.CASCADE, null=True, blank=True)
@@ -327,42 +288,17 @@ class DataCR(models.Model):
     cr_sd = models.DecimalField(max_digits=25, decimal_places=10, null=True, blank=True) # standard deviation
     media_conc = models.CharField(max_length=30, null=True, blank=True)
     media_n = models.CharField(max_length=30, null=True, blank=True)
-    media_conc_units = models.CharField(max_length=20, choices=unit_choices, null=True, blank=True)
+    media_conc_units = models.CharField(max_length=20, choices=units, null=True, blank=True)
     media_sd = models.CharField(max_length=30, null=True, blank=True)
-    media_wet_dry_choices = [
-        ('Water', 'Water'),
-        ('Wet', 'Wet'),
-        ('Dry', 'Dry'),
-        ('Air', 'Air'),
-        ('Soil', 'Soil'),
-        ('undefined', 'undefined'),
-    ]
-    media_wet_dry = models.CharField(max_length=10, choices=media_wet_dry_choices, null=True, blank=True)
+    media_wet_dry = models.CharField(max_length=10, choices=wet_dry_choices, null=True, blank=True)
     biohalflife = models.CharField(max_length=30, null=True, blank=True)
     biota_conc = models.CharField(max_length=30, null=True, blank=True)
-    biota_conc_units = models.CharField(max_length=20, choices=unit_choices, null=True, blank=True)
+    biota_conc_units = models.CharField(max_length=20, choices=units, null=True, blank=True)
     biota_n = models.IntegerField(null=True, blank=True)
-    # goes implemented:
     biota_sd = models.CharField(max_length=30, null=True)
-    biota_wet_dry_choices = [
-        ('Water', 'Water'),
-        ('Wet', 'Wet'),
-        ('Dry', 'Dry'),
-        ('Air', 'Air'),
-        ('Soil', 'Soil'),
-        ('undefined', 'undefined'),
-    ]
-    biota_wet_dry = models.CharField(max_length=20, choices=biota_wet_dry_choices, null=True, blank=True)
-    # goes implemented:
-    #stand_biota_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
-    #stand_media_conc = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
+    biota_wet_dry = models.CharField(max_length=20, choices=wet_dry_choices, null=True, blank=True)
     stand_biota_conc = models.FloatField(null=True, blank=True)
     stand_media_conc = models.FloatField(null=True, blank=True)
     measurement_date = models.DateField(null=True, blank=True)
     notes = models.CharField(max_length=500, null=True, blank=True)
-    approval_choices = [
-        ('PENDING', 'Pending'),
-        ('APPROVED', 'Approved'),
-        ('REJECTED', 'Rejected'),
-    ]
     approval_status = models.CharField(max_length=20, choices=approval_choices, default='PENDING', null=True, blank=True)

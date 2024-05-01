@@ -14,7 +14,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("email", "salutation", "first_name", "last_name", "jobtitle", "organisation")
+        fields = ("email", "salutation", "first_name", "last_name", "job_title", "organisation")
 
     def clean_email(self):
         email = self.cleaned_data["email"]
@@ -70,5 +70,4 @@ class CustomAuthenticationForm(forms.Form):
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'salutation', 'jobtitle', 'organisation', 'admin_priv', 'is_active', 'is_staff')
-
+        fields = ('username', 'email', 'first_name', 'last_name', 'salutation', 'job_title', 'organisation', 'admin_priv', 'is_active', 'is_staff')

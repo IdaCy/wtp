@@ -1,7 +1,7 @@
 from django import forms
-from django.forms import ModelChoiceField
 from .models import DataCR, Reference, PubType, PubTitle, Language, Habitat, SpeciesName
 from .models import RAP, Lifestage, StudyType, Radionuclide, WildlifeGroup, Tissue, Media
+from .attribute_choices import units, wet_dry_choices
 
 
 class ReferenceForm(forms.ModelForm):
@@ -34,21 +34,11 @@ class ReferenceForm(forms.ModelForm):
         label='English Translation Available'
     )
 
-    """article_title = forms.ModelChoiceField(
-        queryset=Reference.objects.all().order_by('article_title'),
-        required=False,
-        label='Article Title',
-        empty_label="Select Article Title"
-    )"""
-
-    # translation = forms.BooleanField(required=False)
-
     class Meta:
         model = Reference
         fields = ['ref_id', 'author', 'article_title', 'pub_title', 'year', 'volume', 'part', 'pages', 'language',
                   'pub_type', 'translation', 'notes']
 
-        # Set distinct article title
         distinct_article_title = Reference.objects.order_by('article_title').values_list('article_title',
                                                                                          flat=True).distinct()
 
@@ -127,52 +117,18 @@ class DataCRForm(forms.ModelForm):
         widget=forms.Textarea(attrs={'placeholder': 'Notes...'}),
         label='Notes'
     )
-    media_wet_dry_choices = [
-        ('Air', 'Air'),
-        ('Wet', 'Wet'),
-        ('Dry', 'Dry'),
-        ('Water', 'Water')
-    ]
     media_wet_dry = forms.ChoiceField(
-        choices=media_wet_dry_choices,
+        choices=wet_dry_choices,
         required=False,
         label='Media Wet/Dry'
     )
-    biota_wet_dry_choices = [
-        ('Wet', 'Wet'),
-        ('Dry', 'Dry'),
-        ('Ash', 'Ash')
-    ]
     biota_wet_dry = forms.ChoiceField(
-        choices=biota_wet_dry_choices,
+        choices=wet_dry_choices,
         required=False,
         label='Biota Wet/Dry',
     )
-    biota_conc_units_choices = [
-        ('µCi/kg', 'µCi/kg'),
-        ('Bq/g', 'Bq/g'),
-        ('Bq/kg', 'Bq/kg'),
-        ('Bq/l', 'Bq/l'),
-        ('Bq/m2', 'Bq/m2'),
-        ('Bq/m3', 'Bq/m3'),
-        ('mBq/g', 'mBq/g'),
-        ('mBq/kg', 'mBq/kg'),
-        ('mBq/l', 'mBq/l'),
-        ('mg/g', 'mg/g'),
-        ('mg/kg', 'mg/kg'),
-        ('mg/l', 'mg/l'),
-        ('pCi/g', 'pCi/g'),
-        ('pCi/kg', 'pCi/kg'),
-        ('pCi/l', 'pCi/l'),
-        ('ppb', 'ppb'),
-        ('ppm', 'ppm'),
-        ('uCi/l', 'uCi/l'),
-        ('ug/g', 'ug/g'),
-        ('ug/kg', 'ug/kg'),
-        ('ug/l', 'ug/l'),
-    ]
     biota_conc_units = forms.ChoiceField(
-        choices=biota_conc_units_choices,
+        choices=units,
         label='Units'
     )
 
@@ -192,7 +148,6 @@ class DataCRForm(forms.ModelForm):
             if stand_biota_conc is not None:
                 cleaned_data['stand_biota_conc'] = float(stand_biota_conc)
         except (ValueError, TypeError):
-            # If there's an error converting to float, reset to None or default
             cleaned_data['stand_media_conc'] = None
             cleaned_data['stand_biota_conc'] = None
 
@@ -202,7 +157,6 @@ class DataCRForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['habitat'].required = True
         self.fields['cr_n'].required = True
-        # self.fields['species_name'].required = False
         self.fields['habitat'].queryset = Habitat.objects.all()
         self.fields['study_type'].queryset = StudyType.objects.all()
         self.fields['radionuclide'].queryset = Radionuclide.objects.all()
@@ -227,10 +181,3 @@ class DataCRForm(forms.ModelForm):
         for name, field in self.fields.items():
             if name not in ['cr', 'cr_n', 'habitat']:
                 field.required = False
-
-    """def clean_species_name(self):
-        data = self.cleaned_data['species_name']
-        # Explicitly allow None or empty string as valid values
-        if data == "" or str(data).lower() == "none":
-            return None
-        return data"""

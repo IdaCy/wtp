@@ -77,7 +77,7 @@ def get_table_data(request):
     term = request.GET.get('term')
     data = {'headers': [], 'rows': []}
 
-    # Implement logic to set headers and rows based on the term
+    # Set headers and rows based on the term
     if term == 'Elements':
         data['headers'] = ['Element ID', 'Element Symbol']
         elements = Element.objects.filter(approved=True).values_list('element_id', 'element_symbol')
@@ -178,10 +178,8 @@ def reject_reference(reference_id, reason):
         if reference.approval_status == 'REJECTED':
             ReferenceRejectionReason.objects.create(reference=reference, reason=reason)
         else:
-            # possibly: raising an exception or handle the logic for when a non-rejected reference is attempted to be associated with a rejection reason
             print("Reference is not marked as rejected.")
     except Reference.DoesNotExist:
-        # !!Handling the case where the reference does not exist
         print("Reference does not exist.")
 
 
@@ -202,12 +200,6 @@ def article_title_search(request):
         titles = list(qs.values_list('article_title', flat=True).distinct())
         return JsonResponse(titles, safe=False)
     return JsonResponse([], safe=False)
-
-
-@login_required
-def data_view(request):
-    dataobj = ActivityConcUnit.objects.all()
-    return render(request, 'data.html', {'data': dataobj})
 
 
 @login_required
@@ -315,21 +307,7 @@ def view_summary_results(request):
                 E=Sum('cr'),
             ).order_by('radionuclide__element__element_symbol')
 
-            datacr_list3 = DataCR.objects.filter(**filters).values(
-                'radionuclide__element__element_symbol'
-            ).values(
-                'radionuclide__element__element_symbol'
-            ).annotate(
-                M=Sum('cr'),
-                S=Sum('cr'),
-                V=Sum('cr'),
-                K=Sum('cr')
-            ).order_by('radionuclide__element__element_symbol')
-
             for item in datacr_list2:
-                # Assuming D = cr_n * CR
-                # Assuming: need to calculate D for each record - iterating over individual records with CR & cr_n values
-                # Testing: using aggregate functions as placeholders
                 crn_cr_product = DataCR.objects.filter(
                     radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
                     habitat__habitat_specific_type=habitat_query
@@ -337,11 +315,6 @@ def view_summary_results(request):
                     dose=F('cr_n') * F('cr')
                 ).aggregate(total_dose=Sum('dose'))['total_dose']
 
-                # item['D'] = "{:.2e}".format(crn_cr_product) if crn_cr_product is not None else None
-
-                # Assuming: for E, it's an error calculation based on variance or standard deviation
-                # Testing: placeholder calculation
-                # Assuming: E could be a sum of (cr_n * CR^2) - this is an assumption tho!!
                 crn_cr_square_sum = DataCR.objects.filter(
                     radionuclide__element__element_symbol=item['radionuclide__element__element_symbol'],
                     habitat__habitat_specific_type=habitat_query
@@ -352,10 +325,6 @@ def view_summary_results(request):
                 # Assign the calculated values directly without formatting
                 item['D'] = crn_cr_product
                 item['E'] = crn_cr_square_sum
-                # item['E'] = "{:.2e}".format(crn_cr_square_sum) if crn_cr_square_sum is not None else None
-
-            # cr_values = DataCR.objects.filter(**filters).values_list('cr', flat=True)
-            # cr_values = [value for value in cr_values if value is not None]
 
             datacr_list3 = []
             elements = DataCR.objects.filter(**filters).values_list('radionuclide__element__element_symbol',
@@ -389,7 +358,6 @@ def view_summary_results(request):
                     element_data['M'] = "{:.8f}".format(element_data['M']) if element_data['M'] is not None else None
                     element_data['S'] = "{:.8f}".format(element_data['S']) if element_data['S'] is not None else None
                     element_data['V'] = "{:.8f}".format(element_data['V']) if element_data['V'] is not None else None
-                    ###element_data['K'] = "{:.2e}".format(element_data['K']) if element_data['V'] is not None else None
 
                 # Append the element data to the list
                 datacr_list3.append(element_data)
@@ -398,8 +366,6 @@ def view_summary_results(request):
             context['datacr_list3'] = datacr_list3
 
         context['datacr_list'] = datacr_list
-        # context['datacr_list2'] = datacr_list2
-        # context['datacr_list3'] = datacr_list3
         context['show_all'] = show_all
 
     return render(request, 'view_summary_results.html', context)

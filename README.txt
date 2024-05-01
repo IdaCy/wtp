@@ -70,7 +70,14 @@ To manually edit PostgreSQL tables, use:
 psql -U wtp_user -d wtp_db (or replace with your differing table and user)
 
 
+## Running Unit Tests
+
+run:
+python manage.py test
+
+
 ## Importing Data
+
 The WTP system uses on tables including `ActivityConcUnit`, `Habitat`, `Element`, `User`, `StudyType`, `Reference`, `DataCR`, etc.
 Sample data files for these models are provided in the `static/excels` directory.
 

@@ -1,3 +1,5 @@
+# This code is adapted from: https://stackoverflow.com/questions/49610125/whats-the-easiest-way-to-import-a-csv-file
+# -into-a-django-model
 import csv
 import os
 
@@ -19,16 +21,16 @@ class Command(BaseCommand):
             reader = csv.reader(infile)
             header = next(reader)
 
-            # find the index of the 'Approved' column
+            # Find the index of the 'Approved' column
             approved_index = header.index('Approved')
 
-            # find the index of the 'MainHabitatType' column
+            # Find the index of the 'MainHabitatType' column
             main_habitat_type_index = header.index('MainHabitatType')
 
-            # find the index of the 'UserID' column
+            # Find the index of the 'UserID' column
             user_id_index = header.index('UserID')
 
-            # modify the header to rearrange columns
+            # Modify the header to rearrange columns
             header = [
                 'HabitatID', 'Habitat', 'MainHabitatType', 'Approved', 'UserID'
             ]
@@ -36,12 +38,12 @@ class Command(BaseCommand):
             with open(os.path.join(directory_path, output_file), 'w', newline='') as outfile:
                 writer = csv.writer(outfile, quoting=csv.QUOTE_ALL)
 
-                # write modified header
+                # Write modified header
                 writer.writerow(header)
 
-                # write data
+                # Write data
                 for row in reader:
-                    # rearrange the columns
+                    # Rearrange the columns
                     rearranged_row = [
                         row[header.index('HabitatID')],
                         row[header.index('Habitat')],

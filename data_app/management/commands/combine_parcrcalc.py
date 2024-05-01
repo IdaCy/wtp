@@ -1,8 +1,11 @@
+# This code is adapted from: https://stackoverflow.com/questions/49610125/whats-the-easiest-way-to-import-a-csv-file
+# -into-a-django-model
 import csv
 import os
 from django.core.management.base import BaseCommand
 
 
+# Command to combine and add column to CSV files.
 class Command(BaseCommand):
     help = 'Combine and add origin column to CSV files'
 
@@ -21,10 +24,10 @@ class Command(BaseCommand):
                 with open(os.path.join(directory_path, input_file), 'r') as infile:
                     reader = csv.reader(infile)
 
-                    # write data
+                    # Write data
                     for row in reader:
-                        # sixth character of each file name indicates the origin (F, M, T)
-                        row.append(os.path.basename(input_file)[6])  # extract F, M, or T from  filename
+                        # Sixth character of each file name indicates the origin (F, M, T)
+                        row.append(os.path.basename(input_file)[6])  # Extract F, M, or T from  filename
                         writer.writerow(row)
 
         self.stdout.write(self.style.SUCCESS(f"Combined data saved to {output_file}"))

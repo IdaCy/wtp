@@ -1,6 +1,5 @@
-import csv
-import os
-
+# This code is adapted from: https://stackoverflow.com/questions/49610125/whats-the-easiest-way-to-import-a-csv-file
+# -into-a-django-model
 from django.core.management.base import BaseCommand
 
 

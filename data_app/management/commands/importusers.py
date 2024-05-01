@@ -1,7 +1,10 @@
+# This code is adapted from: https://stackoverflow.com/questions/70984787/cant-populate-database-by-excel-file-in
+# -django-management-command
 from django.contrib.auth import get_user_model
 import pandas as pd
 import os
 from django.core.management.base import BaseCommand, CommandError
+
 
 class Command(BaseCommand):
     help = 'Imports data from Excel files into the database'

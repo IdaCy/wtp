@@ -18,6 +18,12 @@ def reference(request):
 
 
 @login_required
+def download_summaries(request):
+    return render(request, 'download_summaries.html')
+
+
+
+@login_required
 def report_user(request):
     details_query = request.GET.get('parameter', '')
     print(details_query)

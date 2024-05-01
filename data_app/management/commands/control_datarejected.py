@@ -1,3 +1,5 @@
+# This code is adapted from: https://stackoverflow.com/questions/49610125/whats-the-easiest-way-to-import-a-csv-file
+# -into-a-django-model
 import csv
 import os
 
@@ -19,24 +21,24 @@ class Command(BaseCommand):
             reader = csv.reader(infile)
             header = next(reader)
 
-            # find the index of the 'BiotaWetdry' column
+            # Find the index of the 'BiotaWetdry' column
             biota_wetdry_index = header.index('BiotaWetdry')
 
-            # find the index of the 'dataextract' column
+            # Find the index of the 'dataextract' column
             dataextract_index = header.index('dataextract')
 
-            # modify the header to place 'dataextract' after 'BiotaWetdry'
+            # Modify the header to place 'dataextract' after 'BiotaWetdry'
             header.insert(biota_wetdry_index + 1, header.pop(dataextract_index))
 
             with open(os.path.join(directory_path, output_file), 'w', newline='') as outfile:
                 writer = csv.writer(outfile, quoting=csv.QUOTE_ALL)
 
-                # write modified header
+                # Write modified header
                 writer.writerow(header)
 
-                # write data
+                # Write data
                 for row in reader:
-                    # move 'dataextract' value to the new position
+                    # Move 'biohalflife'/'dataextract' value to the new position
                     row.insert(biota_wetdry_index + 1, row.pop(dataextract_index))
                     writer.writerow(row)
 

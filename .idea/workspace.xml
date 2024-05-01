@@ -5,67 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="91bd120f-fd80-43fc-a680-33b2630a723b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/_wtp.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_app/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report_app/templates/download_summaries.html" beforeDir="false" afterPath="$PROJECT_DIR$/report_app/templates/download_summaries.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/base_form_data.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/base_form_data.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/base_form_data.css.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/base_form_data.css.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/dashboard.css.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/dashboard.css.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/login_user.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/login_user.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/login_user.css.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/login_user.css.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/register.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/register.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/register.css.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/register.css.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/report_table.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/report_table.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/report_table.css.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/report_table.css.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/styles.css.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/styles.css.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/view_all_data.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/view_all_data.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/view_all_data.css.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/view_all_data.css.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/view_editable_data_records.css" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/view_editable_data_records.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/css/view_editable_data_records.css.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/css/view_editable_data_records.css.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/ActivityConcUnit.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/ActivityConcUnit.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/ActivityConcUnit.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/ActivityConcUnit.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/DataCR.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/DataCR.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/DataCR.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/DataCR.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Habitat.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Habitat.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Habitat.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Habitat.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Language.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Language.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Language.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Language.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Lifestage.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Lifestage.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Lifestage.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Lifestage.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/MaterialStatus.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/MaterialStatus.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/MaterialStatus.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/MaterialStatus.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Media.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Media.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Media.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Media.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/PubTitle.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/PubTitle.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/PubTitle.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/PubTitle.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/PubType.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/PubType.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/PubType.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/PubType.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/RAP.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/RAP.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/RAP.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/RAP.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Radionuclide.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Radionuclide.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Radionuclide.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Radionuclide.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Reference.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Reference.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/SpeciesName.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/SpeciesName.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/SpeciesName.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/SpeciesName.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Tissue.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Tissue.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/Tissue.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/Tissue.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/User.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/User.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/WildlifeGroup.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/WildlifeGroup.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/excels/WildlifeGroup.xlsx.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/excels/WildlifeGroup.xlsx.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/js/add_datacr.js" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/js/add_datacr.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/js/add_datacr.js.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/js/add_datacr.js.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/js/base_form_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/js/base_form_data.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/js/base_form_data.js.gz" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/js/base_form_data.js.gz" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/js/edit_data_record.js" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/js/edit_data_record.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/staticfiles/staticfiles.json" beforeDir="false" afterPath="$PROJECT_DIR$/staticfiles/staticfiles.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,7 +137,7 @@
       <workItem from="1713728478278" duration="44922000" />
       <workItem from="1714244852131" duration="3680000" />
       <workItem from="1714324979802" duration="2437000" />
-      <workItem from="1714466420854" duration="17439000" />
+      <workItem from="1714466420854" duration="17917000" />
     </task>
     <servers />
   </component>

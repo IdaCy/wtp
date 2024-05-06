@@ -559,12 +559,13 @@ def view_editable_data_records(request):
 
 
 @login_required
-def edit_data_record(request, ref_id):
+def edit_data_record(request, cr_id):
     species_list = SpeciesName.objects.all()
     print("Edit data record POST data:", request.POST)
-    reference = get_object_or_404(Reference, pk=ref_id)
+    datacr = get_object_or_404(DataCR, pk=cr_id)
+    reference = get_object_or_404(Reference, pk=datacr.reference_id)
     print(reference.ref_id)
-    datacr = DataCR.objects.filter(reference=reference).first()
+    #datacr = DataCR.objects.filter(reference=reference).first()
 
     print("next comes 'POST'")
     if request.method == 'POST':
@@ -596,11 +597,11 @@ def edit_data_record(request, ref_id):
         'species_list': species_list,
         'reference_form': reference_form,
         'datacr_form': datacr_form,
-        'ref_id': ref_id,
+        'cr_id': cr_id,
         'reference': reference,
         'datacr': datacr,
         # 'cr_id': cr_id,
-        'form_action': reverse('edit_data_record', kwargs={'ref_id': ref_id})
+        'form_action': reverse('edit_data_record', kwargs={'cr_id': cr_id})
     })
 
 

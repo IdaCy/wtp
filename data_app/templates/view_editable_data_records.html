@@ -17,22 +17,22 @@
             {% for record in records %}
                 <tr>
                     <td>
-                        <a href="{% url 'edit_data_record' record.ref_id %}">
-                            &#x2197;
+                        <a href="{% url 'edit_data_record' record.cr_id %}">
+                            <!--&#x2197;--> TEST TEST
                         </a>
                     </td>
                     <td>
-                        <a href="{% url 'edit_data_record' record.ref_id %}">
-                            {{ record.ref_id }}
+                        <a href="{% url 'edit_data_record' record.cr_id %}">
+                            {{ record.reference_id }}
                         </a>
                     </td>
                     <td>
-                        <a href="{% url 'edit_data_record' record.ref_id %}">
+                        <a href="{% url 'edit_data_record' record.cr_id %}">
                             {{ record.article_title }}
                         </a>
                     </td>
                     <td>
-                        <a href="{% url 'edit_data_record' record.ref_id %}">
+                        <a href="{% url 'edit_data_record' record.cr_id %}">
                             {{ record.cr }}
                         </a>
                     </td>

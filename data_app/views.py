@@ -544,7 +544,8 @@ def view_editable_data_records(request):
             records_with_details.append({
                 'ref_id': ref.ref_id,
                 'article_title': ref.article_title,
-                'cr': datacr.cr
+                'cr': datacr.cr,
+                'cr_id': datacr.cr_id
             })
 
         # If there are no related DataCR objects, still add the reference info

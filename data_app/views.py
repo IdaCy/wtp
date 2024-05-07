@@ -382,7 +382,8 @@ def handle_reference_datacr(reference_form, datacr_form, user, submit_ref=True, 
 
             datacr = datacr_form.save(commit=False)
 
-            datacr.cr_id = int(time.time())
+            if not datacr.pk:
+                datacr.cr_id = int(time.time())
             datacr.reference = reference
             datacr.save()
             return True, reference_form, datacr_form
@@ -565,10 +566,7 @@ def edit_data_record(request, cr_id):
     print("Edit data record POST data:", request.POST)
     datacr = get_object_or_404(DataCR, pk=cr_id)
     reference = get_object_or_404(Reference, pk=datacr.reference_id)
-    print(reference.ref_id)
-    #datacr = DataCR.objects.filter(reference=reference).first()
 
-    print("next comes 'POST'")
     if request.method == 'POST':
         reference_form = ReferenceForm(request.POST, instance=reference)
         # datacr_form = DataCRForm(request.POST, instance=datacr)
@@ -606,7 +604,7 @@ def edit_data_record(request, cr_id):
     })
 
 
-register = template.Library()
+#register = template.Library()
 
 
 @login_required

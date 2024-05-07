@@ -35,7 +35,7 @@ class Command(BaseCommand):
                     defaults={
                         'first_name': row.get('first_name', ''),
                         'last_name': row.get('last_name', ''),
-                        'jobtitle': row.get('jobtitle', ''),
+                        'job_title': row.get('job_title', ''),
                         'organisation': row.get('organisation', ''),
                         'admin_priv': row.get('admin_priv', 0),
                         'salutation': row.get('salutation', ''),

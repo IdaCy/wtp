@@ -4,8 +4,10 @@ from .models import DataCR, PubType, PubTitle, Language, Reference, Habitat, Spe
 
 
 class DataCRAdmin(admin.ModelAdmin):
-    list_display = ['cr', 'cr_n', 'media_conc', 'biota_conc']
+    list_display = ['cr', 'cr_n', 'media_conc', 'biota_conc', 'approval_status']
+    list_filter = ('approval_status',)
     search_fields = ['cr', 'media_conc_units']
+    ordering = ('-approval_status', 'cr_id')
 
 
 admin.site.register(DataCR, DataCRAdmin)

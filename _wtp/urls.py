@@ -24,6 +24,7 @@ urlpatterns = [
     # Reporting Support-AJAX
     path('view_editable_data_records/', data_views.view_editable_data_records, name='view_editable_data_records'),
     path('edit_data_record/<int:cr_id>/', data_views.edit_data_record, name='edit_data_record'),
+    path('edit_data_record/<int:ref_id>/', data_views.edit_data_record, name='edit_data_record'),
     path('delete/entire-record/<int:ref_id>/confirm/', data_views.delete_entire_record_confirm, name='delete_entire_record_confirm'),
     path('delete/datacr-record/<int:cr_id>/confirm/', data_views.delete_datacr_record_confirm, name='delete_datacr_record_confirm'),
     path('tables_panel/', data_views.tables_panel, name='tables_panel'),
